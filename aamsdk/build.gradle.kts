@@ -1,8 +1,8 @@
 plugins {
     kotlin("multiplatform")
-    kotlin("native.cocoapods")
     id("com.android.library")
     id("convention.publication")
+    id("com.chromaticnoise.multiplatform-swiftpackage") version "2.0.3"
     kotlin("plugin.serialization") version "1.6.10"
 }
 
@@ -18,16 +18,19 @@ repositories {
 
 kotlin {
     android()
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-
-    cocoapods {
-        summary = "Some description for the Shared Module"
-        homepage = "Link to the Shared Module homepage"
-        ios.deploymentTarget = "14.1"
-        framework {
-            baseName = "shared"
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            baseName = libraryName
+        }
+        it.compilations.getByName("main") {
+            val uikit by cinterops.creating {
+                defFile("src/nativeInterop/cinterop/uikit.def")
+                includeDirs("$rootDir/../$libraryName/src")
+            }
         }
     }
 
@@ -104,6 +107,75 @@ kotlin {
             iosSimulatorArm64Test.dependsOn(this)
         }
     }
+
+    tasks {
+        val branch = "dev"
+        val commit_message = "feat: "
+
+        register("pushDevFramework") {
+            description = "Push iOS framework to Repo"
+
+            project.exec {
+                workingDir = File("$rootDir/../$libraryName")
+                commandLine("git", "checkout", branch).standardOutput
+            }
+
+            dependsOn("createXCFramework")
+
+            doLast {
+
+                copy {
+                    from("$rootDir/../swiftpackage")
+                    into("$rootDir/../$libraryName")
+                }
+
+                val dir = File("$rootDir/../$libraryName/$libraryName.podspec")
+                val tempFile = File("$rootDir/../$libraryName/$libraryName.podspec.new")
+
+                val reader = dir.bufferedReader()
+                val writer = tempFile.bufferedWriter()
+                var currentLine: String?
+
+                while (reader.readLine().also { currLine -> currentLine = currLine } != null) {
+                    if (currentLine?.startsWith("s.version") == true) {
+                        writer.write("s.version = \"${libraryVersion}\"" + System.lineSeparator())
+                    } else {
+                        writer.write(currentLine + System.lineSeparator())
+                    }
+                }
+                writer.close()
+                reader.close()
+                val successful = tempFile.renameTo(dir)
+
+                if (successful) {
+
+                    project.exec {
+                        workingDir = File("$rootDir/../$libraryName")
+                        commandLine(
+                            "git",
+                            "add",
+                            "."
+                        ).standardOutput
+                    }
+
+                    project.exec {
+                        workingDir = File("$rootDir/../$libraryName")
+                        commandLine(
+                            "git",
+                            "commit",
+                            "-m",
+                            commit_message
+                        ).standardOutput
+                    }
+
+                    project.exec {
+                        workingDir = File("$rootDir/../$libraryName")
+                        commandLine("git", "push", "origin", branch).standardOutput
+                    }
+                }
+            }
+        }
+    }
 }
 
 android {
@@ -112,5 +184,15 @@ android {
     defaultConfig {
         minSdk = 28
         targetSdk = 31
+    }
+}
+
+multiplatformSwiftPackage {
+    swiftToolsVersion("5.3")
+    targetPlatforms {
+        iOS { v("14.1") }
+    }
+    distributionMode {
+        remote("https://gitlab.com/adadapted/aa_multiplatform_lib")
     }
 }

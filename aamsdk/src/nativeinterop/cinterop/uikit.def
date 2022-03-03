@@ -1,0 +1,11 @@
+package = aa_multiplatform_lib.cinterop
+language = Objective-C
+---
+
+#import <Foundation/Foundation.h>
+#import <UIKit/UIView.h>
+
+@protocol UIViewWithOverrides
+- (void) drawRect:(CGRect)aRect;
+- (void) layoutSubviews;
+@end
