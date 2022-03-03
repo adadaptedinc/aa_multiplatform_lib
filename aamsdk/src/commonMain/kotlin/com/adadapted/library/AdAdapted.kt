@@ -1,6 +1,5 @@
 package com.adadapted.library
 
-import android.content.Context
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.Config
 import com.adadapted.library.network.HttpSessionAdapter
@@ -94,21 +93,21 @@ object AdAdapted {
         println(LOG_TAG + "AdAdapted Android Advertising SDK v%s initialized." + Config.VERSION_NAME)
     }
 
-    fun disableAdTracking(context: Context) {
-        setAdTracking(context, true)
-    }
-
-    fun enableAdTracking(context: Context) {
-        setAdTracking(context, false)
-    }
-
-    private fun setAdTracking(context: Context, value: Boolean) { //TODO needs to be android and ios specific - extract this out
-        val sharedPref = context.getSharedPreferences(Config.AASDK_PREFS_KEY, Context.MODE_PRIVATE) ?: return
-        with (sharedPref.edit()) {
-            putBoolean(Config.AASDK_PREFS_TRACKING_DISABLED_KEY, value)
-            apply()
-        }
-    }
+//    fun disableAdTracking(context: Context) {
+//        setAdTracking(context, true)
+//    }
+//
+//    fun enableAdTracking(context: Context) {
+//        setAdTracking(context, false)
+//    }
+//
+//    private fun setAdTracking(context: Context, value: Boolean) { //TODO needs to be android and ios specific - extract this out
+//        val sharedPref = context.getSharedPreferences(Config.AASDK_PREFS_KEY, Context.MODE_PRIVATE) ?: return
+//        with (sharedPref.edit()) {
+//            putBoolean(Config.AASDK_PREFS_TRACKING_DISABLED_KEY, value)
+//            apply()
+//        }
+//    }
 
     private fun setupClients() {
         Config.init(isProd)
