@@ -6,9 +6,9 @@ import platform.CoreGraphics.*
 import platform.UIKit.*
 import platform.WebKit.*
 
-class ZoneView(): UIView (frame = cValue { CGRectZero }), UIViewWithOverridesProtocol {
+actual class ZoneView(): UIView (frame = cValue { CGRectZero }), UIViewWithOverridesProtocol {
 
-    private lateinit var adView: WKWebView
+    private var adView: WKWebView
 
     init {
         adView = WKWebView(frame = cValue { CGRectZero }, configuration = WKWebViewConfiguration()).apply {

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
@@ -18,18 +20,19 @@ repositories {
 
 kotlin {
     android()
+
+    val xcframework = XCFramework(libraryName)
     listOf(
         iosX64(),
-        iosArm64(),
-        iosSimulatorArm64()
+        iosArm64()
     ).forEach {
-        it.binaries.framework {
-            baseName = libraryName
+        it.binaries.framework(libraryName) {
+            xcframework.add(this)
         }
         it.compilations.getByName("main") {
             val uikit by cinterops.creating {
                 defFile("src/nativeInterop/cinterop/uikit.def")
-                includeDirs("$rootDir/../$libraryName/src")
+                includeDirs("$rootDir/../$libraryName/aamsdk/src")
             }
         }
     }
@@ -83,97 +86,20 @@ kotlin {
                 implementation("io.ktor:ktor-client-ios:$ktorVersion")
             }
         }
-        val iosSimulatorArm64Main by getting {
-            dependencies {
-                implementation("io.ktor:ktor-client-ios:$ktorVersion")
-            }
-        }
         val iosMain by creating {
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
             dependencies {
                 implementation("io.ktor:ktor-client-ios:$ktorVersion")
             }
         }
         val iosX64Test by getting
         val iosArm64Test by getting
-        val iosSimulatorArm64Test by getting
         val iosTest by creating {
             dependsOn(commonTest)
             iosX64Test.dependsOn(this)
             iosArm64Test.dependsOn(this)
-            iosSimulatorArm64Test.dependsOn(this)
-        }
-    }
-
-    tasks {
-        val branch = "dev"
-        val commit_message = "feat: "
-
-        register("pushDevFramework") {
-            description = "Push iOS framework to Repo"
-
-            project.exec {
-                workingDir = File("$rootDir/../$libraryName")
-                commandLine("git", "checkout", branch).standardOutput
-            }
-
-            dependsOn("createXCFramework")
-
-            doLast {
-
-                copy {
-                    from("$rootDir/../swiftpackage")
-                    into("$rootDir/../$libraryName")
-                }
-
-                val dir = File("$rootDir/../$libraryName/$libraryName.podspec")
-                val tempFile = File("$rootDir/../$libraryName/$libraryName.podspec.new")
-
-                val reader = dir.bufferedReader()
-                val writer = tempFile.bufferedWriter()
-                var currentLine: String?
-
-                while (reader.readLine().also { currLine -> currentLine = currLine } != null) {
-                    if (currentLine?.startsWith("s.version") == true) {
-                        writer.write("s.version = \"${libraryVersion}\"" + System.lineSeparator())
-                    } else {
-                        writer.write(currentLine + System.lineSeparator())
-                    }
-                }
-                writer.close()
-                reader.close()
-                val successful = tempFile.renameTo(dir)
-
-                if (successful) {
-
-                    project.exec {
-                        workingDir = File("$rootDir/../$libraryName")
-                        commandLine(
-                            "git",
-                            "add",
-                            "."
-                        ).standardOutput
-                    }
-
-                    project.exec {
-                        workingDir = File("$rootDir/../$libraryName")
-                        commandLine(
-                            "git",
-                            "commit",
-                            "-m",
-                            commit_message
-                        ).standardOutput
-                    }
-
-                    project.exec {
-                        workingDir = File("$rootDir/../$libraryName")
-                        commandLine("git", "push", "origin", branch).standardOutput
-                    }
-                }
-            }
         }
     }
 }
@@ -195,4 +121,6 @@ multiplatformSwiftPackage {
     distributionMode {
         remote("https://gitlab.com/adadapted/aa_multiplatform_lib")
     }
+    zipFileName("aa_multiplatform_lib")
+    outputDirectory(File("../", "swiftpackage"))
 }
