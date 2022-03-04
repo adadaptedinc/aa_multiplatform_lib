@@ -182,6 +182,20 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     @Synchronized
     fun start(listener: SessionListener) {
         addListener(listener)
+
+        transporter.dispatchToBackground {
+            val testDeviceInfo = DeviceInfo(
+            appId = "NWY0NTM2YZDMMDQ0",
+            udid = "1234567890",
+            device = "Emulator",
+            deviceUdid = "12345",
+            os = "AndroidiOS",
+            isAllowRetargetingEnabled = true,
+            sdkVersion = "0.0.8"
+        )
+            performInitialize(deviceInfo = testDeviceInfo) //TODO this is just mocked data for now
+        }
+
 //        DeviceInfoClient.getInstance().getDeviceInfo(object: DeviceInfoClient.Callback { //TODO add deviceInfoClient
 //            override fun onDeviceInfoCollected(deviceInfo: DeviceInfo) {
 //                transporter.dispatchToBackground {

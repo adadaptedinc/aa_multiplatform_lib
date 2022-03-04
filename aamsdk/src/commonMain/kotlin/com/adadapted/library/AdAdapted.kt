@@ -33,7 +33,7 @@ object AdAdapted {
         return this
     }
 
-    fun setSdkSessionListener(listener: (hasAds: Boolean) -> Unit): AdAdapted {
+    fun onHasAdsToServe(listener: (hasAds: Boolean) -> Unit): AdAdapted {
         sessionListener = listener
         return this
     }
