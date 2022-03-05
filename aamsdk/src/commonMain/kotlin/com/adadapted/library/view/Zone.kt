@@ -1,4 +1,4 @@
-package com.adadapted.library
+package com.adadapted.library.view
 
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.dimension.Dimension

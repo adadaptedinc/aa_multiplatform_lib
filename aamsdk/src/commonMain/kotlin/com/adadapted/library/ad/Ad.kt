@@ -3,6 +3,7 @@ package com.adadapted.library.ad
 import com.adadapted.library.Payload
 import com.adadapted.library.constants.Config
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @kotlinx.serialization.Serializable
 data class Ad(
@@ -15,7 +16,7 @@ data class Ad(
     @SerialName("refresh_time") val refreshTime: Long = Config.DEFAULT_AD_REFRESH,
     @SerialName("tracking_html") val trackingHtml: String = ""
 ) {
-    var isImpressionTracked: Boolean = false
+    private var isImpressionTracked: Boolean = false
 
     val isEmpty: Boolean
         get() = id.isEmpty()
@@ -26,6 +27,10 @@ data class Ad(
 
     fun resetImpressionTracking() {
         isImpressionTracked = false
+    }
+    
+    fun setImpressionTracked() {
+        isImpressionTracked = true
     }
 
     fun impressionWasTracked(): Boolean {

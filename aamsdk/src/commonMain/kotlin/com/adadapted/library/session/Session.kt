@@ -1,7 +1,7 @@
 package com.adadapted.library.session
 
 import com.adadapted.library.DeviceInfo
-import com.adadapted.library.Zone
+import com.adadapted.library.view.Zone
 import com.adadapted.library.constants.Config
 import kotlinx.datetime.Clock
 import kotlinx.serialization.SerialName

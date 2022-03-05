@@ -7,6 +7,7 @@ object Config {
 
     const val LIBRARY_VERSION = "0.0.1"
     const val VERSION_NAME = "AA_MULTIPLATFORM_LIB"
+    const val LOG_TAG = "AA_MULTIPLATFORM_LIBRARY: "
 
     const val DEFAULT_AD_POLLING = 300000L // If the new Ad polling isn't set it will default to every 5 minutes
     const val DEFAULT_EVENT_POLLING = 5000L // Events will be pushed to the server every 5 seconds
