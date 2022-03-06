@@ -2,7 +2,6 @@ package com.adadapted.library.view
 
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.ad.AdActionType
-import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionListener
 import com.adadapted.library.PopupAdViewHandler
@@ -22,7 +21,7 @@ internal class AdZonePresenter()
 
     private var currentAd: Ad = Ad()
     private var zoneId: String = ""
-    private var listener: Listener? = null
+    private var zonePresenterListener: Listener? = null
     private var attached: Boolean
     private var sessionId: String? = null
     private var zoneLoaded: Boolean
@@ -52,7 +51,7 @@ internal class AdZonePresenter()
         }
         if (!attached) {
             attached = true
-            listener = l
+            zonePresenterListener = l
             sessionClient.addPresenter(this)
         }
         setNextAd()
@@ -61,7 +60,7 @@ internal class AdZonePresenter()
     fun onDetach() {
         if (attached) {
             attached = false
-            listener = null
+            zonePresenterListener = null
             completeCurrentAd()
             sessionClient.removePresenter(this)
         }
@@ -72,7 +71,7 @@ internal class AdZonePresenter()
             return
         }
         completeCurrentAd()
-        currentAd = if (listener != null && currentZone.hasAds()) {
+        currentAd = if (zonePresenterListener != null && currentZone.hasAds()) {
             val adPosition = randomAdStartPosition % currentZone.ads.size
             randomAdStartPosition++
             currentZone.ads[adPosition]
@@ -199,19 +198,19 @@ internal class AdZonePresenter()
     }
 
     private fun notifyZoneAvailable() {
-        listener?.onZoneAvailable(currentZone)
+        zonePresenterListener?.onZoneAvailable(currentZone)
     }
 
     private fun notifyAdsRefreshed() {
-        listener?.onAdsRefreshed(currentZone)
+        zonePresenterListener?.onAdsRefreshed(currentZone)
     }
 
     private fun notifyAdAvailable(ad: Ad) {
-        listener?.onAdAvailable(ad)
+        zonePresenterListener?.onAdAvailable(ad)
     }
 
     private fun notifyNoAdAvailable() {
-        listener?.onNoAdAvailable()
+        zonePresenterListener?.onNoAdAvailable()
     }
 
     private fun updateSessionId(sessionId: String): Boolean {

@@ -16,7 +16,7 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
         IS_REINITIALIZING_SESSION // SDK is currently reinitializing the Session
     }
 
-    private val listeners: MutableSet<SessionListener>
+    private val sessionListeners: MutableSet<SessionListener>
     private val presenters: MutableSet<String>
     private lateinit var deviceInfo: DeviceInfo
     private lateinit var currentSession: Session
@@ -26,14 +26,14 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     private var eventTimerRunning: Boolean
 
     private fun performAddListener(listener: SessionListener) {
-        listeners.add(listener)
+        sessionListeners.add(listener)
         if (this::currentSession.isInitialized) {
             listener.onSessionAvailable(currentSession)
         }
     }
 
     private fun performRemoveListener(listener: SessionListener) {
-        listeners.remove(listener)
+        sessionListeners.remove(listener)
     }
 
     private fun performAddPresenter(listener: SessionListener) {
@@ -126,31 +126,31 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     }
 
     private fun notifyPublishEvents() {
-        for (l in listeners) {
+        for (l in sessionListeners) {
             l.onPublishEvents()
         }
     }
 
     private fun notifySessionAvailable() {
-        for (l in listeners) {
+        for (l in sessionListeners) {
             l.onSessionAvailable(currentSession)
         }
     }
 
     private fun notifyAdsAvailable() {
-        for (l in listeners) {
+        for (l in sessionListeners) {
             l.onAdsAvailable(currentSession)
         }
     }
 
     private fun notifySessionInitFailed() {
-        for (l in listeners) {
+        for (l in sessionListeners) {
             l.onSessionInitFailed()
         }
     }
 
     private fun notifySessionExpired() {
-        for (l in listeners) {
+        for (l in sessionListeners) {
             l.onSessionExpired()
         }
     }
@@ -206,9 +206,9 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     }
 
     fun addListener(listener: SessionListener) {
-        transporter.dispatchToBackground {
+        //transporter.dispatchToBackground {
             performAddListener(listener)
-        }
+        //}
     }
 
     fun removeListener(listener: SessionListener) {
@@ -218,9 +218,9 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     }
 
     fun addPresenter(listener: SessionListener) {
-        transporter.dispatchToBackground {
+        //transporter.dispatchToBackground {
             performAddPresenter(listener)
-        }
+        //}
     }
 
     fun removePresenter(listener: SessionListener) {
@@ -248,7 +248,7 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     }
 
     init {
-        listeners = HashSet()
+        sessionListeners = HashSet()
         presenters = HashSet()
         pollingTimerRunning = false
         eventTimerRunning = false

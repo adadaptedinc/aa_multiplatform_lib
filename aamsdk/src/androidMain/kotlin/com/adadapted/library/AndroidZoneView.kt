@@ -23,7 +23,7 @@ class AndroidZoneView : RelativeLayout, AdZonePresenter.Listener, AndroidWebView
     private lateinit var webView: AndroidWebView
     private var presenter: AdZonePresenter? = null
     private var isVisible = true
-    private var listener: Listener? = null
+    private var zoneViewListener: Listener? = null
     private var isAdVisible = true
 
     constructor(context: Context) : super(context.applicationContext) {
@@ -55,35 +55,35 @@ class AndroidZoneView : RelativeLayout, AdZonePresenter.Listener, AndroidWebView
 
     fun onStart(listener: Listener? = null, contentListener: AdContentListener? = null) {
         presenter?.onAttach(this)
-        this.listener = listener
+        this.zoneViewListener = listener
         if (contentListener != null) {
             AdContentPublisher.getInstance().addListener(contentListener)
         }
     }
 
     fun onStop(contentListener: AdContentListener? = null) {
-        this.listener = null
+        this.zoneViewListener = null
         presenter?.onDetach()
         if (contentListener != null) {
             AdContentPublisher.getInstance().removeListener(contentListener)
         }
     }
 
-    private fun notifyZoneHasAds(hasAds: Boolean) {
+    private fun notifyClientZoneHasAds(hasAds: Boolean) {
         Handler(Looper.getMainLooper()).post {
-            listener?.onZoneHasAds(hasAds)
+            zoneViewListener?.onZoneHasAds(hasAds)
         }
     }
 
-    private fun notifyAdLoaded() {
+    private fun notifyClientAdLoaded() {
         Handler(Looper.getMainLooper()).post {
-            listener?.onAdLoaded()
+            zoneViewListener?.onAdLoaded()
         }
     }
 
-    private fun notifyAdLoadFailed() {
+    private fun notifyClientAdLoadFailed() {
         Handler(Looper.getMainLooper()).post {
-            listener?.onAdLoadFailed()
+            zoneViewListener?.onAdLoadFailed()
         }
     }
 
@@ -93,20 +93,22 @@ class AndroidZoneView : RelativeLayout, AdZonePresenter.Listener, AndroidWebView
             val dimension = zone.dimensions[Dimension.Orientation.PORT] //todo wtf is this all about
             adjustedLayoutParams = LayoutParams(
                 dimension?.width ?: LayoutParams.MATCH_PARENT,
-                dimension?.height ?: LayoutParams.MATCH_PARENT
+                dimension?.height ?: LayoutParams.WRAP_CONTENT
             )
 
             //adjustedLayoutParams = LayoutParams(LayoutParams.MATCH_PARENT, 120)
         }
         Handler(Looper.getMainLooper()).post { webView.layoutParams = adjustedLayoutParams }
-        notifyZoneHasAds(zone.hasAds())
+        notifyClientZoneHasAds(zone.hasAds())
+        println("AADEBUG" + "AAZONEVIEW onZoneAvailable HIT AND ZONE MADE")
     }
 
     override fun onAdsRefreshed(zone: Zone) {
-        notifyZoneHasAds(zone.hasAds())
+        notifyClientZoneHasAds(zone.hasAds())
     }
 
     override fun onAdAvailable(ad: Ad) {
+        println("AADEBUG" + "AAZONEVIEW onAdAvailable HIT AND webview loading")
         if (isVisible) {
             Handler(Looper.getMainLooper()).post { webView.loadAd(ad) }
         }
@@ -116,25 +118,25 @@ class AndroidZoneView : RelativeLayout, AdZonePresenter.Listener, AndroidWebView
         Handler(Looper.getMainLooper()).post { webView.loadBlank() }
     }
 
-    override fun onAdLoaded(ad: Ad) {
+    override fun onAdLoadedInWebView(ad: Ad) {
         if (presenter != null) {
             presenter?.onAdDisplayed(ad, isAdVisible)
-            notifyAdLoaded()
+            notifyClientAdLoaded()
         }
     }
 
-    override fun onAdLoadFailed() {
+    override fun onAdLoadInWebViewFailed() {
         if (presenter != null) {
             presenter?.onAdDisplayFailed()
-            notifyAdLoadFailed()
+            notifyClientAdLoadFailed()
         }
     }
 
-    override fun onAdClicked(ad: Ad) {
+    override fun onAdInWebViewClicked(ad: Ad) {
         presenter?.onAdClicked(ad)
     }
 
-    override fun onBlankLoaded() {
+    override fun onBlankAdInWebViewLoaded() {
         presenter?.onBlankDisplayed()
     }
 

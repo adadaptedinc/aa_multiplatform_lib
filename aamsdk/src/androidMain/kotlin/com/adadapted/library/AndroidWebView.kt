@@ -16,10 +16,10 @@ import com.adadapted.library.ad.Ad
 internal class AndroidWebView constructor(context: Context, private val listener: Listener) :
     WebView(context.applicationContext) {
     internal interface Listener {
-        fun onAdLoaded(ad: Ad)
-        fun onAdLoadFailed()
-        fun onAdClicked(ad: Ad)
-        fun onBlankLoaded()
+        fun onAdLoadedInWebView(ad: Ad)
+        fun onAdLoadInWebViewFailed()
+        fun onAdInWebViewClicked(ad: Ad)
+        fun onBlankAdInWebViewLoaded()
     }
 
     private lateinit var currentAd: Ad
@@ -40,19 +40,19 @@ internal class AndroidWebView constructor(context: Context, private val listener
     }
 
     private fun notifyAdLoaded() {
-        listener.onAdLoaded(currentAd)
+        listener.onAdLoadedInWebView(currentAd)
     }
 
     private fun notifyAdLoadFailed() {
-        listener.onAdLoadFailed()
+        listener.onAdLoadInWebViewFailed()
     }
 
     private fun notifyBlankLoaded() {
-        listener.onBlankLoaded()
+        listener.onBlankAdInWebViewLoaded()
     }
 
     private fun notifyAdClicked() {
-        listener.onAdClicked(currentAd)
+        listener.onAdInWebViewClicked(currentAd)
     }
 
     init {
