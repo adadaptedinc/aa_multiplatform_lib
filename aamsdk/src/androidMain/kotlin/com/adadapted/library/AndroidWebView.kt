@@ -12,7 +12,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import com.adadapted.library.ad.Ad
 
-@SuppressLint("ClickableViewAccessibility", "SetJavaScriptEnabled")
+@SuppressLint("ClickableViewAccessibility", "SetJavaScriptEnabled", "ViewConstructor")
 internal class AndroidWebView constructor(context: Context, private val listener: Listener) :
     WebView(context.applicationContext) {
     internal interface Listener {

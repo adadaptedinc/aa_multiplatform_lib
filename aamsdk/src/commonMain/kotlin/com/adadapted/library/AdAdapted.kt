@@ -21,8 +21,6 @@ object AdAdapted {
     //private var contentListener: AaSdkAdditContentListener? = null
     private val LOG_TAG = AdAdapted::class.simpleName
 
-    //private fun onHasAdsToServe(listener: (hasAds: Boolean) -> Unit) { }
-
     fun withAppId(key: String): AdAdapted {
         this.apiKey = key
         return this

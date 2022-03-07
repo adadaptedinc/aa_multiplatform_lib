@@ -4,6 +4,7 @@ import com.adadapted.library.DeviceInfo
 import com.adadapted.library.concurrency.Timer
 import com.adadapted.library.concurrency.TransporterCoroutineScope
 import com.adadapted.library.constants.Config
+import com.adadapted.library.constants.Config.LOG_TAG
 import kotlin.jvm.Synchronized
 import kotlin.native.concurrent.ThreadLocal
 
@@ -59,7 +60,7 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
 
     private fun performRefresh() {
         if (currentSession.hasExpired()) {
-            print(LOGTAG + "Session has expired. Expired at: " + currentSession.expiration)
+            print(LOG_TAG + "Session has expired. Expired at: " + currentSession.expiration)
             notifySessionExpired()
             performReinitialize()
         } else {
@@ -70,7 +71,7 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     private fun performReinitialize() {
         if (status == Status.OK || status == Status.SHOULD_REFRESH) {
             if (presenterSize() > 0) {
-                print(LOGTAG + "Reinitializing Session.")
+                print(LOG_TAG + "Reinitializing Session.")
                 status = Status.IS_REINITIALIZING_SESSION
                 transporter.dispatchToBackground { adapter.sendInit(deviceInfo, instance) }
             } else {
@@ -82,7 +83,7 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     private fun performRefreshAds() {
         if (status == Status.OK || status == Status.SHOULD_REFRESH) {
             if (presenterSize() > 0) {
-                print(LOGTAG + "Checking for more Ads.")
+                print(LOG_TAG + "Checking for more Ads.")
                 status = Status.IS_REFRESH_ADS
                 transporter.dispatchToBackground { adapter.sendRefreshAds(currentSession, instance) }
             } else {
@@ -104,11 +105,11 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
 
     private fun startPollingTimer() {
         if (pollingTimerRunning || currentSession.willNotServeAds()) {
-            print(LOGTAG + "Session will not serve Ads. Ignoring Ad polling timer.")
+            print(LOG_TAG + "Session will not serve Ads. Ignoring Ad polling timer.")
             return
         }
         pollingTimerRunning = true
-        print(LOGTAG + "Starting Ad polling timer.")
+        print(LOG_TAG + "Starting Ad polling timer.")
 
         val refreshTimer = Timer({ performRefresh() }, repeatMillis = currentSession.refreshTime, delayMillis = currentSession.refreshTime)
         refreshTimer.startTimer()
@@ -119,7 +120,7 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
             return
         }
         eventTimerRunning = true
-        print(LOGTAG + "Starting up the Event Publisher.")
+        print(LOG_TAG + "Starting up the Event Publisher.")
 
         val eventTimer = Timer({ notifyPublishEvents() }, repeatMillis = Config.DEFAULT_EVENT_POLLING, delayMillis = Config.DEFAULT_EVENT_POLLING)
         eventTimer.startTimer()
@@ -185,13 +186,13 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
 
         transporter.dispatchToBackground {
             val testDeviceInfo = DeviceInfo(
-            appId = "NWY0NTM2YZDMMDQ0",
+            appId = "NWY0NTM2YZDMMDQ0", //NTKXMZFJZTA2NMZJ NWY0NTM2YZDMMDQ0
             udid = "1234567890",
             device = "Emulator",
             deviceUdid = "12345",
             os = "AndroidiOS",
             isAllowRetargetingEnabled = true,
-            sdkVersion = "0.0.8"
+            sdkVersion = "0.0.1"
         )
             performInitialize(deviceInfo = testDeviceInfo) //TODO this is just mocked data for now
         }
@@ -206,32 +207,23 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     }
 
     fun addListener(listener: SessionListener) {
-        //transporter.dispatchToBackground {
-            performAddListener(listener)
-        //}
+        performAddListener(listener)
     }
 
     fun removeListener(listener: SessionListener) {
-        transporter.dispatchToBackground {
-            performRemoveListener(listener)
-        }
+        performRemoveListener(listener)
     }
 
     fun addPresenter(listener: SessionListener) {
-        //transporter.dispatchToBackground {
-            performAddPresenter(listener)
-        //}
+        performAddPresenter(listener)
     }
 
     fun removePresenter(listener: SessionListener) {
-        transporter.dispatchToBackground {
-            performRemovePresenter(listener)
-        }
+        performRemovePresenter(listener)
     }
 
     @ThreadLocal
     companion object {
-        private val LOGTAG = ":" + SessionClient::class.simpleName
         private lateinit var instance: SessionClient
 
         fun getInstance(): SessionClient {
