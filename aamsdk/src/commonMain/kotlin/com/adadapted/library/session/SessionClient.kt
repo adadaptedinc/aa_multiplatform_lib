@@ -1,10 +1,11 @@
 package com.adadapted.library.session
 
-import com.adadapted.library.DeviceInfo
+import com.adadapted.library.device.DeviceInfo
 import com.adadapted.library.concurrency.Timer
 import com.adadapted.library.concurrency.TransporterCoroutineScope
 import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
+import com.adadapted.library.device.DeviceInfoClient
 import kotlin.jvm.Synchronized
 import kotlin.native.concurrent.ThreadLocal
 
@@ -183,27 +184,13 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     @Synchronized
     fun start(listener: SessionListener) {
         addListener(listener)
-
-        transporter.dispatchToBackground {
-            val testDeviceInfo = DeviceInfo(
-            appId = "NWY0NTM2YZDMMDQ0", //NTKXMZFJZTA2NMZJ NWY0NTM2YZDMMDQ0
-            udid = "1234567890",
-            device = "Emulator",
-            deviceUdid = "12345",
-            os = "AndroidiOS",
-            isAllowRetargetingEnabled = true,
-            sdkVersion = "0.0.1"
-        )
-            performInitialize(deviceInfo = testDeviceInfo) //TODO this is just mocked data for now
-        }
-
-//        DeviceInfoClient.getInstance().getDeviceInfo(object: DeviceInfoClient.Callback { //TODO add deviceInfoClient
-//            override fun onDeviceInfoCollected(deviceInfo: DeviceInfo) {
-//                transporter.dispatchToBackground {
-//                    performInitialize(deviceInfo)
-//                }
-//            }
-//        })
+        DeviceInfoClient.getInstance().getDeviceInfo(object: DeviceInfoClient.Callback {
+            override fun onDeviceInfoCollected(deviceInfo: DeviceInfo) {
+                transporter.dispatchToBackground {
+                    performInitialize(deviceInfo)
+                }
+            }
+        })
     }
 
     fun addListener(listener: SessionListener) {

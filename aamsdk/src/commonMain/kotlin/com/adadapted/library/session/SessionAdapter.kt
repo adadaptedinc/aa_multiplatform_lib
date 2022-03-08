@@ -1,6 +1,6 @@
 package com.adadapted.library.session
 
-import com.adadapted.library.DeviceInfo
+import com.adadapted.library.device.DeviceInfo
 
 interface SessionAdapter {
     interface SessionInitListener {

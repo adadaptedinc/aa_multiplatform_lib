@@ -1,6 +1,6 @@
 package com.adadapted.library.network
 
-import com.adadapted.library.DeviceInfo
+import com.adadapted.library.device.DeviceInfo
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionAdapter
 import io.ktor.client.call.receive
@@ -10,6 +10,8 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import io.ktor.utils.io.core.use
 import kotlinx.serialization.json.decodeFromJsonElement
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.serializer
 
 class HttpSessionAdapter(private val initUrl: String, private val refreshUrl: String) : HttpConnector(),
     SessionAdapter {
