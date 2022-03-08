@@ -1,4 +1,4 @@
-package com.adadapted.library
+package com.adadapted.library.view
 
 import android.content.Context
 import android.os.Handler
@@ -6,12 +6,9 @@ import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
-import android.widget.RelativeLayout
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.ad.AdContentListener
 import com.adadapted.library.ad.AdContentPublisher
-import com.adadapted.library.view.AdZonePresenter
-import com.adadapted.library.view.Zone
 
 class AndroidZoneView : FrameLayout, AdZonePresenter.Listener, AndroidWebView.Listener {
     interface Listener {

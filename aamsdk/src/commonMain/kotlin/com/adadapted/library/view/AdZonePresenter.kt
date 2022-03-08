@@ -4,7 +4,7 @@ import com.adadapted.library.ad.Ad
 import com.adadapted.library.ad.AdActionType
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionListener
-import com.adadapted.library.PopupAdViewHandler
+import com.adadapted.library.view.PopupAdViewHandler
 import com.adadapted.library.ad.AdContentPublisher
 import com.adadapted.library.concurrency.Timer
 import com.adadapted.library.constants.Config.LOG_TAG

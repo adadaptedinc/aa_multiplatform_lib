@@ -1,9 +1,8 @@
 package com.adadapted.library.ad
 
-import com.adadapted.library.Payload
+import com.adadapted.library.payload.Payload
 import com.adadapted.library.constants.Config
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
 
 @kotlinx.serialization.Serializable
 data class Ad(

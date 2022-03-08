@@ -1,4 +1,4 @@
-package com.adadapted.library
+package com.adadapted.library.view
 
 import android.app.Activity
 import android.content.Intent

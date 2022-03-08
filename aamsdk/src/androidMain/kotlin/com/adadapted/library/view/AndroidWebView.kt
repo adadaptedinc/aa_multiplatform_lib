@@ -1,4 +1,4 @@
-package com.adadapted.library
+package com.adadapted.library.view
 
 import android.annotation.SuppressLint
 import android.content.Context

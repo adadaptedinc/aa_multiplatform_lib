@@ -1,4 +1,4 @@
-package com.adadapted.library
+package com.adadapted.library.payload
 
 import com.adadapted.library.atl.AddToListItem
 import kotlinx.serialization.SerialName
