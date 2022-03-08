@@ -12,7 +12,33 @@ import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
 
 object AdAdapted: AdAdaptedBase() {
-    fun start(context: Context): AdAdaptedBase {
+
+    fun withAppId(key: String): AdAdapted {
+        this.apiKey = key
+        return this
+    }
+
+    fun inEnvironment(env: AdAdaptedEnv): AdAdapted {
+        isProd = env == AdAdaptedEnv.PROD
+        return this
+    }
+
+    fun onHasAdsToServe(listener: (hasAds: Boolean) -> Unit): AdAdapted {
+        sessionListener = listener
+        return this
+    }
+
+//    fun setSdkEventListener(listener: AaSdkEventListener): AdAdapted {
+//        eventListener = listener
+//        return this
+//    }
+//
+//    fun setSdkAdditContentListener(listener: AaSdkAdditContentListener): AdAdapted {
+//        contentListener = listener
+//        return this
+//    }
+
+    fun start(context: Context) {
         if (apiKey.isEmpty()) {
             println(LOG_TAG + "The Api Key cannot be NULL")
             println("AdAdapted API Key Is Missing")
@@ -21,7 +47,6 @@ object AdAdapted: AdAdaptedBase() {
             if (!isProd) {
                 println(LOG_TAG + "AdAdapted Android Advertising SDK has already been started")
             }
-            return this
         }
         hasStarted = true
         setupClients(context)
@@ -55,8 +80,6 @@ object AdAdapted: AdAdaptedBase() {
         //AppEventClient.getInstance().trackSdkEvent(EventStrings.APP_OPENED)
         //KeywordInterceptMatcher.match("INIT") //init the matcher
         println(LOG_TAG + "AdAdapted Android Advertising SDK v%s initialized." + Config.VERSION_NAME)
-
-        return this
     }
 
     fun disableAdTracking(context: Context): AdAdaptedBase {

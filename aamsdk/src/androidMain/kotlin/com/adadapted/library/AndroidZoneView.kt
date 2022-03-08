@@ -6,6 +6,7 @@ import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
+import android.widget.RelativeLayout
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.ad.AdContentListener
 import com.adadapted.library.ad.AdContentPublisher
@@ -86,6 +87,16 @@ class AndroidZoneView : FrameLayout, AdZonePresenter.Listener, AndroidWebView.Li
     }
 
     override fun onZoneAvailable(zone: Zone) {
+//        var adjustedLayoutParams = RelativeLayout.LayoutParams(width, height)
+//        if (width == 0 || height == 0) {
+//            val dimension = zone.dimensions[Dimension.Orientation.PORT]
+//            adjustedLayoutParams = RelativeLayout.LayoutParams(
+//                dimension?.width ?: RelativeLayout.LayoutParams.MATCH_PARENT,
+//                dimension?.height ?: RelativeLayout.LayoutParams.MATCH_PARENT
+//            )
+//        }
+//        Handler(Looper.getMainLooper()).post { webView.layoutParams = adjustedLayoutParams }
+
         notifyClientZoneHasAds(zone.hasAds())
     }
 
