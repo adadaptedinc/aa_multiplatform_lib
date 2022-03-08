@@ -3,20 +3,18 @@ package com.adadapted.library
 import aa_multiplatform_lib.cinterop.UIViewWithOverridesProtocol
 import kotlinx.cinterop.*
 import platform.CoreGraphics.*
+import platform.Foundation.NSURL
+import platform.Foundation.NSURLRequest
 import platform.UIKit.*
 import platform.WebKit.*
 
-actual class ZoneView(): UIView (frame = cValue { CGRectZero }), UIViewWithOverridesProtocol {
-
-    private var adView: WKWebView
+actual class ZoneView(): WKWebView (frame = cValue { CGRectZero }, configuration = WKWebViewConfiguration()), UIViewWithOverridesProtocol {
 
     init {
-        adView = WKWebView(frame = cValue { CGRectZero }, configuration = WKWebViewConfiguration()).apply {
-            translatesAutoresizingMaskIntoConstraints = false
-
-        }
-        addSubview(adView)
-        translatesAutoresizingMaskIntoConstraints = false
+        this.translatesAutoresizingMaskIntoConstraints = false
+        this.setAllowsBackForwardNavigationGestures(false)
+        this.scrollView().bounces = false
+        this.scrollView().setContentInsetAdjustmentBehavior(UIScrollViewContentInsetAdjustmentBehavior.UIScrollViewContentInsetAdjustmentNever)
         setupConstraints()
     }
 
@@ -30,18 +28,19 @@ actual class ZoneView(): UIView (frame = cValue { CGRectZero }), UIViewWithOverr
             "" + this.origin.x + ", " + this.origin.y + ", " + (this.origin.x +this.size.width) + ", " + (this.origin.y +this.size.height)
         }
         println("ZoneView dimensions: $rectAsString")
+        loadAdView()
+    }
+
+    fun loadAdView() {
+        val link = "https://sandbox.adadapted.com/a/NWY0NTZIODZHNWY0;101942;45445"
+        val request = NSURLRequest(NSURL(string = link))
+        print(link)
+        loadRequest(request)
     }
 
     private fun setupConstraints() {
         val constraints = mutableListOf<NSLayoutConstraint>()
-        constraints.add(leadingAnchor.constraintEqualToAnchor(leadingAnchor))
-        constraints.add(topAnchor.constraintEqualToAnchor(topAnchor))
-        constraints.add(bottomAnchor.constraintEqualToAnchor(topAnchor, 120.0))
-        constraints.add(centerXAnchor.constraintEqualToAnchor(centerXAnchor))
-        constraints.add(centerYAnchor.constraintEqualToAnchor(centerYAnchor))
-
-        constraints += adView.constraintsToFillSuperview()
-
+        constraints += this.constraintsToFillSuperview()
         NSLayoutConstraint.activateConstraints(constraints)
     }
 
@@ -67,3 +66,19 @@ actual class ZoneView(): UIView (frame = cValue { CGRectZero }), UIViewWithOverr
 }
 
 fun createZoneView(): UIView = ZoneView()
+
+//val webView = WKWebView.alloc()
+//webView.init()
+//
+//webView.setUIDelegate(object : WKUIDelegate {})// if you want more control over the UIDelegate, just override methods
+//webView.setNavigationDelegate(object : WKNavigationDelegate {})// if you want more control over the NavigationDelegate, just override methods
+//setView(webView)
+//val urlString = "https://threejs.org/examples/#webgl_loader_mmd"
+//// val urlString = "https://threejs.org/examples/#webgl_buffergeometry_instancing_billboards"
+//// val urlString = "https://threejs.org/examples/#webgl_lines_fat_wireframe"
+//val url = NSURL.URLWithString(urlString)
+//val nsurlRequest = NSURLRequest.requestWithURL(url)
+//webView.loadRequest(nsurlRequest)
+//webView.setAllowsBackForwardNavigationGestures(true)
+//webView.scrollView().setBounces(false)
+//webView.scrollView().setContentInsetAdjustmentBehavior(UIScrollViewContentInsetAdjustmentBehavior.Never) //remove safearea !!!
