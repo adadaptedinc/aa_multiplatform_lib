@@ -12,8 +12,7 @@ data class Ad(
     @SerialName("action_type") val actionType: String = "",
     @SerialName("action_path") val actionPath: String = "",
     val payload: Payload = Payload(listOf()),
-    @SerialName("refresh_time") val refreshTime: Long = Config.DEFAULT_AD_REFRESH,
-    @SerialName("tracking_html") val trackingHtml: String = ""
+    @SerialName("refresh_time") val refreshTime: Long = Config.DEFAULT_AD_REFRESH
 ) {
     private var isImpressionTracked: Boolean = false
 
