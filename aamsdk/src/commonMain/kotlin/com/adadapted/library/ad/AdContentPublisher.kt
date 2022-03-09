@@ -19,8 +19,8 @@ class AdContentPublisher private constructor() {
         if (content.hasNoItems()) {
             return
         }
-        transporter.dispatchToBackground {
-            for (listener in listeners) {
+        transporter.dispatchToMain {
+        for (listener in listeners) {
                 listener.onContentAvailable(zoneId, content)
             }
         }

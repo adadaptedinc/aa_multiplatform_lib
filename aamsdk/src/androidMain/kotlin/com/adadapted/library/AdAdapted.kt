@@ -1,6 +1,7 @@
 package com.adadapted.library
 
 import android.content.Context
+import com.adadapted.library.atl.AddToListContent
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
@@ -33,10 +34,10 @@ object AdAdapted: AdAdaptedBase() {
 //        return this
 //    }
 //
-//    fun setSdkAdditContentListener(listener: AaSdkAdditContentListener): AdAdapted {
-//        contentListener = listener
-//        return this
-//    }
+    fun setSdkAddItContentListener(listener: (atlContent: AddToListContent) -> Unit): AdAdapted {
+        contentListener = listener
+        return this
+    }
 
     fun start(context: Context) {
         if (apiKey.isEmpty()) {
