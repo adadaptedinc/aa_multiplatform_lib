@@ -36,7 +36,7 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
             //AppEventClient.getInstance().trackError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
             return
         }
-        notifyContentAvailable(content)
+        notifyContentAvailable(content) //TODO why not use the AdContentListener like a regular ad here?
     }
 
     fun publishAdContent(content: AdContent) {

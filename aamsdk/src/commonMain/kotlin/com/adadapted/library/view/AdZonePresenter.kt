@@ -101,9 +101,9 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
     }
 
     fun onAdDisplayed(ad: Ad, isAdVisible: Boolean) {
+        startZoneTimer()
         adStarted = true
         trackAdImpression(ad, isAdVisible)
-        startZoneTimer()
     }
 
     fun onAdVisibilityChanged(isAdVisible: Boolean) {
@@ -111,15 +111,15 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
     }
 
     fun onAdDisplayFailed() {
+        startZoneTimer()
         adStarted = true
         currentAd = Ad()
-        startZoneTimer()
     }
 
     fun onBlankDisplayed() {
+        startZoneTimer()
         adStarted = true
         currentAd = Ad()
-        startZoneTimer()
     }
 
     private fun trackAdImpression(ad: Ad, isAdVisible: Boolean) {
@@ -176,8 +176,10 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
     }
 
     private fun restartTimer() {
-        timer.cancelTimer()
-        timerRunning = false
+        if (::timer.isInitialized) {
+            timer.cancelTimer()
+            timerRunning = false
+        }
     }
 
     private fun handleContentAction(ad: Ad) {
