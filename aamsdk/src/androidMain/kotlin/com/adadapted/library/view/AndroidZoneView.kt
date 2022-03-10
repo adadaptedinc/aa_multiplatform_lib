@@ -54,7 +54,6 @@ class AndroidZoneView : FrameLayout, AdZonePresenter.Listener, AndroidWebView.Li
         this.zoneViewListener = listener
         if (contentListener != null) {
             AdContentPublisher.getInstance().addListener(contentListener)
-            //TODO maybe use the AdditPublisher here or combine it with AdContentPublisher?
         }
     }
 

@@ -36,7 +36,7 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
             //AppEventClient.getInstance().trackError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
             return
         }
-        notifyContentAvailable(content) //TODO why not use the AdContentListener like a regular ad here?
+        notifyContentAvailable(content)
     }
 
     fun publishAdContent(content: AdContent) {
@@ -58,18 +58,14 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
 
     @ThreadLocal
     companion object {
-        private const val LISTENER_REGISTRATION_ERROR = "App did not register an Addit Content listener"
+        private const val LISTENER_REGISTRATION_ERROR = "App did not register an AddIt Content listener"
         private lateinit var instance: AddItContentPublisher
 
-        fun getInstance(): AddItContentPublisher {
+        fun getInstance(transporter: Transporter = Transporter()): AddItContentPublisher {
             if (!this::instance.isInitialized) {
-                createInstance()
+                instance = AddItContentPublisher(transporter)
             }
             return instance
-        }
-
-        fun createInstance() {
-            instance = AddItContentPublisher(Transporter())
         }
     }
 }

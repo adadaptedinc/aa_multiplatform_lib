@@ -80,7 +80,7 @@ data class AddItContent(
     }
 
     companion object {
-        //TODO change these to map functions
+        //TODO change these to map functions?
         fun createDeeplinkContent(
             payloadId: String,
             message: String,

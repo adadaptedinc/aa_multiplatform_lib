@@ -77,7 +77,7 @@ class AndroidWebViewPopupActivity : Activity() {
             return
         }
         popupWebView.settings.javaScriptEnabled = true
-        popupWebView.addJavascriptInterface(PopupJavascriptBridge(ad), "AdAdapted")
+        popupWebView.addJavascriptInterface(JavascriptBridge(ad), "AdAdapted")
         popupWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
                 view: WebView,

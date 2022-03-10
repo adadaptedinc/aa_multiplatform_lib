@@ -3,9 +3,8 @@ package com.adadapted.library.ad
 import com.adadapted.library.concurrency.Transporter
 import kotlin.native.concurrent.ThreadLocal
 
-class AdContentPublisher private constructor() {
+class AdContentPublisher private constructor(private val transporter: Transporter) {
     private val listeners: MutableSet<AdContentListener> = HashSet()
-    private val transporter = Transporter() //todo inject
 
     fun addListener(listener: AdContentListener) {
         listeners.add(listener)
@@ -30,15 +29,11 @@ class AdContentPublisher private constructor() {
     companion object {
         private lateinit var instance: AdContentPublisher
 
-        fun getInstance(): AdContentPublisher {
+        fun getInstance(transporter: Transporter = Transporter()): AdContentPublisher {
             if (!this::instance.isInitialized) {
-                createInstance()
+                instance = AdContentPublisher(transporter)
             }
             return instance
-        }
-
-        fun createInstance() {
-            instance = AdContentPublisher()
         }
     }
 }

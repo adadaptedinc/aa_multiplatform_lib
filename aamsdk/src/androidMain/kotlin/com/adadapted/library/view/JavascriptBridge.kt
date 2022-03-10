@@ -7,7 +7,7 @@ import com.adadapted.library.atl.AddToListItem
 import com.adadapted.library.atl.AddItContentPublisher
 import com.adadapted.library.atl.PopupContent.Companion.createPopupContent
 
-class PopupJavascriptBridge internal constructor(private val ad: Ad) {
+class JavascriptBridge internal constructor(private val ad: Ad) {
     @JavascriptInterface
     fun deliverAdContent() {
         val params = HashMap<String, String>()
