@@ -8,8 +8,14 @@ import kotlin.coroutines.CoroutineContext
 
 class Transporter: TransporterCoroutineScope {
     override fun dispatchToBackground(backgroundFunc: suspend CoroutineScope.() -> Unit): Job {
-        return launch {
+        return launch(Dispatchers.Default) {
             backgroundFunc()
+        }
+    }
+
+    override fun dispatchToMain(mainFunc: suspend CoroutineScope.() -> Unit): Job {
+        return launch(Dispatchers.Main) {
+            mainFunc()
         }
     }
 

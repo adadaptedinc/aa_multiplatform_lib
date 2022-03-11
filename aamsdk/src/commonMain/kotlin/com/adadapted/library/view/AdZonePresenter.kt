@@ -4,15 +4,13 @@ import com.adadapted.library.ad.Ad
 import com.adadapted.library.ad.AdActionType
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionListener
-import com.adadapted.library.view.PopupAdViewHandler
 import com.adadapted.library.ad.AdContentPublisher
 import com.adadapted.library.concurrency.Timer
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.session.SessionClient
 import kotlin.jvm.Synchronized
 
-internal class AdZonePresenter()
-    : SessionListener {
+internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : SessionListener {
     internal interface Listener {
         fun onZoneAvailable(zone: Zone)
         fun onAdsRefreshed(zone: Zone)
@@ -103,9 +101,9 @@ internal class AdZonePresenter()
     }
 
     fun onAdDisplayed(ad: Ad, isAdVisible: Boolean) {
+        startZoneTimer()
         adStarted = true
         trackAdImpression(ad, isAdVisible)
-        startZoneTimer()
     }
 
     fun onAdVisibilityChanged(isAdVisible: Boolean) {
@@ -113,15 +111,15 @@ internal class AdZonePresenter()
     }
 
     fun onAdDisplayFailed() {
+        startZoneTimer()
         adStarted = true
         currentAd = Ad()
-        startZoneTimer()
     }
 
     fun onBlankDisplayed() {
+        startZoneTimer()
         adStarted = true
         currentAd = Ad()
-        startZoneTimer()
     }
 
     private fun trackAdImpression(ad: Ad, isAdVisible: Boolean) {
@@ -178,8 +176,10 @@ internal class AdZonePresenter()
     }
 
     private fun restartTimer() {
-        timer.cancelTimer()
-        timerRunning = false
+        if (::timer.isInitialized) {
+            timer.cancelTimer()
+            timerRunning = false
+        }
     }
 
     private fun handleContentAction(ad: Ad) {
@@ -187,15 +187,12 @@ internal class AdZonePresenter()
         AdContentPublisher.getInstance().publishContent(zoneId, ad.getContent())
     }
 
-    private fun handleLinkAction(ad: Ad) { //TODO link action extraction
-//        val intent = Intent(Intent.ACTION_VIEW)
-//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//        intent.data = Uri.parse(ad.actionPath)
-//        context.startActivity(intent)
+    private fun handleLinkAction(ad: Ad) {
+        adViewHandler.handleLink(ad)
     }
 
     private fun handlePopupAction(ad: Ad) {
-        PopupAdViewHandler.handlePopupAd(ad)
+        adViewHandler.handlePopup(ad)
     }
 
     private fun notifyZoneAvailable() {

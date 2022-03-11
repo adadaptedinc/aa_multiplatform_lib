@@ -18,7 +18,7 @@ class AndroidZoneView : FrameLayout, AdZonePresenter.Listener, AndroidWebView.Li
     }
 
     private lateinit var webView: AndroidWebView
-    private var presenter: AdZonePresenter = AdZonePresenter() //inject
+    private var presenter: AdZonePresenter = AdZonePresenter(AdViewHandler(context))
     private var zoneViewListener: Listener? = null
     private var isVisible = true
     private var isAdVisible = true

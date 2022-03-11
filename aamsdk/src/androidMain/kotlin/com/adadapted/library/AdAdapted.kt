@@ -1,6 +1,8 @@
 package com.adadapted.library
 
 import android.content.Context
+import com.adadapted.library.atl.AddItContentPublisher
+import com.adadapted.library.atl.AddToListContent
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
@@ -33,10 +35,10 @@ object AdAdapted: AdAdaptedBase() {
 //        return this
 //    }
 //
-//    fun setSdkAdditContentListener(listener: AaSdkAdditContentListener): AdAdapted {
-//        contentListener = listener
-//        return this
-//    }
+    fun setSdkAddItContentListener(listener: (atlContent: AddToListContent) -> Unit): AdAdapted {
+        contentListener = listener
+        return this
+    }
 
     fun start(context: Context) {
         if (apiKey.isEmpty()) {
@@ -51,7 +53,7 @@ object AdAdapted: AdAdaptedBase() {
         hasStarted = true
         setupClients(context)
         //eventListener?.let { SdkEventPublisher.getInstance().setListener(it) }
-        //contentListener?.let { AdditContentPublisher.getInstance().addListener(it) }
+        contentListener.let { AddItContentPublisher.getInstance().addListener(it) }
 //        PayloadClient.getInstance().pickupPayloads(object : PayloadClient.Callback {
 //            override fun onPayloadAvailable(content: List<AdditContent>) {
 //                if (content.isNotEmpty()) {
