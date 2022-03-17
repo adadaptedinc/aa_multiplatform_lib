@@ -33,7 +33,7 @@ data class Session(
     }
 
     fun hasExpired(): Boolean {
-        return convertExpirationToDate(expiration) > (Clock.System.now().epochSeconds)
+        return Clock.System.now().epochSeconds > expiration
     }
 
     fun getZone(zoneId: String): Zone {
@@ -52,11 +52,5 @@ data class Session(
 
     fun willNotServeAds(): Boolean {
         return !willServeAds || refreshTime == 0L
-    }
-
-    companion object {
-        fun convertExpirationToDate(expireTime: Long): Long {
-            return (expireTime * 1000)
-        }
     }
 }

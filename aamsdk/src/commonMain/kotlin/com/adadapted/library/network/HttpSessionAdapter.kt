@@ -13,10 +13,13 @@ import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.serializer
 
-class HttpSessionAdapter(private val initUrl: String, private val refreshUrl: String) : HttpConnector(),
-    SessionAdapter {
+class HttpSessionAdapter(private val initUrl: String, private val refreshUrl: String) :
+    HttpConnector(), SessionAdapter {
 
-    override suspend fun sendInit(deviceInfo: DeviceInfo, listener: SessionAdapter.SessionInitListener) {
+    override suspend fun sendInit(
+        deviceInfo: DeviceInfo,
+        listener: SessionAdapter.SessionInitListener
+    ) {
         try {
             httpClient.use {
                 val response: HttpResponse = httpClient.post(initUrl) {
@@ -24,7 +27,8 @@ class HttpSessionAdapter(private val initUrl: String, private val refreshUrl: St
                     body = deviceInfo
                 }
                 listener.onSessionInitialized(
-                    json.decodeFromJsonElement<Session>(response.receive()).apply { this.deviceInfo = deviceInfo })
+                    json.decodeFromJsonElement<Session>(response.receive())
+                        .apply { this.deviceInfo = deviceInfo })
             }
         } catch (e: Exception) {
             println(e.message)

@@ -8,6 +8,9 @@ import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
+import com.adadapted.library.keyword.InterceptClient
+import com.adadapted.library.keyword.InterceptMatcher
+import com.adadapted.library.network.HttpInterceptAdapter
 import com.adadapted.library.network.HttpSessionAdapter
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
@@ -80,7 +83,7 @@ object AdAdapted: AdAdaptedBase() {
         }
         SessionClient.getInstance().start(startListener)
         //AppEventClient.getInstance().trackSdkEvent(EventStrings.APP_OPENED)
-        //KeywordInterceptMatcher.match("INIT") //init the matcher
+        //InterceptMatcher.match("INIT") //init the matcher //TODO init this properly
         println(LOG_TAG + "AdAdapted Android Advertising SDK v%s initialized." + Config.VERSION_NAME)
     }
 
@@ -115,7 +118,7 @@ object AdAdapted: AdAdaptedBase() {
         SessionClient.createInstance(HttpSessionAdapter(Config.getInitSessionUrl(), Config.getRefreshAdsUrl()), Transporter())
         //AppEventClient.createInstance(HttpAppEventSink(Config.getAppEventsUrl(), Config.getAppErrorsUrl()), Transporter())
         //AdEventClient.createInstance(HttpAdEventSink(Config.getAdsEventUrl()), Transporter())
-        //InterceptClient.createInstance(HttpInterceptAdapter(Config.getRetrieveInterceptsUrl(), Config.getInterceptEventsUrl()), Transporter())
+        InterceptClient.createInstance(HttpInterceptAdapter(Config.getRetrieveInterceptsUrl(), Config.getInterceptEventsUrl()), Transporter())
         //PayloadClient.createInstance(HttpPayloadAdapter(Config.getPickupPayloadsUrl(), Config.getTrackingPayloadUrl()), AppEventClient.getInstance(), Transporter())
     }
 }
