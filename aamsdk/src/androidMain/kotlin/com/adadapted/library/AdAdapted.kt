@@ -84,6 +84,11 @@ object AdAdapted: AdAdaptedBase() {
         println(LOG_TAG + "AdAdapted Android Advertising SDK v%s initialized." + Config.VERSION_NAME)
     }
 
+    fun setCustomIdentifier(identifier: String): AdAdaptedBase {
+        customIdentifier = identifier
+        return this
+    }
+
     fun disableAdTracking(context: Context): AdAdaptedBase {
         setAdTracking(context, true)
         return this
@@ -106,7 +111,7 @@ object AdAdapted: AdAdaptedBase() {
         Config.init(isProd)
 
         val deviceInfoExtractor = DeviceInfoExtractor(context)
-        DeviceInfoClient.createInstance(apiKey, isProd, params, deviceInfoExtractor, Transporter())
+        DeviceInfoClient.createInstance(apiKey, isProd, params, customIdentifier, deviceInfoExtractor, Transporter())
         SessionClient.createInstance(HttpSessionAdapter(Config.getInitSessionUrl(), Config.getRefreshAdsUrl()), Transporter())
         //AppEventClient.createInstance(HttpAppEventSink(Config.getAppEventsUrl(), Config.getAppErrorsUrl()), Transporter())
         //AdEventClient.createInstance(HttpAdEventSink(Config.getAdsEventUrl()), Transporter())

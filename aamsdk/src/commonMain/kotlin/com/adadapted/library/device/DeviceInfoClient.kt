@@ -7,6 +7,7 @@ class DeviceInfoClient private constructor(
     private val appId: String,
     private val isProd: Boolean,
     private val params: Map<String, String>,
+    private val customIdentifier: String,
     private val deviceInfoExtractor: DeviceInfoExtractor,
     private val transporter: TransporterCoroutineScope
 ) {
@@ -26,7 +27,7 @@ class DeviceInfoClient private constructor(
     }
 
     private fun collectDeviceInfo() {
-        this.deviceInfo = deviceInfoExtractor.extractDeviceInfo(appId, isProd, params)
+        this.deviceInfo = deviceInfoExtractor.extractDeviceInfo(appId, isProd, customIdentifier, params)
         notifyCallbacks()
     }
 
@@ -52,10 +53,11 @@ class DeviceInfoClient private constructor(
             appId: String,
             isProd: Boolean,
             params: Map<String, String>,
+            customIdentifier: String,
             deviceInfoExtractor: DeviceInfoExtractor,
             transporter: TransporterCoroutineScope
         ) {
-            instance = DeviceInfoClient(appId, isProd, params, deviceInfoExtractor, transporter)
+            instance = DeviceInfoClient(appId, isProd, params, customIdentifier, deviceInfoExtractor, transporter)
         }
 
         fun getInstance(): DeviceInfoClient {
