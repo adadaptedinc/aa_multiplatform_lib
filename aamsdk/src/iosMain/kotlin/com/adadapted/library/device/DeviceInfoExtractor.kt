@@ -9,6 +9,7 @@ actual class DeviceInfoExtractor {
     actual fun extractDeviceInfo(
         appId: String,
         isProd: Boolean,
+        customIdentifier: String,
         params: Map<String, String>
     ): DeviceInfo {
         TODO("Not yet implemented")

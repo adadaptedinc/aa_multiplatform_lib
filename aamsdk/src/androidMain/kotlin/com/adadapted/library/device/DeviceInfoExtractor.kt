@@ -19,27 +19,31 @@ import java.util.Locale
 actual class DeviceInfoExtractor(context: Context) {
     private var contextRef: Context? = context
 
-    actual fun extractDeviceInfo(appId: String, isProd: Boolean, params: Map<String, String>): DeviceInfo {
+    actual fun extractDeviceInfo(appId: String, isProd: Boolean, customIdentifier: String, params: Map<String, String>): DeviceInfo {
         var mUdid: String
-        var mAllowRetargeting: Boolean
+        var mAllowRetargeting = false
         var mScale = 0f
         var mHeight = 0
         var mWidth = 0
         var mDensity = 0
 
-        try {
-            Class.forName(AdvertisingIdClientName)
-            val info = contextRef?.let { getAdvertisingIdClientInfo(it) }
-            if (info != null) {
-                mUdid = info.id
-                mAllowRetargeting = (!info.isLimitAdTrackingEnabled)
-            } else {
+        if (customIdentifier.isNotEmpty()) {
+            mUdid = customIdentifier
+        } else {
+            try {
+                Class.forName(AdvertisingIdClientName)
+                val info = contextRef?.let { getAdvertisingIdClientInfo(it) }
+                if (info != null) {
+                    mUdid = info.id
+                    mAllowRetargeting = (!info.isLimitAdTrackingEnabled)
+                } else {
+                    mUdid = captureAndroidId(contextRef)
+                    mAllowRetargeting = false
+                }
+            } catch (e: ClassNotFoundException) {
                 mUdid = captureAndroidId(contextRef)
                 mAllowRetargeting = false
             }
-        } catch (e: ClassNotFoundException) {
-            mUdid = captureAndroidId(contextRef)
-            mAllowRetargeting = false
         }
 
         val mBundleVersion: String = try {
@@ -110,7 +114,26 @@ actual class DeviceInfoExtractor(context: Context) {
     private fun captureAndroidId(context: Context?): String {
         @SuppressLint("HardwareIds") val androidId =
             Settings.Secure.getString(context?.contentResolver, Settings.Secure.ANDROID_ID)
-        return androidId ?: ""
+        return androidId ?: getOrGenerateCustomId(context)
+    }
+
+    private fun getOrGenerateCustomId(context: Context?): String {
+        if (context == null) {
+            return DeviceIdGenerator.generateId()
+        }
+
+        val sharedPrefs = context.getSharedPreferences(Config.AASDK_PREFS_KEY, Context.MODE_PRIVATE)
+        val generatedId = sharedPrefs.getString(Config.AASDK_PREFS_GENERATED_ID_KEY, "")
+
+        if (generatedId.isNullOrEmpty()) {
+            val newGeneratedId = DeviceIdGenerator.generateId()
+            with(sharedPrefs.edit()) {
+                putString(Config.AASDK_PREFS_GENERATED_ID_KEY, newGeneratedId)
+                apply()
+            }
+            return newGeneratedId
+        }
+        return generatedId
     }
 
     private fun isTrackingDisabled(context: Context): Boolean {
