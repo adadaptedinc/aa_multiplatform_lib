@@ -7,7 +7,10 @@ import com.adadapted.library.session.SessionListener
 import kotlin.jvm.Synchronized
 import kotlin.native.concurrent.ThreadLocal
 
-class InterceptClient private constructor(private val adapter: InterceptAdapter, private val transporter: TransporterCoroutineScope) : SessionListener {
+class InterceptClient private constructor(
+    private val adapter: InterceptAdapter,
+    private val transporter: TransporterCoroutineScope
+) : SessionListener {
     interface Listener {
         fun onKeywordInterceptInitialized(intercept: Intercept)
     }
@@ -19,11 +22,14 @@ class InterceptClient private constructor(private val adapter: InterceptAdapter,
         if (session == null || listener == null) {
             return
         }
-        adapter.retrieve(session, object : InterceptAdapter.Callback {
-            override fun onSuccess(intercept: Intercept) {
-                listener.onKeywordInterceptInitialized(intercept)
-            }
-        })
+        transporter.dispatchToBackground {
+            adapter.retrieve(session, object :
+                InterceptAdapter.Listener {
+                override fun onSuccess(intercept: Intercept) {
+                    listener.onKeywordInterceptInitialized(intercept)
+                }
+            })
+        }
         SessionClient.getInstance().addListener(this)
     }
 
@@ -35,7 +41,10 @@ class InterceptClient private constructor(private val adapter: InterceptAdapter,
         events.addAll(resultingEvents)
     }
 
-    private fun consolidateEvents(event: InterceptEvent, events: Set<InterceptEvent>): Set<InterceptEvent> {
+    private fun consolidateEvents(
+        event: InterceptEvent,
+        events: Set<InterceptEvent>
+    ): Set<InterceptEvent> {
         val resultingEvents: MutableSet<InterceptEvent> = HashSet(this.events)
         // Create a new Set of Events not superseded by the current Event
         for (e in events) {
@@ -54,7 +63,9 @@ class InterceptClient private constructor(private val adapter: InterceptAdapter,
         }
         val currentEvents: MutableSet<InterceptEvent> = HashSet(events)
         events.clear()
-        adapter.sendEvents(currentSession, currentEvents)
+        transporter.dispatchToBackground {
+            adapter.sendEvents(currentSession, currentEvents)
+        }
     }
 
     override fun onSessionAvailable(session: Session) {
@@ -74,26 +85,32 @@ class InterceptClient private constructor(private val adapter: InterceptAdapter,
     }
 
     @Synchronized
-    fun trackMatched(searchId: String,
-                     termId: String,
-                     term: String,
-                     userInput: String) {
+    fun trackMatched(
+        searchId: String,
+        termId: String,
+        term: String,
+        userInput: String
+    ) {
         trackEvent(searchId, termId, term, userInput, InterceptEvent.MATCHED)
     }
 
     @Synchronized
-    fun trackPresented(searchId: String,
-                       termId: String,
-                       term: String,
-                       userInput: String) {
+    fun trackPresented(
+        searchId: String,
+        termId: String,
+        term: String,
+        userInput: String
+    ) {
         trackEvent(searchId, termId, term, userInput, InterceptEvent.PRESENTED)
     }
 
     @Synchronized
-    fun trackSelected(searchId: String,
-                      termId: String,
-                      term: String,
-                      userInput: String) {
+    fun trackSelected(
+        searchId: String,
+        termId: String,
+        term: String,
+        userInput: String
+    ) {
         trackEvent(searchId, termId, term, userInput, InterceptEvent.SELECTED)
     }
 
@@ -103,11 +120,13 @@ class InterceptClient private constructor(private val adapter: InterceptAdapter,
     }
 
     @Synchronized
-    private fun trackEvent(searchId: String,
-                           termId: String,
-                           term: String,
-                           userInput: String,
-                           eventType: String) {
+    private fun trackEvent(
+        searchId: String,
+        termId: String,
+        term: String,
+        userInput: String,
+        eventType: String
+    ) {
 
         val event = InterceptEvent(
             searchId,

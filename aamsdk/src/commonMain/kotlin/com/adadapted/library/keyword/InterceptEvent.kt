@@ -4,7 +4,7 @@ import kotlinx.datetime.Clock
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class InterceptEvent (
+data class InterceptEvent(
     val searchId: String = "",
     val event: String = "",
     val userInput: String = "",

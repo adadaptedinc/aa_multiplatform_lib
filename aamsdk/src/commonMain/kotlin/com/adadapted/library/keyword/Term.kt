@@ -10,7 +10,7 @@ data class Term(
     val term: String,
     val replacement: String,
     val icon: String,
-    val tagLine: String,
+    val tagline: String,
     private val priority: Int
 ) {
     operator fun compareTo(a2: Term): Int {

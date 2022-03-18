@@ -33,6 +33,11 @@ object AdAdapted: AdAdaptedBase() {
         return this
     }
 
+    fun enableKeywordIntercept(value: Boolean): AdAdapted {
+        isKeywordInterceptEnabled = value
+        return this
+    }
+
 //    fun setSdkEventListener(listener: AaSdkEventListener): AdAdapted {
 //        eventListener = listener
 //        return this
@@ -83,7 +88,9 @@ object AdAdapted: AdAdaptedBase() {
         }
         SessionClient.getInstance().start(startListener)
         //AppEventClient.getInstance().trackSdkEvent(EventStrings.APP_OPENED)
-        //InterceptMatcher.match("INIT") //init the matcher //TODO init this properly
+        if (isKeywordInterceptEnabled) {
+            InterceptMatcher.match("INIT") //init the matcher
+        }
         println(LOG_TAG + "AdAdapted Android Advertising SDK v%s initialized." + Config.VERSION_NAME)
     }
 

@@ -84,16 +84,9 @@ class AndroidZoneView : FrameLayout, AdZonePresenter.Listener, AndroidWebView.Li
     }
 
     override fun onZoneAvailable(zone: Zone) {
-//        var adjustedLayoutParams = RelativeLayout.LayoutParams(width, height)
-//        if (width == 0 || height == 0) {
-//            val dimension = zone.dimensions[Dimension.Orientation.PORT]
-//            adjustedLayoutParams = RelativeLayout.LayoutParams(
-//                dimension?.width ?: RelativeLayout.LayoutParams.MATCH_PARENT,
-//                dimension?.height ?: RelativeLayout.LayoutParams.MATCH_PARENT
-//            )
+//        if (height == 0 && zone.hasAds()) { //TODO do we want to set this manually or force a specific size? Or just recommend sizes?
+//            webView.minimumHeight = 200
 //        }
-//        Handler(Looper.getMainLooper()).post { webView.layoutParams = adjustedLayoutParams }
-
         notifyClientZoneHasAds(zone.hasAds())
     }
 

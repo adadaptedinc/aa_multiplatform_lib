@@ -3,9 +3,10 @@ package com.adadapted.library.keyword
 import com.adadapted.library.session.Session
 
 interface InterceptAdapter {
-    interface Callback {
+    interface Listener {
         fun onSuccess(intercept: Intercept)
     }
-    fun retrieve(session: Session, callback: Callback)
-    fun sendEvents(session: Session, events: MutableSet<InterceptEvent>)
+
+    suspend fun retrieve(session: Session, listener: Listener)
+    suspend fun sendEvents(session: Session, events: MutableSet<InterceptEvent>)
 }

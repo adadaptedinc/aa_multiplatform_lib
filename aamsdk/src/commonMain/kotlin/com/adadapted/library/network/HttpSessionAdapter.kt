@@ -46,7 +46,7 @@ class HttpSessionAdapter(private val initUrl: String, private val refreshUrl: St
         try {
             httpClient.use {
                 val url =
-                    refreshUrl + ("?aid=%s" + session.deviceInfo.appId + "&uid=%s" + session.deviceInfo.udid + "&sid=%s" + session.id + "&sdk=%s" + session.deviceInfo.sdkVersion)
+                    refreshUrl + ("?aid=" + session.deviceInfo.appId + "&uid=" + session.deviceInfo.udid + "&sid=" + session.id + "&sdk=" + session.deviceInfo.sdkVersion)
 
                 val response: HttpResponse = httpClient.get(url) {
                     contentType(ContentType.Application.Json)

@@ -1,6 +1,5 @@
 package com.adadapted.library.keyword
 
-import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
@@ -13,7 +12,7 @@ class InterceptMatcher private constructor() : SessionListener, InterceptClient.
     private fun matchKeyword(constraint: CharSequence): Set<Suggestion> {
         val suggestions: MutableSet<Suggestion> = HashSet()
         val input = constraint.toString()
-        if (!shouldCheckConstraint(input)) {
+        if (!isReadyToMatch(input)) {
             return suggestions
         }
         for (interceptTerm in intercept.getTerms()) {
@@ -41,7 +40,7 @@ class InterceptMatcher private constructor() : SessionListener, InterceptClient.
         }
     }
 
-    private fun shouldCheckConstraint(input: String?): Boolean {
+    private fun isReadyToMatch(input: String?): Boolean {
         return isLoaded && input != null && input.length >= intercept.minMatchLength
     }
 
@@ -73,7 +72,7 @@ class InterceptMatcher private constructor() : SessionListener, InterceptClient.
                 when {
                     SessionClient.hasInstance() -> {
                         instance = InterceptMatcher()
-                        emptySet()
+                        instance.matchKeyword(constraint)
                     }
                     else -> {
                         return emptySet()
