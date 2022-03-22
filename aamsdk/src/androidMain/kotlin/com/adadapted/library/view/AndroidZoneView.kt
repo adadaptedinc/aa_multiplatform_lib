@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.ad.AdContentListener
@@ -84,9 +85,14 @@ class AndroidZoneView : FrameLayout, AdZonePresenter.Listener, AndroidWebView.Li
     }
 
     override fun onZoneAvailable(zone: Zone) {
-//        if (height == 0 && zone.hasAds()) { //TODO do we want to set this manually or force a specific size? Or just recommend sizes?
-//            webView.minimumHeight = 200
-//        }
+        var adjustedLayoutParams = LayoutParams(width, height)
+        if (width == 0 || height == 0) {
+            adjustedLayoutParams = LayoutParams(
+                if (zone.portWidth < 1) { ViewGroup.LayoutParams.MATCH_PARENT } else { zone.portWidth.toInt() },
+                if (zone.portHeight < 1) { ViewGroup.LayoutParams.MATCH_PARENT } else { zone.portHeight.toInt() }
+            )
+        }
+        Handler(Looper.getMainLooper()).post { webView.layoutParams = adjustedLayoutParams }
         notifyClientZoneHasAds(zone.hasAds())
     }
 

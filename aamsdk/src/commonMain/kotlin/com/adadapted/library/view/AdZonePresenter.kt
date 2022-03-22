@@ -8,7 +8,6 @@ import com.adadapted.library.ad.AdContentPublisher
 import com.adadapted.library.concurrency.Timer
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.session.SessionClient
-import kotlin.jvm.Synchronized
 
 internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : SessionListener {
     internal interface Listener {
@@ -227,7 +226,6 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
         }
     }
 
-    @Synchronized
     override fun onSessionAvailable(session: Session) {
         updateCurrentZone(zoneId.let { session.getZone(it) })
         if (updateSessionId(session.id)) {
