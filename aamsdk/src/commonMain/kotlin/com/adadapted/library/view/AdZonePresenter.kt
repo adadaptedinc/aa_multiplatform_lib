@@ -32,7 +32,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
     private lateinit var timer: Timer
 //    private val adEventClient: AdEventClient = AdEventClient.getInstance()
 //    private val appEventClient: AppEventClient = AppEventClient.getInstance()
-    private val sessionClient: SessionClient = SessionClient.getInstance()
+    private val sessionClient: SessionClient? = SessionClient.getInstance()
 
     fun init(zoneId: String) {
         if (this.zoneId.isEmpty()) {
@@ -51,7 +51,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
         if (!attached) {
             attached = true
             zonePresenterListener = listener
-            sessionClient.addPresenter(this)
+            sessionClient?.addPresenter(this)
         }
         setNextAd()
     }
@@ -61,7 +61,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
             attached = false
             zonePresenterListener = null
             completeCurrentAd()
-            sessionClient.removePresenter(this)
+            sessionClient?.removePresenter(this)
         }
     }
 

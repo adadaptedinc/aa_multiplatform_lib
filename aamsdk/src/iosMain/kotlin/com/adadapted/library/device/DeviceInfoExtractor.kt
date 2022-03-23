@@ -37,7 +37,7 @@ actual class DeviceInfoExtractor {
         return id
     }
 
-    actual fun extractDeviceInfo(appId: String, isProd: Boolean, customIdentifier: String, params: Map<String, String>): DeviceInfo {
+    actual fun extractDeviceInfo(appId: String, isProd: Boolean, params: Map<String, String>, customIdentifier: String): DeviceInfo {
         return DeviceInfo(
             appId = appId,
             isProd = isProd,

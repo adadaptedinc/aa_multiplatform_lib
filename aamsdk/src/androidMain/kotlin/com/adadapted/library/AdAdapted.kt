@@ -78,7 +78,7 @@ object AdAdapted: AdAdaptedBase() {
                 sessionListener(false)
             }
         }
-        SessionClient.getInstance().start(startListener)
+        SessionClient.getInstance()?.start(startListener)
         //AppEventClient.getInstance().trackSdkEvent(EventStrings.APP_OPENED)
         //KeywordInterceptMatcher.match("INIT") //init the matcher
         println(LOG_TAG + "AdAdapted Android Advertising SDK v%s initialized." + Config.VERSION_NAME)

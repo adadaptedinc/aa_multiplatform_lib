@@ -21,6 +21,10 @@ repositories {
 kotlin {
     android()
 
+    android {
+        publishLibraryVariants("release", "debug")
+    }
+
     val xcframework = XCFramework(libraryName)
     listOf(
         iosX64(),
@@ -37,9 +41,13 @@ kotlin {
         }
     }
 
-    android {
-        publishLibraryVariants("release", "debug")
+    targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class.java) {
+        binaries.all {
+            binaryOptions["memoryModel"] = "experimental"
+            binaryOptions["freezing"] = "disabled"
+        }
     }
+
 
     sourceSets {
         val ktorVersion = "1.6.7"

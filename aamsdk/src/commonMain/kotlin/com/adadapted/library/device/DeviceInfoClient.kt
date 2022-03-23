@@ -27,7 +27,7 @@ class DeviceInfoClient private constructor(
     }
 
     private fun collectDeviceInfo() {
-        this.deviceInfo = deviceInfoExtractor.extractDeviceInfo(appId, isProd, customIdentifier, params)
+        this.deviceInfo = deviceInfoExtractor.extractDeviceInfo(appId, isProd, params, customIdentifier)
         notifyCallbacks()
     }
 

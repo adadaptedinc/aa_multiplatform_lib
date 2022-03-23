@@ -56,7 +56,7 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
 
     private fun performInitialize(deviceInfo: DeviceInfo) {
         this.deviceInfo = deviceInfo
-        transporter.dispatchToBackground { adapter.sendInit(deviceInfo, instance) }
+        transporter.dispatchToBackground { instance?.let { adapter.sendInit(deviceInfo, it) } }
     }
 
     private fun performRefresh() {
@@ -74,7 +74,11 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
             if (presenterSize() > 0) {
                 print(LOG_TAG + "Reinitializing Session.")
                 status = Status.IS_REINITIALIZING_SESSION
-                transporter.dispatchToBackground { adapter.sendInit(deviceInfo, instance) }
+                transporter.dispatchToBackground { instance?.let {
+                    adapter.sendInit(deviceInfo,
+                        it
+                    )
+                } }
             } else {
                 status = Status.SHOULD_REFRESH
             }
@@ -86,7 +90,11 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
             if (presenterSize() > 0) {
                 print(LOG_TAG + "Checking for more Ads.")
                 status = Status.IS_REFRESH_ADS
-                transporter.dispatchToBackground { adapter.sendRefreshAds(currentSession, instance) }
+                transporter.dispatchToBackground { instance?.let {
+                    adapter.sendRefreshAds(currentSession,
+                        it
+                    )
+                } }
             } else {
                 status = Status.SHOULD_REFRESH
             }
@@ -211,19 +219,21 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
 
     @ThreadLocal
     companion object {
-        private lateinit var instance: SessionClient
+        private var instance: SessionClient? = null
 
-        fun getInstance(): SessionClient {
+        fun getInstance(): SessionClient? {
             return instance
         }
 
         fun createInstance(adapter: SessionAdapter, transporter: TransporterCoroutineScope) {
             instance = SessionClient(adapter, transporter)
         }
+        
+//  need work around for iOS consumption
 
-        fun hasInstance(): Boolean {
-            return this::instance.isInitialized
-        }
+//        fun hasInstance(): Boolean {
+//            return this::instance.isInitialized
+//        }
     }
 
     init {

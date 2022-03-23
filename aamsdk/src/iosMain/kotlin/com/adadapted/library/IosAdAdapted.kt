@@ -59,7 +59,7 @@ object IosAdAdapted: AdAdaptedBase() {
                 println("onSessionInitFailed")
             }
         }
-        SessionClient.getInstance().start(startListener)
+        SessionClient.getInstance()?.start(startListener)
         println(LOG_TAG + "AdAdapted iOS Advertising SDK v%s initialized." + Config.VERSION_NAME)
     }
 
