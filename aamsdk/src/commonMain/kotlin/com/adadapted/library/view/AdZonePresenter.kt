@@ -8,9 +8,8 @@ import com.adadapted.library.ad.AdContentPublisher
 import com.adadapted.library.concurrency.Timer
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.session.SessionClient
-import kotlin.jvm.Synchronized
 
-internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : SessionListener {
+internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sessionClient: SessionClient?) : SessionListener {
     internal interface Listener {
         fun onZoneAvailable(zone: Zone)
         fun onAdsRefreshed(zone: Zone)
@@ -30,9 +29,9 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
     private var adCompleted = false
     private var timerRunning = false
     private lateinit var timer: Timer
-//    private val adEventClient: AdEventClient = AdEventClient.getInstance()
+
+    //    private val adEventClient: AdEventClient = AdEventClient.getInstance()
 //    private val appEventClient: AppEventClient = AppEventClient.getInstance()
-    private val sessionClient: SessionClient = SessionClient.getInstance()
 
     fun init(zoneId: String) {
         if (this.zoneId.isEmpty()) {
@@ -51,7 +50,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
         if (!attached) {
             attached = true
             zonePresenterListener = listener
-            sessionClient.addPresenter(this)
+            sessionClient?.addPresenter(this)
         }
         setNextAd()
     }
@@ -61,12 +60,12 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
             attached = false
             zonePresenterListener = null
             completeCurrentAd()
-            sessionClient.removePresenter(this)
+            sessionClient?.removePresenter(this)
         }
     }
 
     private fun setNextAd() {
-        if (!zoneLoaded || timerRunning) {
+        if (!zoneLoaded) {
             return
         }
         completeCurrentAd()
@@ -122,24 +121,6 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
         currentAd = Ad()
     }
 
-    private fun trackAdImpression(ad: Ad, isAdVisible: Boolean) {
-        if (!isAdVisible || ad.impressionWasTracked() || ad.isEmpty) return
-        ad.setImpressionTracked()
-        //adEventClient.trackImpression(ad)
-    }
-
-    private fun startZoneTimer() {
-        if (!zoneLoaded || timerRunning) {
-            return
-        }
-        val timerDelay = currentAd.refreshTime * 1000
-        timerRunning = true
-        timer = Timer({
-            timerRunning = false
-            setNextAd()
-        }, timerDelay, timerDelay)
-    }
-
     fun onAdClicked(ad: Ad) {
         val actionType = ad.actionType
         val params: MutableMap<String, String> = HashMap()
@@ -168,6 +149,23 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
         cycleToNextAdIfPossible()
     }
 
+    private fun trackAdImpression(ad: Ad, isAdVisible: Boolean) {
+        if (!isAdVisible || ad.impressionWasTracked() || ad.isEmpty) return
+        ad.setImpressionTracked()
+        //adEventClient.trackImpression(ad)
+    }
+
+    private fun startZoneTimer() {
+        if (!zoneLoaded || timerRunning) {
+            return
+        }
+        val timerDelay = currentAd.refreshTime * 1000
+        timerRunning = true
+        timer = Timer({
+            setNextAd()
+        }, timerDelay, timerDelay)
+    }
+
     private fun cycleToNextAdIfPossible() {
         if (currentZone.ads.count() > 1) {
             restartTimer()
@@ -179,6 +177,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
         if (::timer.isInitialized) {
             timer.cancelTimer()
             timerRunning = false
+            startZoneTimer()
         }
     }
 
@@ -222,12 +221,12 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
     private fun updateCurrentZone(zone: Zone) {
         zoneLoaded = true
         currentZone = zone
+        restartTimer()
         if (currentAd.isEmpty) {
             setNextAd()
         }
     }
 
-    @Synchronized
     override fun onSessionAvailable(session: Session) {
         updateCurrentZone(zoneId.let { session.getZone(it) })
         if (updateSessionId(session.id)) {

@@ -23,7 +23,7 @@ data class Session(
     @SerialName("session_expires_at")
     val expiration: Long = 0,
 
-    val zones: Map<String, Zone> = HashMap()
+    private var zones: Map<String, Zone> = HashMap()
 ) {
 
     var deviceInfo: DeviceInfo = DeviceInfo()
@@ -33,7 +33,7 @@ data class Session(
     }
 
     fun hasExpired(): Boolean {
-        return convertExpirationToDate(expiration) > (Clock.System.now().epochSeconds)
+        return Clock.System.now().epochSeconds > expiration
     }
 
     fun getZone(zoneId: String): Zone {
@@ -43,6 +43,10 @@ data class Session(
         return Zone()
     }
 
+    fun getAllZones(): Map<String, Zone> {
+        return zones
+    }
+
     fun hasZoneAds(): Boolean {
         for (zone in zones) {
             return zone.value.ads.any()
@@ -50,13 +54,11 @@ data class Session(
         return false
     }
 
-    fun willNotServeAds(): Boolean {
-        return !willServeAds || refreshTime == 0L
+    fun updateZones(newZones: Map<String, Zone>) {
+        zones = newZones
     }
 
-    companion object {
-        fun convertExpirationToDate(expireTime: Long): Long {
-            return (expireTime * 1000)
-        }
+    fun willNotServeAds(): Boolean {
+        return !willServeAds || refreshTime == 0L
     }
 }

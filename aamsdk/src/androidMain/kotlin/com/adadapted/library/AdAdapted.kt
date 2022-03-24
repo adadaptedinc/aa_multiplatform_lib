@@ -8,6 +8,10 @@ import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
+import com.adadapted.library.keyword.InterceptClient
+import com.adadapted.library.keyword.InterceptMatcher
+import com.adadapted.library.network.HttpConnector
+import com.adadapted.library.network.HttpInterceptAdapter
 import com.adadapted.library.network.HttpSessionAdapter
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
@@ -27,6 +31,11 @@ object AdAdapted: AdAdaptedBase() {
 
     fun onHasAdsToServe(listener: (hasAds: Boolean) -> Unit): AdAdapted {
         sessionListener = listener
+        return this
+    }
+
+    fun enableKeywordIntercept(value: Boolean): AdAdapted {
+        isKeywordInterceptEnabled = value
         return this
     }
 
@@ -78,9 +87,11 @@ object AdAdapted: AdAdaptedBase() {
                 sessionListener(false)
             }
         }
-        SessionClient.getInstance().start(startListener)
+        SessionClient.getInstance()?.start(startListener)
         //AppEventClient.getInstance().trackSdkEvent(EventStrings.APP_OPENED)
-        //KeywordInterceptMatcher.match("INIT") //init the matcher
+        if (isKeywordInterceptEnabled) {
+            InterceptMatcher.match("INIT") //init the matcher
+        }
         println(LOG_TAG + "AdAdapted Android Advertising SDK v%s initialized." + Config.VERSION_NAME)
     }
 
@@ -112,10 +123,10 @@ object AdAdapted: AdAdaptedBase() {
 
         val deviceInfoExtractor = DeviceInfoExtractor(context)
         DeviceInfoClient.createInstance(apiKey, isProd, params, customIdentifier, deviceInfoExtractor, Transporter())
-        SessionClient.createInstance(HttpSessionAdapter(Config.getInitSessionUrl(), Config.getRefreshAdsUrl()), Transporter())
+        SessionClient.createInstance(HttpSessionAdapter(Config.getInitSessionUrl(), Config.getRefreshAdsUrl(), HttpConnector.getInstance()), Transporter())
         //AppEventClient.createInstance(HttpAppEventSink(Config.getAppEventsUrl(), Config.getAppErrorsUrl()), Transporter())
         //AdEventClient.createInstance(HttpAdEventSink(Config.getAdsEventUrl()), Transporter())
-        //InterceptClient.createInstance(HttpInterceptAdapter(Config.getRetrieveInterceptsUrl(), Config.getInterceptEventsUrl()), Transporter())
+        InterceptClient.createInstance(HttpInterceptAdapter(Config.getRetrieveInterceptsUrl(), Config.getInterceptEventsUrl(), HttpConnector.getInstance()), Transporter())
         //PayloadClient.createInstance(HttpPayloadAdapter(Config.getPickupPayloadsUrl(), Config.getTrackingPayloadUrl()), AppEventClient.getInstance(), Transporter())
     }
 }

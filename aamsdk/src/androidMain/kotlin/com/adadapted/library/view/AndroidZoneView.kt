@@ -5,10 +5,12 @@ import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.ad.AdContentListener
 import com.adadapted.library.ad.AdContentPublisher
+import com.adadapted.library.session.SessionClient
 
 class AndroidZoneView : FrameLayout, AdZonePresenter.Listener, AndroidWebView.Listener {
     interface Listener {
@@ -18,7 +20,7 @@ class AndroidZoneView : FrameLayout, AdZonePresenter.Listener, AndroidWebView.Li
     }
 
     private lateinit var webView: AndroidWebView
-    private var presenter: AdZonePresenter = AdZonePresenter(AdViewHandler(context))
+    private var presenter: AdZonePresenter = AdZonePresenter(AdViewHandler(context), SessionClient.getInstance())
     private var zoneViewListener: Listener? = null
     private var isVisible = true
     private var isAdVisible = true
@@ -84,16 +86,14 @@ class AndroidZoneView : FrameLayout, AdZonePresenter.Listener, AndroidWebView.Li
     }
 
     override fun onZoneAvailable(zone: Zone) {
-//        var adjustedLayoutParams = RelativeLayout.LayoutParams(width, height)
-//        if (width == 0 || height == 0) {
-//            val dimension = zone.dimensions[Dimension.Orientation.PORT]
-//            adjustedLayoutParams = RelativeLayout.LayoutParams(
-//                dimension?.width ?: RelativeLayout.LayoutParams.MATCH_PARENT,
-//                dimension?.height ?: RelativeLayout.LayoutParams.MATCH_PARENT
-//            )
-//        }
-//        Handler(Looper.getMainLooper()).post { webView.layoutParams = adjustedLayoutParams }
-
+        var adjustedLayoutParams = LayoutParams(width, height)
+        if (width == 0 || height == 0) {
+            adjustedLayoutParams = LayoutParams(
+                if (zone.portWidth < 1) { ViewGroup.LayoutParams.MATCH_PARENT } else { zone.portWidth.toInt() },
+                if (zone.portHeight < 1) { ViewGroup.LayoutParams.MATCH_PARENT } else { zone.portHeight.toInt() }
+            )
+        }
+        Handler(Looper.getMainLooper()).post { webView.layoutParams = adjustedLayoutParams }
         notifyClientZoneHasAds(zone.hasAds())
     }
 
