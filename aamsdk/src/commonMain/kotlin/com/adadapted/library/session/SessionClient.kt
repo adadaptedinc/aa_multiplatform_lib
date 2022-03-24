@@ -100,7 +100,7 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     }
 
     private fun updateCurrentZones(session: Session) {
-        currentSession = session
+        currentSession.updateZones(session.getAllZones())
         startPollingTimer()
     }
 

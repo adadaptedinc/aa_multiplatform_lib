@@ -10,6 +10,7 @@ import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
 import com.adadapted.library.keyword.InterceptClient
 import com.adadapted.library.keyword.InterceptMatcher
+import com.adadapted.library.network.HttpConnector
 import com.adadapted.library.network.HttpInterceptAdapter
 import com.adadapted.library.network.HttpSessionAdapter
 import com.adadapted.library.session.Session
@@ -122,10 +123,10 @@ object AdAdapted: AdAdaptedBase() {
 
         val deviceInfoExtractor = DeviceInfoExtractor(context)
         DeviceInfoClient.createInstance(apiKey, isProd, params, customIdentifier, deviceInfoExtractor, Transporter())
-        SessionClient.createInstance(HttpSessionAdapter(Config.getInitSessionUrl(), Config.getRefreshAdsUrl()), Transporter())
+        SessionClient.createInstance(HttpSessionAdapter(Config.getInitSessionUrl(), Config.getRefreshAdsUrl(), HttpConnector.getInstance()), Transporter())
         //AppEventClient.createInstance(HttpAppEventSink(Config.getAppEventsUrl(), Config.getAppErrorsUrl()), Transporter())
         //AdEventClient.createInstance(HttpAdEventSink(Config.getAdsEventUrl()), Transporter())
-        InterceptClient.createInstance(HttpInterceptAdapter(Config.getRetrieveInterceptsUrl(), Config.getInterceptEventsUrl()), Transporter())
+        InterceptClient.createInstance(HttpInterceptAdapter(Config.getRetrieveInterceptsUrl(), Config.getInterceptEventsUrl(), HttpConnector.getInstance()), Transporter())
         //PayloadClient.createInstance(HttpPayloadAdapter(Config.getPickupPayloadsUrl(), Config.getTrackingPayloadUrl()), AppEventClient.getInstance(), Transporter())
     }
 }

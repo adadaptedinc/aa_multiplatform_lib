@@ -29,7 +29,8 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
     private var adCompleted = false
     private var timerRunning = false
     private lateinit var timer: Timer
-//    private val adEventClient: AdEventClient = AdEventClient.getInstance()
+
+    //    private val adEventClient: AdEventClient = AdEventClient.getInstance()
 //    private val appEventClient: AppEventClient = AppEventClient.getInstance()
     private val sessionClient: SessionClient = SessionClient.getInstance()
 
@@ -65,7 +66,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
     }
 
     private fun setNextAd() {
-        if (!zoneLoaded || timerRunning) {
+        if (!zoneLoaded) {
             return
         }
         completeCurrentAd()
@@ -121,24 +122,6 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
         currentAd = Ad()
     }
 
-    private fun trackAdImpression(ad: Ad, isAdVisible: Boolean) {
-        if (!isAdVisible || ad.impressionWasTracked() || ad.isEmpty) return
-        ad.setImpressionTracked()
-        //adEventClient.trackImpression(ad)
-    }
-
-    private fun startZoneTimer() {
-        if (!zoneLoaded || timerRunning) {
-            return
-        }
-        val timerDelay = currentAd.refreshTime * 1000
-        timerRunning = true
-        timer = Timer({
-            timerRunning = false
-            setNextAd()
-        }, timerDelay, timerDelay)
-    }
-
     fun onAdClicked(ad: Ad) {
         val actionType = ad.actionType
         val params: MutableMap<String, String> = HashMap()
@@ -167,6 +150,23 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
         cycleToNextAdIfPossible()
     }
 
+    private fun trackAdImpression(ad: Ad, isAdVisible: Boolean) {
+        if (!isAdVisible || ad.impressionWasTracked() || ad.isEmpty) return
+        ad.setImpressionTracked()
+        //adEventClient.trackImpression(ad)
+    }
+
+    private fun startZoneTimer() {
+        if (!zoneLoaded || timerRunning) {
+            return
+        }
+        val timerDelay = currentAd.refreshTime * 1000
+        timerRunning = true
+        timer = Timer({
+            setNextAd()
+        }, timerDelay, timerDelay)
+    }
+
     private fun cycleToNextAdIfPossible() {
         if (currentZone.ads.count() > 1) {
             restartTimer()
@@ -178,6 +178,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
         if (::timer.isInitialized) {
             timer.cancelTimer()
             timerRunning = false
+            startZoneTimer()
         }
     }
 
@@ -221,6 +222,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
     private fun updateCurrentZone(zone: Zone) {
         zoneLoaded = true
         currentZone = zone
+        restartTimer()
         if (currentAd.isEmpty) {
             setNextAd()
         }

@@ -1,16 +1,22 @@
 package com.adadapted.library.keyword
 
 import kotlinx.datetime.Clock
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class InterceptEvent(
+    @SerialName("search_id")
     val searchId: String = "",
+    @SerialName("event_type")
     val event: String = "",
+    @SerialName("user_input")
     val userInput: String = "",
+    @SerialName("term_id")
     val termId: String = "",
     val term: String = ""
 ) {
+    @SerialName("created_at")
     val createdAt: Long = Clock.System.now().epochSeconds
 
     fun supersedes(e: InterceptEvent): Boolean {

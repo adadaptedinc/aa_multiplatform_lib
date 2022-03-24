@@ -4,8 +4,9 @@ import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.features.observer.ResponseObserver
+import kotlin.native.concurrent.ThreadLocal
 
-abstract class HttpConnector {
+class HttpConnector {
     val json = kotlinx.serialization.json.Json {
         useAlternativeNames = false
         ignoreUnknownKeys = true
@@ -13,7 +14,7 @@ abstract class HttpConnector {
         prettyPrint = true
     }
 
-    val httpClient = HttpClient {
+    val client = HttpClient {
         install(JsonFeature) {
             serializer = KotlinxSerializer(json)
         }
@@ -21,6 +22,20 @@ abstract class HttpConnector {
         install(ResponseObserver) {
             onResponse { response ->
                 println("HTTP status: ${response.status.value}")
+            }
+        }
+    }
+
+    @ThreadLocal
+    companion object {
+        private lateinit var instance: HttpConnector
+
+        fun getInstance(): HttpConnector {
+            return if (::instance.isInitialized) {
+                instance
+            } else {
+                instance = HttpConnector()
+                instance
             }
         }
     }
