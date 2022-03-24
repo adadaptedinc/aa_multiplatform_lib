@@ -87,7 +87,7 @@ object AdAdapted: AdAdaptedBase() {
                 sessionListener(false)
             }
         }
-        SessionClient.getInstance().start(startListener)
+        SessionClient.getInstance()?.start(startListener)
         //AppEventClient.getInstance().trackSdkEvent(EventStrings.APP_OPENED)
         if (isKeywordInterceptEnabled) {
             InterceptMatcher.match("INIT") //init the matcher

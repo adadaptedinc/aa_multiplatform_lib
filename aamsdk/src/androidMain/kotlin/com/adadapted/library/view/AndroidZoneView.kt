@@ -10,6 +10,7 @@ import android.widget.FrameLayout
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.ad.AdContentListener
 import com.adadapted.library.ad.AdContentPublisher
+import com.adadapted.library.session.SessionClient
 
 class AndroidZoneView : FrameLayout, AdZonePresenter.Listener, AndroidWebView.Listener {
     interface Listener {
@@ -19,7 +20,7 @@ class AndroidZoneView : FrameLayout, AdZonePresenter.Listener, AndroidWebView.Li
     }
 
     private lateinit var webView: AndroidWebView
-    private var presenter: AdZonePresenter = AdZonePresenter(AdViewHandler(context))
+    private var presenter: AdZonePresenter = AdZonePresenter(AdViewHandler(context), SessionClient.getInstance())
     private var zoneViewListener: Listener? = null
     private var isVisible = true
     private var isAdVisible = true

@@ -30,7 +30,7 @@ class InterceptClient private constructor(
                 }
             })
         }
-        SessionClient.getInstance().addListener(this)
+        SessionClient.getInstance()?.addListener(this)
     }
 
     @Synchronized
@@ -156,6 +156,6 @@ class InterceptClient private constructor(
 
     init {
         events = HashSet()
-        SessionClient.getInstance().addListener(this)
+        SessionClient.getInstance()?.addListener(this)
     }
 }
