@@ -20,6 +20,7 @@ class DeviceInfoClient private constructor(
 
     private fun performGetInfo(callback: Callback) {
         if (this::deviceInfo.isInitialized) {
+
             callback.onDeviceInfoCollected(deviceInfo)
         } else {
             callbacks.add(callback)

@@ -5,6 +5,7 @@ import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
+import com.adadapted.library.network.HttpConnector
 import com.adadapted.library.network.HttpSessionAdapter
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
@@ -67,7 +68,20 @@ object IosAdAdapted: AdAdaptedBase() {
         Config.init(isProd)
 
         val deviceInfoExtractor = DeviceInfoExtractor()
-        DeviceInfoClient.createInstance(apiKey, isProd, params, customIdentifier, deviceInfoExtractor, Transporter())
-        SessionClient.createInstance(HttpSessionAdapter(Config.getInitSessionUrl(), Config.getRefreshAdsUrl()), Transporter())
+        DeviceInfoClient.createInstance(
+            apiKey,
+            isProd,
+            params,
+            customIdentifier,
+            deviceInfoExtractor,
+            Transporter()
+        )
+        SessionClient.createInstance(
+            HttpSessionAdapter(
+                Config.getInitSessionUrl(),
+                Config.getRefreshAdsUrl(),
+                HttpConnector.getInstance()
+            ), Transporter()
+        )
     }
 }

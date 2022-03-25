@@ -32,7 +32,7 @@ class IosWebView constructor(): WKWebView (frame = cValue { CGRectZero }, config
         this.setAllowsBackForwardNavigationGestures(false)
         this.scrollView().bounces = false
         this.scrollView().setContentInsetAdjustmentBehavior(UIScrollViewContentInsetAdjustmentBehavior.UIScrollViewContentInsetAdjustmentNever)
-        setupConstraints()
+//        setupConstraints()
     }
 
     fun addWebViewListener(listener: WebViewListener) {
@@ -89,12 +89,6 @@ class IosWebView constructor(): WKWebView (frame = cValue { CGRectZero }, config
         listener?.onAdInWebViewClicked(currentAd)
     }
 
-    private fun setupConstraints() {
-        val constraints = mutableListOf<NSLayoutConstraint>()
-        constraints += this.constraintsToFillSuperview()
-        NSLayoutConstraint.activateConstraints(constraints)
-    }
-
     // WKWebView Navigation Delegate
     override fun webView(webView: WKWebView, decidePolicyForNavigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Unit) {
         if (decidePolicyForNavigationAction.navigationType == WKNavigationTypeOther) {
@@ -105,16 +99,16 @@ class IosWebView constructor(): WKWebView (frame = cValue { CGRectZero }, config
     }
 
     override fun webView(webView: WKWebView, didFinishNavigation: WKNavigation?) {
-        if ((currentAd.id.isNotEmpty() == true)  && !loaded) {
+        if (currentAd.id.isNotEmpty() && !loaded) {
             loaded = true
-//            notifyAdLoaded()
+            notifyAdLoaded()
         }
     }
 
     override fun webView(webView: WKWebView, didFailNavigation: WKNavigation?, withError: NSError) {
-        if ((currentAd.id.isNotEmpty() == true) && !loaded) {
+        if (currentAd.id.isNotEmpty() && !loaded) {
             loaded = true
-//            notifyAdLoadFailed()
+            notifyAdLoadFailed()
         }
     }
 
@@ -128,23 +122,3 @@ class IosWebView constructor(): WKWebView (frame = cValue { CGRectZero }, config
 
 fun String.nsData(): NSData? =
     NSString.create(string = this).dataUsingEncoding(NSUTF8StringEncoding)
-
-fun UIView.constraintsToFillSuperview(): List<NSLayoutConstraint> {
-    val horizontal = constraintsToFillSuperviewHorizontally()
-    val vertical = constraintsToFillSuperviewVertically()
-    return vertical + horizontal
-}
-
-fun UIView.constraintsToFillSuperviewVertically(): List<NSLayoutConstraint> {
-    val superview = superview ?: return emptyList()
-    val top = topAnchor.constraintEqualToAnchor(superview.topAnchor)
-    val bottom = bottomAnchor.constraintEqualToAnchor(superview.bottomAnchor)
-    return listOf(top, bottom)
-}
-
-fun UIView.constraintsToFillSuperviewHorizontally(): List<NSLayoutConstraint> {
-    val superview = superview ?: return emptyList()
-    val leader = leadingAnchor.constraintEqualToAnchor(superview.leadingAnchor)
-    val trailer = trailingAnchor.constraintEqualToAnchor(superview.trailingAnchor)
-    return listOf(leader, trailer)
-}

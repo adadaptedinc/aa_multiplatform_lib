@@ -26,8 +26,8 @@ class IosZoneView() : UIView(frame = cValue { CGRectZero }), UIViewWithOverrides
 
     init {
         this.webView.addWebViewListener(setWebViewListener())
-        setupConstraints()
         addSubview(webView)
+        setupConstraints()
     }
 
     fun shutdown() {
@@ -49,6 +49,7 @@ class IosZoneView() : UIView(frame = cValue { CGRectZero }), UIViewWithOverrides
             "" + this.origin.x + ", " + this.origin.y + ", " + (this.origin.x +this.size.width) + ", " + (this.origin.y +this.size.height)
         }
         println("ZoneView dimensions: $rectAsString")
+        webView.loadAd(ad = Ad())
     }
 
     private fun onStart(zoneViewListener: ZoneViewListener, contentListener: AdContentListener? = null) {
@@ -137,6 +138,10 @@ class IosZoneView() : UIView(frame = cValue { CGRectZero }), UIViewWithOverrides
     private fun setupConstraints() {
         val constraints = mutableListOf<NSLayoutConstraint>()
         constraints += this.constraintsToFillSuperview()
+        constraints.add(webView.leadingAnchor.constraintEqualToAnchor(leadingAnchor))
+        constraints.add(webView.trailingAnchor.constraintEqualToAnchor(trailingAnchor))
+        constraints.add(webView.heightAnchor.constraintEqualToAnchor(heightAnchor))
+        constraints.add(webView.widthAnchor.constraintEqualToAnchor(widthAnchor))
         NSLayoutConstraint.activateConstraints(constraints)
     }
 
@@ -152,3 +157,23 @@ class IosZoneView() : UIView(frame = cValue { CGRectZero }), UIViewWithOverrides
 }
 
 fun createZoneView(): UIView = IosZoneView()
+
+fun UIView.constraintsToFillSuperview(): List<NSLayoutConstraint> {
+    val horizontal = constraintsToFillSuperviewHorizontally()
+    val vertical = constraintsToFillSuperviewVertically()
+    return vertical + horizontal
+}
+
+fun UIView.constraintsToFillSuperviewVertically(): List<NSLayoutConstraint> {
+    val superview = superview ?: return emptyList()
+    val top = topAnchor.constraintEqualToAnchor(superview.topAnchor)
+    val bottom = bottomAnchor.constraintEqualToAnchor(superview.bottomAnchor)
+    return listOf(top, bottom)
+}
+
+fun UIView.constraintsToFillSuperviewHorizontally(): List<NSLayoutConstraint> {
+    val superview = superview ?: return emptyList()
+    val leader = leadingAnchor.constraintEqualToAnchor(superview.leadingAnchor)
+    val trailer = trailingAnchor.constraintEqualToAnchor(superview.trailingAnchor)
+    return listOf(leader, trailer)
+}
