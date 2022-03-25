@@ -17,7 +17,7 @@ import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
 
-object AdAdapted: AdAdaptedBase() {
+object AdAdapted : AdAdaptedBase() {
 
     fun withAppId(key: String): AdAdapted {
         this.apiKey = key
@@ -39,7 +39,7 @@ object AdAdapted: AdAdaptedBase() {
         return this
     }
 
-//    fun setSdkEventListener(listener: AaSdkEventListener): AdAdapted {
+    //    fun setSdkEventListener(listener: AaSdkEventListener): AdAdapted {
 //        eventListener = listener
 //        return this
 //    }
@@ -75,7 +75,7 @@ object AdAdapted: AdAdaptedBase() {
             override fun onSessionAvailable(session: Session) {
                 sessionListener(session.hasActiveCampaigns())
                 if (session.hasActiveCampaigns() && !session.hasZoneAds()) {
-                    println(LOG_TAG +"Session has ads to show but none were loaded properly. Is an obfuscation tool obstructing the AdAdapted Library?")
+                    println(LOG_TAG + "Session has ads to show but none were loaded properly. Is an obfuscation tool obstructing the AdAdapted Library?")
                 }
             }
 
@@ -111,8 +111,9 @@ object AdAdapted: AdAdaptedBase() {
     }
 
     private fun setAdTracking(context: Context, value: Boolean) {
-        val sharedPref = context.getSharedPreferences(Config.AASDK_PREFS_KEY, Context.MODE_PRIVATE) ?: return
-        with (sharedPref.edit()) {
+        val sharedPref =
+            context.getSharedPreferences(Config.AASDK_PREFS_KEY, Context.MODE_PRIVATE) ?: return
+        with(sharedPref.edit()) {
             putBoolean(Config.AASDK_PREFS_TRACKING_DISABLED_KEY, value)
             apply()
         }
@@ -122,11 +123,30 @@ object AdAdapted: AdAdaptedBase() {
         Config.init(isProd)
 
         val deviceInfoExtractor = DeviceInfoExtractor(context)
-        DeviceInfoClient.createInstance(apiKey, isProd, params, customIdentifier, deviceInfoExtractor, Transporter())
-        SessionClient.createInstance(HttpSessionAdapter(Config.getInitSessionUrl(), Config.getRefreshAdsUrl(), HttpConnector.getInstance()), Transporter())
+        DeviceInfoClient.createInstance(
+            apiKey,
+            isProd,
+            params,
+            customIdentifier,
+            deviceInfoExtractor,
+            Transporter()
+        )
+        SessionClient.createInstance(
+            HttpSessionAdapter(
+                Config.getInitSessionUrl(),
+                Config.getRefreshAdsUrl(),
+                HttpConnector.getInstance()
+            ), Transporter()
+        )
         //AppEventClient.createInstance(HttpAppEventSink(Config.getAppEventsUrl(), Config.getAppErrorsUrl()), Transporter())
         //AdEventClient.createInstance(HttpAdEventSink(Config.getAdsEventUrl()), Transporter())
-        InterceptClient.createInstance(HttpInterceptAdapter(Config.getRetrieveInterceptsUrl(), Config.getInterceptEventsUrl(), HttpConnector.getInstance()), Transporter())
+        InterceptClient.createInstance(
+            HttpInterceptAdapter(
+                Config.getRetrieveInterceptsUrl(),
+                Config.getInterceptEventsUrl(),
+                HttpConnector.getInstance()
+            ), Transporter()
+        )
         //PayloadClient.createInstance(HttpPayloadAdapter(Config.getPickupPayloadsUrl(), Config.getTrackingPayloadUrl()), AppEventClient.getInstance(), Transporter())
     }
 }

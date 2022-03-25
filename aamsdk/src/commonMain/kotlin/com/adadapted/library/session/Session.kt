@@ -5,24 +5,20 @@ import com.adadapted.library.view.Zone
 import com.adadapted.library.constants.Config
 import kotlinx.datetime.Clock
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@kotlinx.serialization.Serializable
+@Serializable
 data class Session(
     @SerialName("session_id")
     val id: String = "",
-
     @SerialName("will_serve_ads")
     private val willServeAds: Boolean = false,
-
     @SerialName("active_campaigns")
     val hasAds: Boolean = false,
-
     @SerialName("polling_interval_ms")
     val refreshTime: Long = Config.DEFAULT_AD_POLLING,
-
     @SerialName("session_expires_at")
     val expiration: Long = 0,
-
     private var zones: Map<String, Zone> = HashMap()
 ) {
 

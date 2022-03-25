@@ -21,7 +21,7 @@ import kotlinx.serialization.serializer
 class AndroidWebViewPopupActivity : Activity() {
     fun createActivity(context: Context, ad: Ad): Intent {
         val intent = Intent(context.applicationContext, AndroidWebViewPopupActivity::class.java)
-        intent.putExtra(EXTRA_POPUP_AD, Json.encodeToString(serializer(),ad))
+        intent.putExtra(EXTRA_POPUP_AD, Json.encodeToString(serializer(), ad))
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         return intent
     }

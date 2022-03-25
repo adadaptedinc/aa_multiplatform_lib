@@ -159,7 +159,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private
         if (!zoneLoaded || timerRunning) {
             return
         }
-        val timerDelay = currentAd.refreshTime * 1000
+        val timerDelay = currentAd.refreshTime
         timerRunning = true
         timer = Timer({
             setNextAd()

@@ -1,5 +1,7 @@
 package com.adadapted.library.network
 
+import com.adadapted.library.atl.AddItContentPublisher
+import com.adadapted.library.concurrency.Transporter
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
@@ -31,12 +33,10 @@ class HttpConnector {
         private lateinit var instance: HttpConnector
 
         fun getInstance(): HttpConnector {
-            return if (::instance.isInitialized) {
-                instance
-            } else {
+            if (!this::instance.isInitialized) {
                 instance = HttpConnector()
-                instance
             }
+            return instance
         }
     }
 }

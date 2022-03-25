@@ -20,12 +20,4 @@ data class AddToListItem(
     val retailerID: String,
     @SerialName("product_image")
     val productImage: String) {
-
-    @Deprecated("Use ProductUpc field instead.", ReplaceWith("productUpc"))
-    fun getBarCode(): String {
-        return productUpc
-    }
-
-    @Deprecated("Discount is no longer used in payload item data.")
-    val discount: String =  ""
 }
