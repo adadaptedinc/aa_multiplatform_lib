@@ -208,6 +208,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
     }
 
     private fun notifyNoAdAvailable() {
+        println("No ad available")
         zonePresenterListener?.onNoAdAvailable()
     }
 

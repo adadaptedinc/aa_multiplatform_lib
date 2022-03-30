@@ -1,6 +1,5 @@
 package com.adadapted.library.view
 
-import aa_multiplatform_lib.cinterop.UIViewWithOverridesProtocol
 import com.adadapted.library.ad.Ad
 import kotlinx.cinterop.*
 import platform.CoreGraphics.*
@@ -18,12 +17,11 @@ interface WebViewListener {
 class IosWebView constructor(): WKWebView (frame = cValue { CGRectZero }, configuration = WKWebViewConfiguration()),
         WKUIDelegateProtocol,
         WKNavigationDelegateProtocol,
-        UIViewWithOverridesProtocol {
+        UIGestureRecognizerDelegateProtocol {
 
     private lateinit var currentAd: Ad
     private var listener: WebViewListener? = null
     private var loaded = false
-    private val presenterListener: AdZonePresenter.Listener? = null
 
     init {
         setUIDelegate(this)
@@ -32,7 +30,8 @@ class IosWebView constructor(): WKWebView (frame = cValue { CGRectZero }, config
         this.setAllowsBackForwardNavigationGestures(false)
         this.scrollView().bounces = false
         this.scrollView().setContentInsetAdjustmentBehavior(UIScrollViewContentInsetAdjustmentBehavior.UIScrollViewContentInsetAdjustmentNever)
-//        setupConstraints()
+
+        this.setOnCLickListener { tapAction() }
     }
 
     fun addWebViewListener(listener: WebViewListener) {
@@ -58,19 +57,7 @@ class IosWebView constructor(): WKWebView (frame = cValue { CGRectZero }, config
         if (data != null) {
             loadData(data, "text/html", null.toString(), NSURL(string = ""))
         }
-//        notifyBlankLoaded()
-    }
-
-    override fun layoutSubviews() {
-        println("laying out ZoneView subviews")
-        setNeedsDisplay()
-    }
-
-    override fun drawRect(aRect: CValue<CGRect>) {
-        val rectAsString = aRect.useContents {
-            "" + this.origin.x + ", " + this.origin.y + ", " + (this.origin.x +this.size.width) + ", " + (this.origin.y +this.size.height)
-        }
-        println("ZoneView dimensions: $rectAsString")
+        notifyBlankLoaded()
     }
 
     private fun notifyAdLoaded() {
@@ -110,6 +97,16 @@ class IosWebView constructor(): WKWebView (frame = cValue { CGRectZero }, config
             loaded = true
             notifyAdLoadFailed()
         }
+    }
+
+    // Gesture Recognizer Delegate
+    private fun UIView.setOnCLickListener(block: () -> Unit) {
+        this.addGestureRecognizer(UITapGestureRecognizer(Target(block), NSSelectorFromString("invokeBlock")))
+    }
+
+    private fun tapAction() {
+        println("webView tapped")
+        notifyAdClicked()
     }
 
     @ThreadLocal

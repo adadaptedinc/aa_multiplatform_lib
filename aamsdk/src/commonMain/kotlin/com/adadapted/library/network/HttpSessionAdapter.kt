@@ -23,6 +23,7 @@ class HttpSessionAdapter(private val initUrl: String, private val refreshUrl: St
             val response: HttpResponse = httpConnector.client.post(initUrl) {
                 contentType(ContentType.Application.Json)
                 body = deviceInfo
+                println("DeviceInfo: $deviceInfo")
             }
             listener.onSessionInitialized(
                 httpConnector.json.decodeFromJsonElement<Session>(response.receive())
@@ -38,6 +39,7 @@ class HttpSessionAdapter(private val initUrl: String, private val refreshUrl: St
 //                )
             listener.onSessionInitializeFailed()
         }
+        println("sendInit complete")
     }
 
     override suspend fun sendRefreshAds(session: Session, listener: SessionAdapter.AdGetListener) {

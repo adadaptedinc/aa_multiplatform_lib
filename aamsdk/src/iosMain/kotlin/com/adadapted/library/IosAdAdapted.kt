@@ -11,7 +11,7 @@ import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
 
-object IosAdAdapted: AdAdaptedBase() {
+object IosAdAdapted : AdAdaptedBase() {
 
     fun withAppId(key: String): IosAdAdapted {
         this.apiKey = key
@@ -46,7 +46,7 @@ object IosAdAdapted: AdAdaptedBase() {
             override fun onSessionAvailable(session: Session) {
                 sessionListener(session.hasActiveCampaigns())
                 if (session.hasActiveCampaigns() && !session.hasZoneAds()) {
-                    println(LOG_TAG +"Session has ads to show but none were loaded properly. Is an obfuscation tool obstructing the AdAdapted Library?")
+                    println(LOG_TAG + "Session has ads to show but none were loaded properly. Is an obfuscation tool obstructing the AdAdapted Library?")
                 }
             }
 
