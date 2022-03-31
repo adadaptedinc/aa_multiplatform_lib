@@ -67,6 +67,8 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }),
             "" + this.origin.x + ", " + this.origin.y + ", " + (this.origin.x + this.size.width) + ", " + (this.origin.y + this.size.height)
         }
         println("ZoneView dimensions: $rectAsString")
+        // need to draw to screen here
+        webView.loadAd(Ad())
     }
 
     private fun setWebViewListener() = object : WebViewListener {
@@ -93,7 +95,7 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }),
         }
     }
 
-    private fun setAdZonePresenterListener() = object : AdZonePresenter.Listener {
+    private fun setAdZonePresenterListener() = object : AdZonePresenterListener {
         override fun onZoneAvailable(zone: Zone) {
             println("Zone available: $zone")
             notifyClientZoneHasAds(zone.hasAds())
@@ -180,7 +182,7 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }),
     }
 }
 
- fun createZoneView(): UIView = IosZoneView.getInstance()
+fun createZoneView(): UIView = IosZoneView.getInstance()
 
 fun UIView.constraintsToFillSuperview(): List<NSLayoutConstraint> {
     val horizontal = constraintsToFillSuperviewHorizontally()

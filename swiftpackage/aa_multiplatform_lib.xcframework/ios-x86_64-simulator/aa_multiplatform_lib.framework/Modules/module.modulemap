@@ -1,6 +1,0 @@
-framework module aa_multiplatform_lib {
-    umbrella header "aa_multiplatform_lib.h"
-
-    export *
-    module * { export * }
-}
