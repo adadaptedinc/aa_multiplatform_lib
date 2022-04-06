@@ -1,14 +1,12 @@
 package com.adadapted.library.network
 
-import com.adadapted.library.atl.AddItContentPublisher
-import com.adadapted.library.concurrency.Transporter
 import io.ktor.client.HttpClient
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import io.ktor.client.features.observer.ResponseObserver
 import kotlin.native.concurrent.ThreadLocal
 
-class HttpConnector {
+class HttpConnector private constructor() {
     val json = kotlinx.serialization.json.Json {
         useAlternativeNames = false
         ignoreUnknownKeys = true

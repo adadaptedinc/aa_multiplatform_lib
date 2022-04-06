@@ -1,6 +1,7 @@
 package com.adadapted.library
 
 import android.content.Context
+import com.adadapted.library.atl.AddItContent
 import com.adadapted.library.atl.AddItContentPublisher
 import com.adadapted.library.atl.AddToListContent
 import com.adadapted.library.concurrency.Transporter
@@ -12,7 +13,9 @@ import com.adadapted.library.keyword.InterceptClient
 import com.adadapted.library.keyword.InterceptMatcher
 import com.adadapted.library.network.HttpConnector
 import com.adadapted.library.network.HttpInterceptAdapter
+import com.adadapted.library.network.HttpPayloadAdapter
 import com.adadapted.library.network.HttpSessionAdapter
+import com.adadapted.library.payload.PayloadClient
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
@@ -63,13 +66,11 @@ object AdAdapted : AdAdaptedBase() {
         setupClients(context)
         //eventListener?.let { SdkEventPublisher.getInstance().setListener(it) }
         contentListener.let { AddItContentPublisher.getInstance().addListener(it) }
-//        PayloadClient.getInstance().pickupPayloads(object : PayloadClient.Callback {
-//            override fun onPayloadAvailable(content: List<AdditContent>) {
-//                if (content.isNotEmpty()) {
-//                    AdditContentPublisher.getInstance().publishAdditContent(content[0])
-//                }
-//            }
-//        })
+        PayloadClient.getInstance().pickupPayloads {
+            if (it.isNotEmpty()) {
+                AddItContentPublisher.getInstance().publishAddItContent(it[0])
+            }
+        }
 
         val startListener: SessionListener = object : SessionListener {
             override fun onSessionAvailable(session: Session) {
@@ -147,6 +148,12 @@ object AdAdapted : AdAdaptedBase() {
                 HttpConnector.getInstance()
             ), Transporter()
         )
-        //PayloadClient.createInstance(HttpPayloadAdapter(Config.getPickupPayloadsUrl(), Config.getTrackingPayloadUrl()), AppEventClient.getInstance(), Transporter())
+        PayloadClient.createInstance(
+            HttpPayloadAdapter(
+                Config.getPickupPayloadsUrl(),
+                Config.getTrackingPayloadUrl(),
+                HttpConnector.getInstance()
+            ), Transporter()
+        )//AppEventClient.getInstance(), Transporter())
     }
 }
