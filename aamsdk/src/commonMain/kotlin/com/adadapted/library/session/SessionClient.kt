@@ -20,7 +20,6 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
 
     private val sessionListeners: MutableSet<SessionListener>
     private val presenters: MutableSet<String>
-    private lateinit var deviceInfo: DeviceInfo
     private lateinit var currentSession: Session
     var status: Status
         private set
@@ -55,21 +54,22 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     private fun presenterSize() = presenters.size
 
     private fun performInitialize(deviceInfo: DeviceInfo) {
-        this.deviceInfo = deviceInfo
         transporter.dispatchToBackground { instance?.let { adapter.sendInit(deviceInfo, it) } }
     }
 
-    private fun performRefresh() {
+    private fun performRefresh(deviceInfo: DeviceInfo? = DeviceInfoClient.getInstance().getCachedDeviceInfo()) {
         if (currentSession.hasExpired()) {
             print(LOG_TAG + "Session has expired. Expired at: " + currentSession.expiration)
             notifySessionExpired()
-            performReinitialize()
+            if (deviceInfo != null) {
+                performReinitialize(deviceInfo)
+            }
         } else {
             performRefreshAds()
         }
     }
 
-    private fun performReinitialize() {
+    private fun performReinitialize(deviceInfo: DeviceInfo) {
         if (status == Status.OK || status == Status.SHOULD_REFRESH) {
             if (presenterSize() > 0) {
                 print(LOG_TAG + "Reinitializing Session.")
