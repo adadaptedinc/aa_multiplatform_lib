@@ -45,6 +45,12 @@ class DeviceInfoClient private constructor(
         }
     }
 
+    fun getCachedDeviceInfo(): DeviceInfo? {
+        return if (this::deviceInfo.isInitialized) {
+            deviceInfo
+        } else null
+    }
+
     @ThreadLocal
     companion object {
         private lateinit var instance: DeviceInfoClient
@@ -57,7 +63,14 @@ class DeviceInfoClient private constructor(
             deviceInfoExtractor: DeviceInfoExtractor,
             transporter: TransporterCoroutineScope
         ) {
-            instance = DeviceInfoClient(appId, isProd, params, customIdentifier, deviceInfoExtractor, transporter)
+            instance = DeviceInfoClient(
+                appId,
+                isProd,
+                params,
+                customIdentifier,
+                deviceInfoExtractor,
+                transporter
+            )
         }
 
         fun getInstance(): DeviceInfoClient {

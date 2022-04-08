@@ -8,11 +8,10 @@ import com.adadapted.library.device.DeviceInfoClient
 import kotlin.jvm.Synchronized
 import kotlin.native.concurrent.ThreadLocal
 
-class PayloadClient private constructor(private val adapter: PayloadAdapter, private val transporter: TransporterCoroutineScope) { //private val appEventClient: AppEventClient, private val transporter: TransporterCoroutineScope) {
-//    interface Callback {
-//        fun onPayloadAvailable(content: List<AddItContent>)
-//    }
-
+class PayloadClient private constructor(
+    private val adapter: PayloadAdapter,
+    private val transporter: TransporterCoroutineScope
+) { //private val appEventClient: AppEventClient,) {
     private fun performPickupPayload(callback: (content: List<AddItContent>) -> Unit) {
         DeviceInfoClient.getInstance().getDeviceInfo(object : DeviceInfoClient.Callback {
             override fun onDeviceInfoCollected(deviceInfo: DeviceInfo) {
@@ -29,7 +28,8 @@ class PayloadClient private constructor(private val adapter: PayloadAdapter, pri
     private fun trackPayload(content: AddItContent, result: String) {
         val event = PayloadEvent(content.payloadId, result)
         transporter.dispatchToBackground {
-            adapter.publishEvent(event)
+            DeviceInfoClient.getInstance().getCachedDeviceInfo()
+                ?.let { adapter.publishEvent(it, event) }
         }
     }
 
@@ -119,7 +119,10 @@ class PayloadClient private constructor(private val adapter: PayloadAdapter, pri
             return instance
         }
 
-        fun createInstance(adapter: PayloadAdapter, transporter: TransporterCoroutineScope) { //appEventClient: AppEventClient, transporter: TransporterCoroutineScope) {
+        fun createInstance(
+            adapter: PayloadAdapter,
+            transporter: TransporterCoroutineScope
+        ) { //appEventClient: AppEventClient,) {
             instance = PayloadClient(adapter, transporter) //appEventClient, transporter)
         }
     }
