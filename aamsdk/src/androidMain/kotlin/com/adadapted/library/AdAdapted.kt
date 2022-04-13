@@ -1,7 +1,6 @@
 package com.adadapted.library
 
 import android.content.Context
-import com.adadapted.library.atl.AddItContent
 import com.adadapted.library.atl.AddItContentPublisher
 import com.adadapted.library.atl.AddToListContent
 import com.adadapted.library.concurrency.Transporter
@@ -88,7 +87,7 @@ object AdAdapted : AdAdaptedBase() {
                 sessionListener(false)
             }
         }
-        SessionClient.getInstance()?.start(startListener)
+        SessionClient.start(startListener)
         //AppEventClient.getInstance().trackSdkEvent(EventStrings.APP_OPENED)
         if (isKeywordInterceptEnabled) {
             InterceptMatcher.match("INIT") //init the matcher

@@ -9,7 +9,8 @@ import com.adadapted.library.device.DeviceInfoClient
 import kotlin.jvm.Synchronized
 import kotlin.native.concurrent.ThreadLocal
 
-class SessionClient private constructor(private val adapter: SessionAdapter, private val transporter: TransporterCoroutineScope) : SessionAdapter.Listener {
+@ThreadLocal
+object SessionClient : SessionAdapter.Listener {
 
     enum class Status {
         OK,  // Normal Status. No alterations to regular behavior
@@ -18,13 +19,16 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
         IS_REINITIALIZING_SESSION // SDK is currently reinitializing the Session
     }
 
+    private lateinit var currentSession: Session
+    private lateinit var adapter: SessionAdapter
+    private lateinit var transporter: TransporterCoroutineScope
     private val sessionListeners: MutableSet<SessionListener>
     private val presenters: MutableSet<String>
-    private lateinit var currentSession: Session
     var status: Status
         private set
     private var pollingTimerRunning: Boolean
     private var eventTimerRunning: Boolean
+    private var hasInstance: Boolean = false
 
     private fun performAddListener(listener: SessionListener) {
         sessionListeners.add(listener)
@@ -54,10 +58,12 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     private fun presenterSize() = presenters.size
 
     private fun performInitialize(deviceInfo: DeviceInfo) {
-        transporter.dispatchToBackground { instance?.let { adapter.sendInit(deviceInfo, it) } }
+        transporter.dispatchToBackground { adapter.sendInit(deviceInfo, this@SessionClient) }
     }
 
-    private fun performRefresh(deviceInfo: DeviceInfo? = DeviceInfoClient.getInstance().getCachedDeviceInfo()) {
+    private fun performRefresh(
+        deviceInfo: DeviceInfo? = DeviceInfoClient.getInstance().getCachedDeviceInfo()
+    ) {
         if (currentSession.hasExpired()) {
             print(LOG_TAG + "Session has expired. Expired at: " + currentSession.expiration)
             notifySessionExpired()
@@ -74,11 +80,9 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
             if (presenterSize() > 0) {
                 print(LOG_TAG + "Reinitializing Session.")
                 status = Status.IS_REINITIALIZING_SESSION
-                transporter.dispatchToBackground { instance?.let {
-                    adapter.sendInit(deviceInfo,
-                        it
-                    )
-                } }
+                transporter.dispatchToBackground {
+                    adapter.sendInit(deviceInfo, this@SessionClient)
+                }
             } else {
                 status = Status.SHOULD_REFRESH
             }
@@ -90,11 +94,12 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
             if (presenterSize() > 0) {
                 print(LOG_TAG + "Checking for more Ads.")
                 status = Status.IS_REFRESH_ADS
-                transporter.dispatchToBackground { instance?.let {
-                    adapter.sendRefreshAds(currentSession,
-                        it
+                transporter.dispatchToBackground {
+                    adapter.sendRefreshAds(
+                        currentSession,
+                        this@SessionClient
                     )
-                } }
+                }
             } else {
                 status = Status.SHOULD_REFRESH
             }
@@ -120,18 +125,26 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
         pollingTimerRunning = true
         print(LOG_TAG + "Starting Ad polling timer.")
 
-        val refreshTimer = Timer({ performRefresh() }, repeatMillis = currentSession.refreshTime, delayMillis = currentSession.refreshTime)
+        val refreshTimer = Timer(
+            { performRefresh() },
+            repeatMillis = currentSession.refreshTime,
+            delayMillis = currentSession.refreshTime
+        )
         refreshTimer.startTimer()
     }
 
     private fun startPublishTimer() {
-        if(eventTimerRunning) {
+        if (eventTimerRunning) {
             return
         }
         eventTimerRunning = true
         print(LOG_TAG + "Starting up the Event Publisher.")
 
-        val eventTimer = Timer({ notifyPublishEvents() }, repeatMillis = Config.DEFAULT_EVENT_POLLING, delayMillis = Config.DEFAULT_EVENT_POLLING)
+        val eventTimer = Timer(
+            { notifyPublishEvents() },
+            repeatMillis = Config.DEFAULT_EVENT_POLLING,
+            delayMillis = Config.DEFAULT_EVENT_POLLING
+        )
         eventTimer.startTimer()
     }
 
@@ -192,7 +205,7 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     @Synchronized
     fun start(listener: SessionListener) {
         addListener(listener)
-        DeviceInfoClient.getInstance().getDeviceInfo(object: DeviceInfoClient.Callback {
+        DeviceInfoClient.getInstance().getDeviceInfo(object : DeviceInfoClient.Callback {
             override fun onDeviceInfoCollected(deviceInfo: DeviceInfo) {
                 transporter.dispatchToBackground {
                     performInitialize(deviceInfo)
@@ -217,21 +230,14 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
         performRemovePresenter(listener)
     }
 
-    @ThreadLocal
-    companion object {
-        private var instance: SessionClient? = null
+    fun hasInstance(): Boolean {
+        return hasInstance
+    }
 
-        fun getInstance(): SessionClient? {
-            return instance
-        }
-
-        fun createInstance(adapter: SessionAdapter, transporter: TransporterCoroutineScope) {
-            instance = SessionClient(adapter, transporter)
-        }
-
-        fun hasInstance(): Boolean {
-            return instance != null
-        }
+    fun createInstance(adapter: SessionAdapter, transporter: TransporterCoroutineScope) {
+        this.adapter = adapter
+        this.transporter = transporter
+        this.hasInstance = true
     }
 
     init {
