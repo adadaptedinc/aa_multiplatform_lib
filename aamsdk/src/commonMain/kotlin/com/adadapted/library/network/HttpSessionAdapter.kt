@@ -1,29 +1,28 @@
 package com.adadapted.library.network
 
 import com.adadapted.library.device.DeviceInfo
+import com.adadapted.library.interfaces.AdGetListener
+import com.adadapted.library.interfaces.SessionInitListener
 import com.adadapted.library.session.Session
-import com.adadapted.library.session.SessionAdapter
+import com.adadapted.library.interfaces.SessionAdapter
 import io.ktor.client.call.receive
 import io.ktor.client.request.*
 import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import io.ktor.utils.io.core.use
 import kotlinx.serialization.json.decodeFromJsonElement
-import kotlinx.serialization.json.encodeToJsonElement
-import kotlinx.serialization.serializer
 
-class HttpSessionAdapter(private val initUrl: String, private val refreshUrl: String, private val httpConnector: HttpConnector) : SessionAdapter {
+class HttpSessionAdapter(private val initUrl: String, private val refreshUrl: String, private val httpConnector: HttpConnector) :
+    SessionAdapter {
 
     override suspend fun sendInit(
         deviceInfo: DeviceInfo,
-        listener: SessionAdapter.SessionInitListener
+        listener: SessionInitListener
     ) {
         try {
             val response: HttpResponse = httpConnector.client.post(initUrl) {
                 contentType(ContentType.Application.Json)
                 body = deviceInfo
-                println("DeviceInfo: $deviceInfo")
             }
             listener.onSessionInitialized(
                 httpConnector.json.decodeFromJsonElement<Session>(response.receive())
@@ -39,10 +38,9 @@ class HttpSessionAdapter(private val initUrl: String, private val refreshUrl: St
 //                )
             listener.onSessionInitializeFailed()
         }
-        println("sendInit complete")
     }
 
-    override suspend fun sendRefreshAds(session: Session, listener: SessionAdapter.AdGetListener) {
+    override suspend fun sendRefreshAds(session: Session, listener: AdGetListener) {
         try {
             val url =
                 refreshUrl + ("?aid=" + session.deviceInfo.appId + "&uid=" + session.deviceInfo.udid + "&sid=" + session.id + "&sdk=" + session.deviceInfo.sdkVersion)

@@ -2,14 +2,19 @@ package com.adadapted.library.session
 
 import com.adadapted.library.device.DeviceInfo
 import com.adadapted.library.concurrency.Timer
+import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.concurrency.TransporterCoroutineScope
 import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.device.DeviceInfoClient
+import com.adadapted.library.interfaces.Callback
+import com.adadapted.library.interfaces.SessionAdapter
+import com.adadapted.library.interfaces.SessionAdapterListener
 import kotlin.jvm.Synchronized
 import kotlin.native.concurrent.ThreadLocal
 
-class SessionClient private constructor(private val adapter: SessionAdapter, private val transporter: TransporterCoroutineScope) : SessionAdapter.Listener {
+@ThreadLocal
+object SessionClient : SessionAdapterListener {
 
     enum class Status {
         OK,  // Normal Status. No alterations to regular behavior
@@ -26,6 +31,10 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
         private set
     private var pollingTimerRunning: Boolean
     private var eventTimerRunning: Boolean
+    private var adapter: SessionAdapter? = null
+    private var transporter: TransporterCoroutineScope = Transporter()
+    private var hasInstance: Boolean = false
+
 
     private fun performAddListener(listener: SessionListener) {
         sessionListeners.add(listener)
@@ -56,7 +65,7 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
 
     private fun performInitialize(deviceInfo: DeviceInfo) {
         this.deviceInfo = deviceInfo
-        transporter.dispatchToBackground { instance?.let { adapter.sendInit(deviceInfo, it) } }
+        transporter.dispatchToMain { adapter?.sendInit(deviceInfo, this@SessionClient) }
     }
 
     private fun performRefresh() {
@@ -74,11 +83,9 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
             if (presenterSize() > 0) {
                 print(LOG_TAG + "Reinitializing Session.")
                 status = Status.IS_REINITIALIZING_SESSION
-                transporter.dispatchToBackground { instance?.let {
-                    adapter.sendInit(deviceInfo,
-                        it
-                    )
-                } }
+                transporter.dispatchToBackground {
+                    adapter?.sendInit(deviceInfo, this@SessionClient)
+                }
             } else {
                 status = Status.SHOULD_REFRESH
             }
@@ -90,11 +97,9 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
             if (presenterSize() > 0) {
                 print(LOG_TAG + "Checking for more Ads.")
                 status = Status.IS_REFRESH_ADS
-                transporter.dispatchToBackground { instance?.let {
-                    adapter.sendRefreshAds(currentSession,
-                        it
-                    )
-                } }
+                transporter.dispatchToBackground {
+                    adapter?.sendInit(deviceInfo, this@SessionClient)
+                }
             } else {
                 status = Status.SHOULD_REFRESH
             }
@@ -120,18 +125,26 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
         pollingTimerRunning = true
         print(LOG_TAG + "Starting Ad polling timer.")
 
-        val refreshTimer = Timer({ performRefresh() }, repeatMillis = currentSession.refreshTime, delayMillis = currentSession.refreshTime)
+        val refreshTimer = Timer(
+            { performRefresh() },
+            repeatMillis = currentSession.refreshTime,
+            delayMillis = currentSession.refreshTime
+        )
         refreshTimer.startTimer()
     }
 
     private fun startPublishTimer() {
-        if(eventTimerRunning) {
+        if (eventTimerRunning) {
             return
         }
         eventTimerRunning = true
         print(LOG_TAG + "Starting up the Event Publisher.")
 
-        val eventTimer = Timer({ notifyPublishEvents() }, repeatMillis = Config.DEFAULT_EVENT_POLLING, delayMillis = Config.DEFAULT_EVENT_POLLING)
+        val eventTimer = Timer(
+            { notifyPublishEvents() },
+            repeatMillis = Config.DEFAULT_EVENT_POLLING,
+            delayMillis = Config.DEFAULT_EVENT_POLLING
+        )
         eventTimer.startTimer()
     }
 
@@ -143,13 +156,13 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
 
     private fun notifySessionAvailable() {
         for (l in sessionListeners) {
-            l.onSessionAvailable(currentSession)
+            currentSession.let { l.onSessionAvailable(it) }
         }
     }
 
     private fun notifyAdsAvailable() {
         for (l in sessionListeners) {
-            l.onAdsAvailable(currentSession)
+            currentSession.let { l.onAdsAvailable(it) }
         }
     }
 
@@ -192,9 +205,9 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
     @Synchronized
     fun start(listener: SessionListener) {
         addListener(listener)
-        DeviceInfoClient.getInstance().getDeviceInfo(object: DeviceInfoClient.Callback {
+        DeviceInfoClient.getInstance().getDeviceInfo(object : Callback {
             override fun onDeviceInfoCollected(deviceInfo: DeviceInfo) {
-                transporter.dispatchToBackground {
+                transporter.dispatchToMain {
                     performInitialize(deviceInfo)
                 }
             }
@@ -217,23 +230,14 @@ class SessionClient private constructor(private val adapter: SessionAdapter, pri
         performRemovePresenter(listener)
     }
 
-    @ThreadLocal
-    companion object {
-        private var instance: SessionClient? = null
+    fun hasInstance(): Boolean {
+        return hasInstance
+    }
 
-        fun getInstance(): SessionClient? {
-            return instance
-        }
-
-        fun createInstance(adapter: SessionAdapter, transporter: TransporterCoroutineScope) {
-            instance = SessionClient(adapter, transporter)
-        }
-        
-//  need work around for iOS consumption
-
-//        fun hasInstance(): Boolean {
-//            return this::instance.isInitialized
-//        }
+    fun createInstance(adapter: SessionAdapter, transporter: TransporterCoroutineScope) {
+        this.adapter = adapter
+        this.transporter = transporter
+        this.hasInstance = true
     }
 
     init {

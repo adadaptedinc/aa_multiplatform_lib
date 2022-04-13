@@ -1,5 +1,6 @@
 package com.adadapted.library.network
 
+import com.adadapted.library.constants.Config.LOG_TAG
 import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.features.json.JsonFeature
@@ -25,7 +26,7 @@ class HttpConnector {
 
         install(ResponseObserver) {
             onResponse { response ->
-                println("HTTP status: ${response.status.value}")
+                println(LOG_TAG + "AA HTTP status: ${response.status.value}")
             }
         }
     }

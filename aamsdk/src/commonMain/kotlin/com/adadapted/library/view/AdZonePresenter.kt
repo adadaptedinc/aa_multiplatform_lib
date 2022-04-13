@@ -17,10 +17,10 @@ interface AdZonePresenterListener {
     fun onNoAdAvailable()
 }
 
-internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : SessionListener {
+class AdZonePresenter(private val adViewHandler: AdViewHandler) : SessionListener {
     private var currentAd: Ad = Ad()
     private var zoneId: String = ""
-    private var adZonePresenterListener: AdZonePresenterListener? = null
+    var adZonePresenterListener: AdZonePresenterListener? = null
     private var attached: Boolean
     private var sessionId: String? = null
     private var zoneLoaded: Boolean
@@ -32,7 +32,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
     private lateinit var timer: Timer
 //    private val adEventClient: AdEventClient = AdEventClient.getInstance()
 //    private val appEventClient: AppEventClient = AppEventClient.getInstance()
-    private val sessionClient: SessionClient? = SessionClient.getInstance()
+    private val sessionClient: SessionClient = SessionClient
 
     fun init(zoneId: String) {
         if (this.zoneId.isEmpty()) {
@@ -51,8 +51,9 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
         if (!attached) {
             attached = true
             this.adZonePresenterListener = adZonePresenterListener
-            sessionClient?.addPresenter(this)
+            sessionClient.addPresenter(this)
         }
+        // here
         setNextAd()
     }
 
@@ -61,7 +62,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
             attached = false
             adZonePresenterListener = null
             completeCurrentAd()
-            sessionClient?.removePresenter(this)
+            sessionClient.removePresenter(this)
         }
     }
 
@@ -70,6 +71,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
             return
         }
         completeCurrentAd()
+
         currentAd = if (adZonePresenterListener != null && currentZone.hasAds()) {
             val adPosition = randomAdStartPosition % currentZone.ads.size
             randomAdStartPosition++
@@ -77,6 +79,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
         } else {
             Ad()
         }
+
         adStarted = false
         adCompleted = false
         displayAd()
@@ -208,7 +211,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
     }
 
     private fun notifyNoAdAvailable() {
-        println("No ad available")
+        println(LOG_TAG + "No ad available")
         adZonePresenterListener?.onNoAdAvailable()
     }
 
@@ -223,6 +226,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler) : Sessi
     private fun updateCurrentZone(zone: Zone) {
         zoneLoaded = true
         currentZone = zone
+
         if (currentAd.isEmpty) {
             setNextAd()
         }

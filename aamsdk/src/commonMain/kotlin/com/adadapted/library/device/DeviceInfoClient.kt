@@ -1,6 +1,7 @@
 package com.adadapted.library.device
 
 import com.adadapted.library.concurrency.TransporterCoroutineScope
+import com.adadapted.library.interfaces.Callback
 import kotlin.native.concurrent.ThreadLocal
 
 class DeviceInfoClient private constructor(
@@ -11,16 +12,12 @@ class DeviceInfoClient private constructor(
     private val deviceInfoExtractor: DeviceInfoExtractor,
     private val transporter: TransporterCoroutineScope
 ) {
-    interface Callback {
-        fun onDeviceInfoCollected(deviceInfo: DeviceInfo)
-    }
 
     private lateinit var deviceInfo: DeviceInfo
     private val callbacks: MutableSet<Callback>
 
     private fun performGetInfo(callback: Callback) {
         if (this::deviceInfo.isInitialized) {
-
             callback.onDeviceInfoCollected(deviceInfo)
         } else {
             callbacks.add(callback)

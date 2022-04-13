@@ -51,9 +51,10 @@ kotlin {
 
     sourceSets {
         val ktorVersion = "1.6.7"
-        val kotlinVersion = "1.6.0"
+        val kotlinVersion = "1.6.20"
         val kotlinxVersion = "1.1.0"
         val kotlinXDateTimeVersion = "0.3.0"
+        val kotlinCoroutineVersion = "1.6.1"
 
         val commonMain by getting {
             dependencies {
@@ -65,6 +66,9 @@ kotlin {
                 // DateTime
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinXDateTimeVersion")
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
+
+                // Coroutines
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion")
             }
         }
         val commonTest by getting {

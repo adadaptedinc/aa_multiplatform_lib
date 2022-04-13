@@ -1,6 +1,7 @@
 package com.adadapted.library
 
 import com.adadapted.library.atl.AddToListContent
+import com.adadapted.library.concurrency.Transporter
 
 abstract class AdAdaptedBase {
     protected var hasStarted = false

@@ -1,10 +1,14 @@
 package com.adadapted.library.view
 
 import aa_multiplatform_lib.cinterop.UIViewWithOverridesProtocol
+import com.adadapted.library.interfaces.ZoneViewListener
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.ad.AdContentListener
 import com.adadapted.library.ad.AdContentPublisher
 import com.adadapted.library.concurrency.Transporter
+import com.adadapted.library.constants.Config.LOG_TAG
+import com.adadapted.library.constraintsToFillSuperview
+import com.adadapted.library.interfaces.WebViewListener
 import kotlinx.cinterop.CValue
 import kotlinx.cinterop.cValue
 import kotlinx.cinterop.useContents
@@ -12,19 +16,13 @@ import platform.CoreGraphics.CGRect
 import platform.CoreGraphics.CGRectZero
 import platform.UIKit.*
 
-interface ZoneViewListener {
-    fun onZoneHasAds(hasAds: Boolean)
-    fun onAdLoaded()
-    fun onAdLoadFailed()
-}
-
 class IosZoneView : UIView(frame = cValue { CGRectZero }),
     UIViewWithOverridesProtocol,
     UIGestureRecognizerDelegateProtocol {
 
-    private var webView: IosWebView = IosWebView.getInstance()
-    private var presenter: AdZonePresenter = AdZonePresenter(AdViewHandler())
-    private var zoneViewListener: ZoneViewListener? = null
+    private var webView: IosWebView = IosWebView()
+    var presenter: AdZonePresenter = AdZonePresenter(AdViewHandler())
+    var zoneViewListener: ZoneViewListener? = null
     private var isVisible = true
     private var isAdVisible = true
 
@@ -32,6 +30,22 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }),
         this.webView.addWebViewListener(setWebViewListener())
         addSubview(webView)
         setupConstraints()
+    }
+
+    fun initZone(zoneId: String) {
+        this.presenter.init(zoneId)
+    }
+
+    fun onStart(
+        zoneViewListener: ZoneViewListener? = null,
+        contentListener: AdContentListener? = null
+    ) {
+        presenter.onAttach(setAdZonePresenterListener())
+        this.zoneViewListener = zoneViewListener
+
+        if (contentListener != null) {
+            AdContentPublisher.getInstance().addListener(contentListener)
+        }
     }
 
     fun shutdown() {
@@ -43,85 +57,52 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }),
         presenter.onAdVisibilityChanged(isAdVisible)
     }
 
-    fun onStart(
-        zoneViewListener: ZoneViewListener? = null,
-        contentListener: AdContentListener? = null
-    ) {
-        println("onStart")
-        println("zoneViewListener: $zoneViewListener")
-        presenter.onAttach(setAdZonePresenterListener())
-        this.zoneViewListener = zoneViewListener
-        println("zoneViewListener: $zoneViewListener")
-        if (contentListener != null) {
-            AdContentPublisher.getInstance().addListener(contentListener)
-        }
-    }
-
-    override fun layoutSubviews() {
-        println("laying out ZoneView subviews")
-        setNeedsDisplay()
-    }
-
-    override fun drawRect(aRect: CValue<CGRect>) {
-        val rectAsString = aRect.useContents {
-            "" + this.origin.x + ", " + this.origin.y + ", " + (this.origin.x + this.size.width) + ", " + (this.origin.y + this.size.height)
-        }
-        println("ZoneView dimensions: $rectAsString")
-        // need to draw to screen here
-        webView.loadAd(Ad())
-    }
-
     private fun setWebViewListener() = object : WebViewListener {
         override fun onAdLoadedInWebView(ad: Ad) {
-            println("Ad loaded in webview: $ad")
+            println(LOG_TAG + "Ad loaded: $ad")
             presenter.onAdDisplayed(ad, isAdVisible)
             notifyClientAdLoaded()
         }
 
         override fun onAdLoadInWebViewFailed() {
-            println("Ad load in webview failed")
+            println(LOG_TAG + "Ad load failed")
             presenter.onAdDisplayFailed()
             notifyClientAdLoadFailed()
         }
 
         override fun onAdInWebViewClicked(ad: Ad) {
-            println("Ad in webview clicked: $ad")
+            println("Ad clicked: $ad")
             presenter.onAdClicked(ad)
         }
 
         override fun onBlankAdInWebViewLoaded() {
-            println("Blank ad in webview loaded")
+            println(LOG_TAG + "Blank ad loaded")
             presenter.onBlankDisplayed()
         }
     }
 
     private fun setAdZonePresenterListener() = object : AdZonePresenterListener {
         override fun onZoneAvailable(zone: Zone) {
-            println("Zone available: $zone")
             notifyClientZoneHasAds(zone.hasAds())
         }
 
         override fun onAdsRefreshed(zone: Zone) {
-            println("Ads refrehed for zone: $zone")
             notifyClientZoneHasAds(zone.hasAds())
         }
 
         override fun onAdAvailable(ad: Ad) {
-            println("Ad available: $ad")
             if (isVisible) {
                 Transporter().dispatchToMain {
-                    println("onAdAvailalbe ad: $ad")
                     webView.loadAd(ad)
-                    drawRect(cValue { CGRectZero })
+                    setNeedsDisplay()
                 }
             }
         }
 
         override fun onNoAdAvailable() {
-            println("No ad available")
             Transporter().dispatchToMain {
                 webView.loadBlank()
-                drawRect(cValue { CGRectZero })
+                setNeedsDisplay()
             }
         }
     }
@@ -142,7 +123,6 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }),
 
     private fun notifyClientAdLoaded() {
         Transporter().dispatchToMain {
-            println("notifyClientAdLoaded")
             zoneViewListener?.onAdLoaded()
         }
     }
@@ -160,6 +140,7 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }),
         constraints.add(webView.trailingAnchor.constraintEqualToAnchor(trailingAnchor))
         constraints.add(webView.heightAnchor.constraintEqualToAnchor(heightAnchor))
         constraints.add(webView.widthAnchor.constraintEqualToAnchor(widthAnchor))
+        constraints.add(webView.centerXAnchor.constraintEqualToAnchor(centerXAnchor))
         NSLayoutConstraint.activateConstraints(constraints)
     }
 
@@ -173,33 +154,15 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }),
         presenter.onDetach()
     }
 
-    companion object {
-        fun getInstance(): IosZoneView {
-            val zoneView = IosZoneView()
-            zoneView.onStart()
-            return zoneView
-        }
+    override fun layoutSubviews() {
+        println(LOG_TAG + "Laying out ZoneView")
+        setNeedsDisplay()
     }
-}
 
-fun createZoneView(): UIView = IosZoneView.getInstance()
-
-fun UIView.constraintsToFillSuperview(): List<NSLayoutConstraint> {
-    val horizontal = constraintsToFillSuperviewHorizontally()
-    val vertical = constraintsToFillSuperviewVertically()
-    return vertical + horizontal
-}
-
-fun UIView.constraintsToFillSuperviewVertically(): List<NSLayoutConstraint> {
-    val superview = superview ?: return emptyList()
-    val top = topAnchor.constraintEqualToAnchor(superview.topAnchor)
-    val bottom = bottomAnchor.constraintEqualToAnchor(superview.bottomAnchor)
-    return listOf(top, bottom)
-}
-
-fun UIView.constraintsToFillSuperviewHorizontally(): List<NSLayoutConstraint> {
-    val superview = superview ?: return emptyList()
-    val leader = leadingAnchor.constraintEqualToAnchor(superview.leadingAnchor)
-    val trailer = trailingAnchor.constraintEqualToAnchor(superview.trailingAnchor)
-    return listOf(leader, trailer)
+    override fun drawRect(aRect: CValue<CGRect>) {
+        val rectAsString = aRect.useContents {
+            "" + this.origin.x + ", " + this.origin.y + ", " + (this.origin.x + this.size.width) + ", " + (this.origin.y + this.size.height)
+        }
+        println(LOG_TAG + "AAZoneView dimensions: $rectAsString")
+    }
 }

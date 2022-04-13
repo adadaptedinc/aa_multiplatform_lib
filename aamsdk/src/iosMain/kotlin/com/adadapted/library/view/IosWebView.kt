@@ -1,20 +1,15 @@
 package com.adadapted.library.view
 
 import com.adadapted.library.ad.Ad
+import com.adadapted.library.interfaces.WebViewListener
+import com.adadapted.library.nsData
 import kotlinx.cinterop.*
 import platform.CoreGraphics.*
 import platform.Foundation.*
 import platform.UIKit.*
 import platform.WebKit.*
 
-interface WebViewListener {
-    fun onAdLoadedInWebView(ad: Ad)
-    fun onAdLoadInWebViewFailed()
-    fun onAdInWebViewClicked(ad: Ad)
-    fun onBlankAdInWebViewLoaded()
-}
-
-class IosWebView constructor(): WKWebView (frame = cValue { CGRectZero }, configuration = WKWebViewConfiguration()),
+class IosWebView : WKWebView (frame = cValue { CGRectZero }, configuration = WKWebViewConfiguration()),
         WKUIDelegateProtocol,
         WKNavigationDelegateProtocol,
         UIGestureRecognizerDelegateProtocol {
@@ -29,7 +24,8 @@ class IosWebView constructor(): WKWebView (frame = cValue { CGRectZero }, config
         this.translatesAutoresizingMaskIntoConstraints = false
         this.setAllowsBackForwardNavigationGestures(false)
         this.scrollView().bounces = false
-        this.scrollView().setContentInsetAdjustmentBehavior(UIScrollViewContentInsetAdjustmentBehavior.UIScrollViewContentInsetAdjustmentNever)
+        this.scrollView()
+            .setContentInsetAdjustmentBehavior(UIScrollViewContentInsetAdjustmentBehavior.UIScrollViewContentInsetAdjustmentNever)
 
         this.setOnCLickListener { tapAction() }
     }
@@ -41,7 +37,7 @@ class IosWebView constructor(): WKWebView (frame = cValue { CGRectZero }, config
     fun loadAd(ad: Ad) {
         currentAd = ad
         loaded = false
-        val url = NSURL(string = "https://sandbox.adadapted.com/a/NWY0NTZIODZHNWY0;101942;45445")
+        val url = NSURL(string = currentAd.url )
         val request = NSURLRequest(uRL = url)
         loadRequest(request)
 
@@ -77,7 +73,11 @@ class IosWebView constructor(): WKWebView (frame = cValue { CGRectZero }, config
     }
 
     // WKWebView Navigation Delegate
-    override fun webView(webView: WKWebView, decidePolicyForNavigationAction: WKNavigationAction, decisionHandler: (WKNavigationActionPolicy) -> Unit) {
+    override fun webView(
+        webView: WKWebView,
+        decidePolicyForNavigationAction: WKNavigationAction,
+        decisionHandler: (WKNavigationActionPolicy) -> Unit
+    ) {
         if (decidePolicyForNavigationAction.navigationType == WKNavigationTypeOther) {
             decisionHandler(WKNavigationActionPolicy.WKNavigationActionPolicyAllow)
         } else {
@@ -85,37 +85,46 @@ class IosWebView constructor(): WKWebView (frame = cValue { CGRectZero }, config
         }
     }
 
-    override fun webView(webView: WKWebView, didFinishNavigation: WKNavigation?) {
+    override fun webView(
+        webView: WKWebView,
+        didFinishNavigation: WKNavigation?
+    ) {
         if (currentAd.id.isNotEmpty() && !loaded) {
             loaded = true
             notifyAdLoaded()
         }
     }
 
-    override fun webView(webView: WKWebView, didFailNavigation: WKNavigation?, withError: NSError) {
+    override fun webView(
+        webView: WKWebView,
+        didFailNavigation: WKNavigation?,
+        withError: NSError
+    ) {
         if (currentAd.id.isNotEmpty() && !loaded) {
             loaded = true
             notifyAdLoadFailed()
         }
     }
 
+    override fun webView(
+        webView: WKWebView,
+        contextMenuWillPresentForElement: WKContextMenuElementInfo
+    ) {
+        // NOOP
+    }
+
     // Gesture Recognizer Delegate
     private fun UIView.setOnCLickListener(block: () -> Unit) {
-        this.addGestureRecognizer(UITapGestureRecognizer(Target(block), NSSelectorFromString("invokeBlock")))
+        this.addGestureRecognizer(
+            UITapGestureRecognizer(
+                Target(block),
+                NSSelectorFromString("invokeBlock")
+            )
+        )
     }
 
     private fun tapAction() {
         println("webView tapped")
         notifyAdClicked()
     }
-
-    @ThreadLocal
-    companion object {
-        fun getInstance(): IosWebView {
-            return IosWebView()
-        }
-    }
 }
-
-fun String.nsData(): NSData? =
-    NSString.create(string = this).dataUsingEncoding(NSUTF8StringEncoding)

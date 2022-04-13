@@ -52,15 +52,13 @@ object IosAdAdapted : AdAdaptedBase() {
 
             override fun onAdsAvailable(session: Session) {
                 sessionListener(session.hasActiveCampaigns())
-                println("onAdsAvailable")
             }
 
             override fun onSessionInitFailed() {
                 sessionListener(false)
-                println("onSessionInitFailed")
             }
         }
-        SessionClient.getInstance()?.start(startListener)
+        SessionClient.start(startListener)
         println(LOG_TAG + "AdAdapted iOS Advertising SDK v%s initialized." + Config.VERSION_NAME)
     }
 
@@ -68,6 +66,7 @@ object IosAdAdapted : AdAdaptedBase() {
         Config.init(isProd)
 
         val deviceInfoExtractor = DeviceInfoExtractor()
+
         DeviceInfoClient.createInstance(
             apiKey,
             isProd,
@@ -76,6 +75,7 @@ object IosAdAdapted : AdAdaptedBase() {
             deviceInfoExtractor,
             Transporter()
         )
+
         SessionClient.createInstance(
             HttpSessionAdapter(
                 Config.getInitSessionUrl(),
