@@ -83,6 +83,6 @@ class InterceptMatcher private constructor() : SessionListener, InterceptClient.
     }
 
     init {
-        SessionClient.getInstance()?.addListener(this)
+        SessionClient.addListener(this)
     }
 }
