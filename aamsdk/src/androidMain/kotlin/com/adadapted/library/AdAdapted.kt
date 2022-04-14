@@ -67,7 +67,9 @@ object AdAdapted : AdAdaptedBase() {
         contentListener.let { AddItContentPublisher.getInstance().addListener(it) }
         PayloadClient.getInstance().pickupPayloads {
             if (it.isNotEmpty()) {
-                AddItContentPublisher.getInstance().publishAddItContent(it[0])
+                for (content in it) {
+                    AddItContentPublisher.getInstance().publishAddItContent(content)
+                }
             }
         }
 
