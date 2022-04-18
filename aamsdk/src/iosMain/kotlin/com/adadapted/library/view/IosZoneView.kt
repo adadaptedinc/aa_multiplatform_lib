@@ -17,8 +17,7 @@ import platform.CoreGraphics.CGRectZero
 import platform.UIKit.*
 
 class IosZoneView : UIView(frame = cValue { CGRectZero }),
-    UIViewWithOverridesProtocol,
-    UIGestureRecognizerDelegateProtocol {
+    UIViewWithOverridesProtocol {
 
     private var webView: IosWebView = IosWebView()
     var presenter: AdZonePresenter = AdZonePresenter(AdViewHandler())

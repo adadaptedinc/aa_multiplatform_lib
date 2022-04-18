@@ -693,11 +693,9 @@ __attribute__((swift_name("IosZoneView")))
 @interface Aa_multiplatform_libIosZoneView : NSObject
 @end;
 
-__attribute__((objc_subclassing_restricted))
+__attribute__((unavailable("Kotlin subclass of Objective-C class can't be imported")))
 __attribute__((swift_name("Target")))
-@interface Aa_multiplatform_libTarget : Aa_multiplatform_libBase
-- (instancetype)initWithBlock:(void (^)(void))block __attribute__((swift_name("init(block:)"))) __attribute__((objc_designated_initializer));
-- (void)invokeBlock __attribute__((swift_name("invokeBlock()")));
+@interface Aa_multiplatform_libTarget : NSObject
 @end;
 
 __attribute__((objc_subclassing_restricted))

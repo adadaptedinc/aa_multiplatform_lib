@@ -12,7 +12,8 @@ import platform.WebKit.*
 class IosWebView : WKWebView (frame = cValue { CGRectZero }, configuration = WKWebViewConfiguration()),
         WKUIDelegateProtocol,
         WKNavigationDelegateProtocol,
-        UIGestureRecognizerDelegateProtocol {
+        UIGestureRecognizerDelegateProtocol,
+        UIScrollViewDelegateProtocol {
 
     private lateinit var currentAd: Ad
     private var listener: WebViewListener? = null
@@ -25,9 +26,17 @@ class IosWebView : WKWebView (frame = cValue { CGRectZero }, configuration = WKW
         this.setAllowsBackForwardNavigationGestures(false)
         this.scrollView().bounces = false
         this.scrollView()
-            .setContentInsetAdjustmentBehavior(UIScrollViewContentInsetAdjustmentBehavior.UIScrollViewContentInsetAdjustmentNever)
+            .setContentInsetAdjustmentBehavior(UIScrollViewContentInsetAdjustmentBehavior
+                .UIScrollViewContentInsetAdjustmentNever)
 
-        this.setOnCLickListener { tapAction() }
+        val tap = UITapGestureRecognizer(
+            target = this,
+            action = NSSelectorFromString("adTapped")
+        )
+
+        tap.numberOfTapsRequired = 1u
+        tap.delegate = this
+        this.addGestureRecognizer(tap)
     }
 
     fun addWebViewListener(listener: WebViewListener) {
@@ -72,6 +81,11 @@ class IosWebView : WKWebView (frame = cValue { CGRectZero }, configuration = WKW
         listener?.onAdInWebViewClicked(currentAd)
     }
 
+    // UIScrollView Delegate
+    override fun viewForZoomingInScrollView(scrollView: UIScrollView): UIView? {
+        return null
+    }
+
     // WKWebView Navigation Delegate
     override fun webView(
         webView: WKWebView,
@@ -106,25 +120,24 @@ class IosWebView : WKWebView (frame = cValue { CGRectZero }, configuration = WKW
         }
     }
 
+    // Gesture Recognizer Delegate
+    @ObjCAction
+    fun adTapped() {
+        notifyAdClicked()
+    }
+
+    override fun gestureRecognizer(
+        gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWithGestureRecognizer: UIGestureRecognizer
+    ): Boolean {
+        return true
+    }
+
+    // NOOP WebView Overrides
     override fun webView(
         webView: WKWebView,
         contextMenuWillPresentForElement: WKContextMenuElementInfo
     ) {
         // NOOP
-    }
-
-    // Gesture Recognizer Delegate
-    private fun UIView.setOnCLickListener(block: () -> Unit) {
-        this.addGestureRecognizer(
-            UITapGestureRecognizer(
-                Target(block),
-                NSSelectorFromString("invokeBlock")
-            )
-        )
-    }
-
-    private fun tapAction() {
-        println("webView tapped")
-        notifyAdClicked()
     }
 }

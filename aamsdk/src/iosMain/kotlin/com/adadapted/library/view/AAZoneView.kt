@@ -1,9 +1,9 @@
 package com.adadapted.library.view
 
-import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.interfaces.ZoneViewListener
-import platform.UIKit.UIView
-import platform.UIKit.setNeedsDisplay
+import kotlinx.cinterop.ObjCAction
+import platform.Foundation.NSSelectorFromString
+import platform.UIKit.*
 
 class AAZoneView constructor(zoneId: String): ZoneViewListener {
     var zoneView = IosZoneView()
