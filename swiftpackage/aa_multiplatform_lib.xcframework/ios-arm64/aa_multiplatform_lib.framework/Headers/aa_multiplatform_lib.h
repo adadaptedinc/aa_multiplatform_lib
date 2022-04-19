@@ -195,8 +195,13 @@ __attribute__((swift_name("IosAdAdapted")))
 + (instancetype)new __attribute__((unavailable));
 + (instancetype)iosAdAdapted __attribute__((swift_name("init()")));
 @property (class, readonly, getter=shared) Aa_multiplatform_libIosAdAdapted *shared __attribute__((swift_name("shared")));
+- (Aa_multiplatform_libAdAdaptedBase *)disableAdTracking __attribute__((swift_name("disableAdTracking()")));
+- (Aa_multiplatform_libAdAdaptedBase *)enableAdTracking __attribute__((swift_name("enableAdTracking()")));
+- (Aa_multiplatform_libIosAdAdapted *)enableKeywordInterceptValue:(BOOL)value __attribute__((swift_name("enableKeywordIntercept(value:)")));
 - (Aa_multiplatform_libIosAdAdapted *)inEnvironmentEnv:(Aa_multiplatform_libAdAdaptedEnv *)env __attribute__((swift_name("inEnvironment(env:)")));
 - (Aa_multiplatform_libIosAdAdapted *)onHasAdsToServeListener:(void (^)(Aa_multiplatform_libBoolean *))listener __attribute__((swift_name("onHasAdsToServe(listener:)")));
+- (Aa_multiplatform_libAdAdaptedBase *)setCustomIdentifierIdentifier:(NSString *)identifier __attribute__((swift_name("setCustomIdentifier(identifier:)")));
+- (Aa_multiplatform_libIosAdAdapted *)setSdkAddItContentListenerListener:(void (^)(id<Aa_multiplatform_libAddToListContent>))listener __attribute__((swift_name("setSdkAddItContentListener(listener:)")));
 
 /**
  @note This method converts instances of Exception to errors.
@@ -691,11 +696,6 @@ __attribute__((swift_name("IosWebView")))
 __attribute__((unavailable("Kotlin subclass of Objective-C class can't be imported")))
 __attribute__((swift_name("IosZoneView")))
 @interface Aa_multiplatform_libIosZoneView : NSObject
-@end;
-
-__attribute__((unavailable("Kotlin subclass of Objective-C class can't be imported")))
-__attribute__((swift_name("Target")))
-@interface Aa_multiplatform_libTarget : NSObject
 @end;
 
 __attribute__((objc_subclassing_restricted))

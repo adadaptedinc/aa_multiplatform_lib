@@ -53,7 +53,6 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler) : SessionListene
             this.adZonePresenterListener = adZonePresenterListener
             sessionClient.addPresenter(this)
         }
-        // here
         setNextAd()
     }
 

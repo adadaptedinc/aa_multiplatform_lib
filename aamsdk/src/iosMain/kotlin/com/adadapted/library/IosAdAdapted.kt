@@ -1,5 +1,6 @@
 package com.adadapted.library
 
+import com.adadapted.library.atl.AddToListContent
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
@@ -10,6 +11,9 @@ import com.adadapted.library.network.HttpSessionAdapter
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
+import platform.Foundation.NSUserDefaults
+import platform.Foundation.setValue
+import platform.Foundation.valueForKey
 
 object IosAdAdapted : AdAdaptedBase() {
 
@@ -25,6 +29,16 @@ object IosAdAdapted : AdAdaptedBase() {
 
     fun onHasAdsToServe(listener: (hasAds: Boolean) -> Unit): IosAdAdapted {
         sessionListener = listener
+        return this
+    }
+
+    fun enableKeywordIntercept(value: Boolean): IosAdAdapted {
+//        isKeywordInterceptEnabled = value
+        return this
+    }
+
+    fun setSdkAddItContentListener(listener: (atlContent: AddToListContent) -> Unit): IosAdAdapted {
+        contentListener = listener
         return this
     }
 
@@ -60,6 +74,26 @@ object IosAdAdapted : AdAdaptedBase() {
         }
         SessionClient.start(startListener)
         println(LOG_TAG + "AdAdapted iOS Advertising SDK v%s initialized." + Config.VERSION_NAME)
+    }
+
+    fun setCustomIdentifier(identifier: String): AdAdaptedBase {
+        customIdentifier = identifier
+        return this
+    }
+
+    fun disableAdTracking(): AdAdaptedBase {
+        setAdTracking(true)
+        return this
+    }
+
+    fun enableAdTracking(): AdAdaptedBase {
+        setAdTracking(false)
+        return this
+    }
+
+    private fun setAdTracking(value: Boolean) {
+        val preferences = NSUserDefaults.standardUserDefaults
+        preferences.setValue(value = value, forKey = Config.AASDK_PREFS_TRACKING_DISABLED_KEY)
     }
 
     private fun setupClients() {
