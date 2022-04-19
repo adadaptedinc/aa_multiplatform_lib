@@ -1,5 +1,7 @@
 package com.adadapted.library.atl
 
+import com.adadapted.library.atl.AddToListContent.Sources.IN_APP
+import com.adadapted.library.payload.PayloadClient
 import kotlin.jvm.Synchronized
 
 data class AddItContent(
@@ -9,14 +11,12 @@ data class AddItContent(
     val type: Int,
     private val source: String,
     val addItSource: String,
-    private val items: List<AddToListItem>
-)
+    private val items: List<AddToListItem>,
+    private var payloadClient: PayloadClient = PayloadClient.getInstance()
 //appEventClient: AppEventClient = AppEventClient.getInstance(),
-//private var payloadClient: PayloadClient = PayloadClient.getInstance())
-    : AddToListContent {
+) : AddToListContent {
 
     internal object AddItSources {
-        const val IN_APP = "in_app"
         const val DEEPLINK = "deeplink"
         const val PAYLOAD = "payload"
     }
@@ -29,16 +29,16 @@ data class AddItContent(
             return
         }
         handled = true
-        //payloadClient.markContentAcknowledged(this)
+        payloadClient.markContentAcknowledged(this)
     }
 
     @Synchronized
     override fun itemAcknowledge(item: AddToListItem) {
         if (!handled) {
             handled = true
-            //payloadClient.markContentAcknowledged(this)
+            payloadClient.markContentAcknowledged(this)
         }
-        //payloadClient.markContentItemAcknowledged(this, item)
+        payloadClient.markContentItemAcknowledged(this, item)
     }
 
     @Synchronized
@@ -47,7 +47,7 @@ data class AddItContent(
             return
         }
         handled = true
-        //payloadClient.markContentDuplicate(this)
+        payloadClient.markContentDuplicate(this)
     }
 
     @Synchronized
@@ -56,12 +56,12 @@ data class AddItContent(
             return
         }
         handled = true
-        //payloadClient.markContentFailed(this, message)
+        payloadClient.markContentFailed(this, message)
     }
 
     @Synchronized
     override fun itemFailed(item: AddToListItem, message: String) {
-        //payloadClient.markContentItemFailed(this, item, message)
+        payloadClient.markContentItemFailed(this, item, message)
     }
 
     override fun getSource(): String {
@@ -80,7 +80,7 @@ data class AddItContent(
     }
 
     companion object {
-        //TODO change these to map functions?
+        //TODO change these to map functions
         fun createDeeplinkContent(
             payloadId: String,
             message: String,
@@ -111,26 +111,8 @@ data class AddItContent(
                 message,
                 image,
                 type,
-                AddToListContent.Sources.IN_APP,
-                AddItSources.IN_APP,
-                items
-            )
-        }
-
-        fun createPayloadContent(
-            payloadId: String,
-            message: String,
-            image: String,
-            type: Int,
-            items: List<AddToListItem>
-        ): AddItContent {
-            return AddItContent(
-                payloadId,
-                message,
-                image,
-                type,
-                AddToListContent.Sources.OUT_OF_APP,
-                AddItSources.PAYLOAD,
+                IN_APP,
+                IN_APP,
                 items
             )
         }

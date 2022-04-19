@@ -7,7 +7,9 @@ import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
 import com.adadapted.library.network.HttpConnector
+import com.adadapted.library.network.HttpPayloadAdapter
 import com.adadapted.library.network.HttpSessionAdapter
+import com.adadapted.library.payload.PayloadClient
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
@@ -33,7 +35,7 @@ object IosAdAdapted : AdAdaptedBase() {
     }
 
     fun enableKeywordIntercept(value: Boolean): IosAdAdapted {
-//        isKeywordInterceptEnabled = value
+        isKeywordInterceptEnabled = value
         return this
     }
 
@@ -114,6 +116,13 @@ object IosAdAdapted : AdAdaptedBase() {
             HttpSessionAdapter(
                 Config.getInitSessionUrl(),
                 Config.getRefreshAdsUrl(),
+                HttpConnector.getInstance()
+            ), Transporter()
+        )
+        PayloadClient.createInstance(
+            HttpPayloadAdapter(
+                Config.getPickupPayloadsUrl(),
+                Config.getTrackingPayloadUrl(),
                 HttpConnector.getInstance()
             ), Transporter()
         )

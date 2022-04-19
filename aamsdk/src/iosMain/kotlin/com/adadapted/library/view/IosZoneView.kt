@@ -9,6 +9,7 @@ import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.constraintsToFillSuperview
 import com.adadapted.library.interfaces.WebViewListener
+import com.adadapted.library.session.SessionClient
 import kotlinx.cinterop.CValue
 import kotlinx.cinterop.cValue
 import kotlinx.cinterop.useContents
@@ -19,7 +20,7 @@ import platform.UIKit.*
 class IosZoneView : UIView(frame = cValue { CGRectZero }) {
 
     private var webView: IosWebView = IosWebView()
-    var presenter: AdZonePresenter = AdZonePresenter(AdViewHandler())
+    var presenter: AdZonePresenter = AdZonePresenter(AdViewHandler(), SessionClient)
     var zoneViewListener: ZoneViewListener? = null
     private var isVisible = true
     private var isAdVisible = true

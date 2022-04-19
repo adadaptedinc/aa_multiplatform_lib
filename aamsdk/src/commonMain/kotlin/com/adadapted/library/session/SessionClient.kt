@@ -23,18 +23,16 @@ object SessionClient : SessionAdapterListener {
         IS_REINITIALIZING_SESSION // SDK is currently reinitializing the Session
     }
 
+    private lateinit var currentSession: Session
+    private var adapter: SessionAdapter? = null
+    private var transporter: TransporterCoroutineScope = Transporter()
     private val sessionListeners: MutableSet<SessionListener>
     private val presenters: MutableSet<String>
-    private lateinit var deviceInfo: DeviceInfo
-    private lateinit var currentSession: Session
     var status: Status
         private set
     private var pollingTimerRunning: Boolean
     private var eventTimerRunning: Boolean
-    private var adapter: SessionAdapter? = null
-    private var transporter: TransporterCoroutineScope = Transporter()
     private var hasInstance: Boolean = false
-
 
     private fun performAddListener(listener: SessionListener) {
         sessionListeners.add(listener)
@@ -64,21 +62,24 @@ object SessionClient : SessionAdapterListener {
     private fun presenterSize() = presenters.size
 
     private fun performInitialize(deviceInfo: DeviceInfo) {
-        this.deviceInfo = deviceInfo
         transporter.dispatchToMain { adapter?.sendInit(deviceInfo, this@SessionClient) }
     }
 
-    private fun performRefresh() {
+    private fun performRefresh(
+        deviceInfo: DeviceInfo? = DeviceInfoClient.getInstance().getCachedDeviceInfo()
+    ) {
         if (currentSession.hasExpired()) {
             print(LOG_TAG + "Session has expired. Expired at: " + currentSession.expiration)
             notifySessionExpired()
-            performReinitialize()
+            if (deviceInfo != null) {
+                performReinitialize(deviceInfo)
+            }
         } else {
             performRefreshAds()
         }
     }
 
-    private fun performReinitialize() {
+    private fun performReinitialize(deviceInfo: DeviceInfo) {
         if (status == Status.OK || status == Status.SHOULD_REFRESH) {
             if (presenterSize() > 0) {
                 print(LOG_TAG + "Reinitializing Session.")
@@ -98,7 +99,10 @@ object SessionClient : SessionAdapterListener {
                 print(LOG_TAG + "Checking for more Ads.")
                 status = Status.IS_REFRESH_ADS
                 transporter.dispatchToBackground {
-                    adapter?.sendInit(deviceInfo, this@SessionClient)
+                    adapter?.sendRefreshAds(
+                        currentSession,
+                        this@SessionClient
+                    )
                 }
             } else {
                 status = Status.SHOULD_REFRESH
@@ -113,7 +117,7 @@ object SessionClient : SessionAdapterListener {
     }
 
     private fun updateCurrentZones(session: Session) {
-        currentSession = session
+        currentSession.updateZones(session.getAllZones())
         startPollingTimer()
     }
 

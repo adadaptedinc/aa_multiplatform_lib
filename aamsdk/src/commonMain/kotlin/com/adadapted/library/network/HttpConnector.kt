@@ -36,12 +36,10 @@ class HttpConnector {
         private lateinit var instance: HttpConnector
 
         fun getInstance(): HttpConnector {
-            return if (::instance.isInitialized) {
-                instance
-            } else {
+            if (!this::instance.isInitialized) {
                 instance = HttpConnector()
-                instance
             }
+            return instance
         }
     }
 }
