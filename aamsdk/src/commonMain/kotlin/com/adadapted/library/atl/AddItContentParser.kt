@@ -1,8 +1,10 @@
 package com.adadapted.library.atl
 
+import com.adadapted.library.atl.AddItContent.AddItSources.DEEPLINK
 import com.adadapted.library.atl.AddItContent.AddItSources.PAYLOAD
 import com.adadapted.library.atl.AddToListContent.Sources.OUT_OF_APP
 import com.adadapted.library.constants.AddToListTypes
+import com.adadapted.library.payload.Payload
 import com.adadapted.library.payload.PayloadResponse
 
 object AddItContentParser {
@@ -20,5 +22,17 @@ object AddItContentParser {
         }
         //track errors
         return listOfAddItContentToReturn
+    }
+
+    fun generateAddItContentFromDeeplink(payload: Payload): AddItContent {
+        return AddItContent(
+            payload.payloadId,
+            payload.payloadMessage,
+            payload.payloadImage,
+            AddToListTypes.ADD_TO_LIST_ITEMS,
+            OUT_OF_APP,
+            DEEPLINK,
+            payload.detailedListItems
+        )
     }
 }

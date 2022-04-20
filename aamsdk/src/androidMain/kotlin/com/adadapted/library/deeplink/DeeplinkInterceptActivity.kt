@@ -1,14 +1,13 @@
-package com.adadapted.library.view
+package com.adadapted.library.deeplink
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.adadapted.library.atl.AddItContentPublisher
-import com.adadapted.library.atl.DeeplinkContentParser
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.payload.PayloadClient
 
-class DeeplinkInterceptActivity: AppCompatActivity() {
+class DeeplinkInterceptActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         println(LOG_TAG + "Deeplink Intercept Activity Launched.")
