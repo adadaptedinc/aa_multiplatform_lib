@@ -1,6 +1,5 @@
 package com.adadapted.library.atl
 
-import com.adadapted.library.atl.AddToListContent.Sources.IN_APP
 import com.adadapted.library.payload.PayloadClient
 import kotlin.jvm.Synchronized
 
@@ -77,45 +76,6 @@ data class AddItContent(
 
     override fun hasNoItems(): Boolean {
         return items.isEmpty()
-    }
-
-    companion object {
-        //TODO change these to map functions
-        fun createDeeplinkContent(
-            payloadId: String,
-            message: String,
-            image: String,
-            type: Int,
-            items: List<AddToListItem>
-        ): AddItContent {
-            return AddItContent(
-                payloadId,
-                message,
-                image,
-                type,
-                AddToListContent.Sources.OUT_OF_APP,
-                AddItSources.DEEPLINK,
-                items
-            )
-        }
-
-        fun createInAppContent(
-            payloadId: String,
-            message: String,
-            image: String,
-            type: Int,
-            items: List<AddToListItem>
-        ): AddItContent {
-            return AddItContent(
-                payloadId,
-                message,
-                image,
-                type,
-                IN_APP,
-                IN_APP,
-                items
-            )
-        }
     }
 
     init {
