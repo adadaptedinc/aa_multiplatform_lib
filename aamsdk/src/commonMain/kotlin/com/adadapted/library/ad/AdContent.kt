@@ -3,12 +3,12 @@ package com.adadapted.library.ad
 import com.adadapted.library.atl.AddToListContent
 import com.adadapted.library.atl.AddToListItem
 import com.adadapted.library.constants.EventStrings
+import com.adadapted.library.event.EventClient
 import kotlin.jvm.Synchronized
 
 //class AdContent private constructor(private val ad: Ad, val type: Int, private val items: List<AddToListItem>, adClient: AdEventClient = AdEventClient.getInstance(), appClient: AppEventClient = AppEventClient.getInstance()) : AddToListContent {
-class AdContent private constructor(private val ad: Ad, val type: Int, private val items: List<AddToListItem>) : AddToListContent {
+class AdContent private constructor(private val ad: Ad, val type: Int, private val items: List<AddToListItem>, private val eventClient: EventClient = EventClient.getInstance()) : AddToListContent {
     private var isHandled: Boolean
-    //private var adEventClient: AdEventClient = adClient
     //private var appEventClient: AppEventClient = appClient
 
     override fun acknowledge() {
@@ -16,14 +16,14 @@ class AdContent private constructor(private val ad: Ad, val type: Int, private v
             return
         }
         isHandled = true
-        //adEventClient.trackInteraction(ad)
+        eventClient.trackInteraction(ad)
     }
 
     @Synchronized
     override fun itemAcknowledge(item: AddToListItem) {
         if (!isHandled) {
             isHandled = true
-            //adEventClient.trackInteraction(ad)
+            eventClient.trackInteraction(ad)
         }
         trackItem(item.title)
     }

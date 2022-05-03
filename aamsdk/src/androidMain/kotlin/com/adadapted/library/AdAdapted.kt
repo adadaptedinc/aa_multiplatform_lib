@@ -8,12 +8,11 @@ import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
+import com.adadapted.library.event.EventClient
+import com.adadapted.library.event.EventPublisher
 import com.adadapted.library.keyword.InterceptClient
 import com.adadapted.library.keyword.InterceptMatcher
-import com.adadapted.library.network.HttpConnector
-import com.adadapted.library.network.HttpInterceptAdapter
-import com.adadapted.library.network.HttpPayloadAdapter
-import com.adadapted.library.network.HttpSessionAdapter
+import com.adadapted.library.network.*
 import com.adadapted.library.payload.PayloadClient
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
@@ -41,11 +40,11 @@ object AdAdapted : AdAdaptedBase() {
         return this
     }
 
-    //    fun setSdkEventListener(listener: AaSdkEventListener): AdAdapted {
-//        eventListener = listener
-//        return this
-//    }
-//
+    fun setSdkEventListener(listener: (zoneId: String, eventType: String) -> Unit): AdAdapted {
+        eventListener = listener
+        return this
+    }
+
     fun setSdkAddItContentListener(listener: (atlContent: AddToListContent) -> Unit): AdAdapted {
         contentListener = listener
         return this
@@ -63,7 +62,7 @@ object AdAdapted : AdAdaptedBase() {
         }
         hasStarted = true
         setupClients(context)
-        //eventListener?.let { SdkEventPublisher.getInstance().setListener(it) }
+        eventListener.let { EventPublisher.getInstance().setListener(it) }
         contentListener.let { AddItContentPublisher.getInstance().addListener(it) }
         PayloadClient.getInstance().pickupPayloads {
             if (it.isNotEmpty()) {
@@ -141,7 +140,12 @@ object AdAdapted : AdAdaptedBase() {
             ), Transporter()
         )
         //AppEventClient.createInstance(HttpAppEventSink(Config.getAppEventsUrl(), Config.getAppErrorsUrl()), Transporter())
-        //AdEventClient.createInstance(HttpAdEventSink(Config.getAdsEventUrl()), Transporter())
+        EventClient.createInstance(
+            HttpEventAdapter(
+                Config.getAdsEventUrl(),
+                HttpConnector.getInstance()
+            ), Transporter()
+        )
         InterceptClient.createInstance(
             HttpInterceptAdapter(
                 Config.getRetrieveInterceptsUrl(),
@@ -155,6 +159,6 @@ object AdAdapted : AdAdaptedBase() {
                 Config.getTrackingPayloadUrl(),
                 HttpConnector.getInstance()
             ), Transporter()
-        )//AppEventClient.getInstance(), Transporter())
+        )
     }
 }

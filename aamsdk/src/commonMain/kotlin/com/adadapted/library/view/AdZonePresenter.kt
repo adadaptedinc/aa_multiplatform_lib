@@ -7,6 +7,7 @@ import com.adadapted.library.session.SessionListener
 import com.adadapted.library.ad.AdContentPublisher
 import com.adadapted.library.concurrency.Timer
 import com.adadapted.library.constants.Config.LOG_TAG
+import com.adadapted.library.event.EventClient
 import com.adadapted.library.session.SessionClient
 
 internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sessionClient: SessionClient?) : SessionListener {
@@ -29,8 +30,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private
     private var adCompleted = false
     private var timerRunning = false
     private lateinit var timer: Timer
-
-    //    private val adEventClient: AdEventClient = AdEventClient.getInstance()
+    private val eventClient: EventClient = EventClient.getInstance()
 //    private val appEventClient: AppEventClient = AppEventClient.getInstance()
 
     fun init(zoneId: String) {
@@ -92,7 +92,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private
     private fun completeCurrentAd() {
         if (!currentAd.isEmpty && adStarted && !adCompleted) {
             if (!currentAd.impressionWasTracked()) {
-                //adEventClient.trackInvisibleImpression(currentAd)
+                eventClient.trackInvisibleImpression(currentAd)
             }
             currentAd.resetImpressionTracking() //this is critical to make sure rotating ads can get more than one impression (total)
             adCompleted = true
@@ -132,11 +132,11 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private
                 handleContentAction(ad)
             }
             AdActionType.LINK, AdActionType.EXTERNAL_LINK -> {
-                //adEventClient.trackInteraction(ad)
+                eventClient.trackInteraction(ad)
                 handleLinkAction(ad)
             }
             AdActionType.POPUP -> {
-                //adEventClient.trackInteraction(ad)
+                eventClient.trackInteraction(ad)
                 handlePopupAction(ad)
             }
             AdActionType.CONTENT_POPUP -> {
@@ -152,7 +152,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private
     private fun trackAdImpression(ad: Ad, isAdVisible: Boolean) {
         if (!isAdVisible || ad.impressionWasTracked() || ad.isEmpty) return
         ad.setImpressionTracked()
-        //adEventClient.trackImpression(ad)
+        eventClient.trackImpression(ad)
     }
 
     private fun startZoneTimer() {

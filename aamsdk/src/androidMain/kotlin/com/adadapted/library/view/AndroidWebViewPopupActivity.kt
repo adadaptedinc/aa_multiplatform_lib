@@ -14,6 +14,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.RelativeLayout
 import com.adadapted.library.constants.Config.LOG_TAG
+import com.adadapted.library.event.EventClient
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
@@ -60,7 +61,7 @@ class AndroidWebViewPopupActivity : Activity() {
 
     public override fun onStart() {
         super.onStart()
-        //AdEventClient.getInstance().trackPopupBegin(ad)
+        EventClient.getInstance().trackPopupBegin(ad)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
