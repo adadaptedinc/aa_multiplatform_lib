@@ -4,7 +4,7 @@ import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.concurrency.TransporterCoroutineScope
 import kotlin.native.concurrent.ThreadLocal
 
-class EventPublisher private constructor(private val transporter: TransporterCoroutineScope) :
+class EventBroadcaster private constructor(private val transporter: TransporterCoroutineScope) :
     EventClient.Listener {
 
     private lateinit var listener: (zoneId: String, eventType: String) -> Unit
@@ -22,11 +22,11 @@ class EventPublisher private constructor(private val transporter: TransporterCor
 
     @ThreadLocal
     companion object {
-        private lateinit var instance: EventPublisher
+        private lateinit var instance: EventBroadcaster
 
-        fun getInstance(transporter: Transporter = Transporter()): EventPublisher {
+        fun getInstance(transporter: Transporter = Transporter()): EventBroadcaster {
             if (!this::instance.isInitialized) {
-                instance = EventPublisher(transporter)
+                instance = EventBroadcaster(transporter)
             }
             return instance
         }

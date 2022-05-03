@@ -10,7 +10,7 @@ import io.ktor.http.*
 class HttpEventAdapter(private val adEventUrl: String, private val httpConnector: HttpConnector) :
     EventAdapter {
 
-    override suspend fun sendAdEvents(session: Session, adEvents: Set<AdEvent>) {
+    override suspend fun publishAdEvents(session: Session, adEvents: Set<AdEvent>) {
         try {
             httpConnector.client.post(adEventUrl) {
                 contentType(ContentType.Application.Json)

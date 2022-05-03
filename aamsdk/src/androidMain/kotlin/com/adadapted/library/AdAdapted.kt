@@ -9,7 +9,7 @@ import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
 import com.adadapted.library.event.EventClient
-import com.adadapted.library.event.EventPublisher
+import com.adadapted.library.event.EventBroadcaster
 import com.adadapted.library.keyword.InterceptClient
 import com.adadapted.library.keyword.InterceptMatcher
 import com.adadapted.library.network.*
@@ -62,7 +62,7 @@ object AdAdapted : AdAdaptedBase() {
         }
         hasStarted = true
         setupClients(context)
-        eventListener.let { EventPublisher.getInstance().setListener(it) }
+        eventListener.let { EventBroadcaster.getInstance().setListener(it) }
         contentListener.let { AddItContentPublisher.getInstance().addListener(it) }
         PayloadClient.getInstance().pickupPayloads {
             if (it.isNotEmpty()) {

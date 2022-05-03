@@ -42,7 +42,7 @@ class EventClient private constructor(private val eventAdapter: EventAdapter, pr
         events.clear()
         session?.let {
             transporter.dispatchToBackground {
-                eventAdapter.sendAdEvents(it, currentEvents)
+                eventAdapter.publishAdEvents(it, currentEvents)
             }
         }
     }
