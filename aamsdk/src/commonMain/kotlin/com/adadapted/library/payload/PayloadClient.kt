@@ -3,19 +3,22 @@ package com.adadapted.library.payload
 import com.adadapted.library.atl.AddItContent
 import com.adadapted.library.atl.AddToListItem
 import com.adadapted.library.concurrency.TransporterCoroutineScope
+import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.device.DeviceInfo
 import com.adadapted.library.device.DeviceInfoClient
+import com.adadapted.library.event.EventClient
 import kotlin.jvm.Synchronized
 import kotlin.native.concurrent.ThreadLocal
 
 class PayloadClient private constructor(
     private val adapter: PayloadAdapter,
+    private val eventClient: EventClient,
     private val transporter: TransporterCoroutineScope
-) { //private val appEventClient: AppEventClient,) {
+) {
     private fun performPickupPayload(callback: (content: List<AddItContent>) -> Unit) {
         DeviceInfoClient.getInstance().getDeviceInfo(object : DeviceInfoClient.Callback {
             override fun onDeviceInfoCollected(deviceInfo: DeviceInfo) {
-                //appEventClient.trackSdkEvent(EventStrings.PAYLOAD_PICKUP_ATTEMPT)
+                eventClient.trackSdkEvent(EventStrings.PAYLOAD_PICKUP_ATTEMPT)
                 transporter.dispatchToBackground {
                     adapter.pickup(deviceInfo) {
                         callback(it)
@@ -57,7 +60,7 @@ class PayloadClient private constructor(
             val eventParams: MutableMap<String, String> = HashMap()
             eventParams[PAYLOAD_ID] = content.payloadId
             eventParams[SOURCE] = content.addItSource
-            //appEventClient.trackSdkEvent(EventStrings.ADDIT_ADDED_TO_LIST, eventParams)
+            eventClient.trackSdkEvent(EventStrings.ADDIT_ADDED_TO_LIST, eventParams)
             if (content.isPayloadSource) {
                 trackPayload(content, "delivered")
             }
@@ -71,7 +74,7 @@ class PayloadClient private constructor(
             eventParams[TRACKING_ID] = item.trackingId
             eventParams[ITEM_NAME] = item.title
             eventParams[SOURCE] = content.addItSource
-            //appEventClient.trackSdkEvent(EventStrings.ADDIT_ITEM_ADDED_TO_LIST, eventParams)
+            eventClient.trackSdkEvent(EventStrings.ADDIT_ITEM_ADDED_TO_LIST, eventParams)
         }
     }
 
@@ -79,7 +82,7 @@ class PayloadClient private constructor(
         transporter.dispatchToBackground {
             val eventParams: MutableMap<String, String> = HashMap()
             eventParams[PAYLOAD_ID] = content.payloadId
-            //appEventClient.trackSdkEvent(EventStrings.ADDIT_DUPLICATE_PAYLOAD, eventParams)
+            eventClient.trackSdkEvent(EventStrings.ADDIT_DUPLICATE_PAYLOAD, eventParams)
             if (content.isPayloadSource) {
                 trackPayload(content, "duplicate")
             }
@@ -90,7 +93,7 @@ class PayloadClient private constructor(
         transporter.dispatchToBackground {
             val eventParams: MutableMap<String, String> = HashMap()
             eventParams[PAYLOAD_ID] = content.payloadId
-            //appEventClient.trackError(EventStrings.ADDIT_CONTENT_FAILED, message, eventParams)
+            eventClient.trackSdkError(EventStrings.ADDIT_CONTENT_FAILED, message, eventParams)
             if (content.isPayloadSource) {
                 trackPayload(content, "rejected")
             }
@@ -102,7 +105,7 @@ class PayloadClient private constructor(
             val eventParams: MutableMap<String, String> = HashMap()
             eventParams[PAYLOAD_ID] = content.payloadId
             eventParams[TRACKING_ID] = item.trackingId
-            //appEventClient.trackError(EventStrings.ADDIT_CONTENT_ITEM_FAILED, message, eventParams)
+            eventClient.trackSdkError(EventStrings.ADDIT_CONTENT_ITEM_FAILED, message, eventParams)
         }
     }
 
@@ -121,9 +124,10 @@ class PayloadClient private constructor(
 
         fun createInstance(
             adapter: PayloadAdapter,
+            eventClient: EventClient,
             transporter: TransporterCoroutineScope
-        ) { //appEventClient: AppEventClient,) {
-            instance = PayloadClient(adapter, transporter) //appEventClient, transporter)
+        ) {
+            instance = PayloadClient(adapter, eventClient, transporter)
         }
     }
 }

@@ -14,6 +14,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.RelativeLayout
 import com.adadapted.library.constants.Config.LOG_TAG
+import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.event.EventClient
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -52,10 +53,10 @@ class AndroidWebViewPopupActivity : Activity() {
         if (url.startsWith("http")) {
             loadPopup(ad.actionPath)
         } else {
-//            AppEventClient.getInstance().trackError(
-//                EventStrings.POPUP_URL_MALFORMED,
-//                "Incorrect Action Path URL supplied for Ad: " + ad.id
-//            )
+            EventClient.getInstance().trackSdkError(
+                EventStrings.POPUP_URL_MALFORMED,
+                "Incorrect Action Path URL supplied for Ad: " + ad.id
+            )
         }
     }
 
@@ -97,11 +98,11 @@ class AndroidWebViewPopupActivity : Activity() {
                 val params: MutableMap<String, String> = HashMap()
                 params["url"] = url
                 params["error"] = error.toString()
-//                AppEventClient.getInstance().trackError(
-//                    EventStrings.POPUP_URL_LOAD_FAILED,
-//                    "Problem loading popup url",
-//                    params
-//                )
+                EventClient.getInstance().trackSdkError(
+                    EventStrings.POPUP_URL_LOAD_FAILED,
+                    "Problem loading popup url",
+                    params
+                )
             }
         }
         popupWebView.loadUrl(url)

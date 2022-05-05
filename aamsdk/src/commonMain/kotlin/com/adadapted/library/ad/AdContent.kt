@@ -6,10 +6,12 @@ import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.event.EventClient
 import kotlin.jvm.Synchronized
 
-//class AdContent private constructor(private val ad: Ad, val type: Int, private val items: List<AddToListItem>, adClient: AdEventClient = AdEventClient.getInstance(), appClient: AppEventClient = AppEventClient.getInstance()) : AddToListContent {
-class AdContent private constructor(private val ad: Ad, val type: Int, private val items: List<AddToListItem>, private val eventClient: EventClient = EventClient.getInstance()) : AddToListContent {
+class AdContent private constructor(
+    private val ad: Ad,
+    private val items: List<AddToListItem>,
+    private val eventClient: EventClient = EventClient.getInstance()
+) : AddToListContent {
     private var isHandled: Boolean
-    //private var appEventClient: AppEventClient = appClient
 
     override fun acknowledge() {
         if (isHandled) {
@@ -33,7 +35,7 @@ class AdContent private constructor(private val ad: Ad, val type: Int, private v
         val params: MutableMap<String, String> = HashMap()
         params[AD_ID] = ad.id
         params[ITEM_NAME] = itemName
-        //appEventClient.trackSdkEvent(EventStrings.ATL_ITEM_ADDED_TO_LIST, params)
+        eventClient.trackSdkEvent(EventStrings.ATL_ITEM_ADDED_TO_LIST, params)
     }
 
     @Synchronized
@@ -44,11 +46,11 @@ class AdContent private constructor(private val ad: Ad, val type: Int, private v
         isHandled = true
         val params: MutableMap<String, String> = HashMap()
         params[AD_ID] = ad.id
-//        appEventClient.trackError(
-//            EventStrings.ATL_ADDED_TO_LIST_FAILED,
-//            if (message.isEmpty()) UNKNOWN_REASON else message,
-//            params
-//        )
+        eventClient.trackSdkError(
+            EventStrings.ATL_ADDED_TO_LIST_FAILED,
+            message.ifEmpty { UNKNOWN_REASON },
+            params
+        )
     }
 
     override fun itemFailed(item: AddToListItem, message: String) {
@@ -56,11 +58,11 @@ class AdContent private constructor(private val ad: Ad, val type: Int, private v
         val params: MutableMap<String, String> = HashMap()
         params[AD_ID] = ad.id
         params[ITEM] = item.title
-//        appEventClient.trackError(
-//            EventStrings.ATL_ADDED_TO_LIST_ITEM_FAILED,
-//            if (message.isEmpty()) UNKNOWN_REASON else message,
-//            params
-//        )
+        eventClient.trackSdkError(
+            EventStrings.ATL_ADDED_TO_LIST_ITEM_FAILED,
+            message.ifEmpty { UNKNOWN_REASON },
+            params
+        )
     }
 
     val zoneId: String
@@ -79,20 +81,22 @@ class AdContent private constructor(private val ad: Ad, val type: Int, private v
     }
 
     companion object {
-        private const val ADD_TO_LIST = 0
         private const val AD_ID = "ad_id"
         private const val ITEM_NAME = "item_name"
         private const val ITEM = "item"
         private const val UNKNOWN_REASON = "Unknown Reason"
 
         fun createAddToListContent(ad: Ad): AdContent {
-            return AdContent(ad, ADD_TO_LIST, ad.payload.detailedListItems)
+            return AdContent(ad, ad.payload.detailedListItems)
         }
     }
 
     init {
         if (ad.payload.detailedListItems.isEmpty()) {
-            //appClient.trackError(EventStrings.AD_PAYLOAD_IS_EMPTY, "Ad ${ad.id} has empty payload")
+            eventClient.trackSdkError(
+                EventStrings.AD_PAYLOAD_IS_EMPTY,
+                "Ad ${ad.id} has empty payload"
+            )
         }
         isHandled = false
     }

@@ -2,21 +2,77 @@ package com.adadapted.library.event
 
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.concurrency.TransporterCoroutineScope
+import com.adadapted.library.constants.EventStrings
+import com.adadapted.library.constants.EventStrings.SDK_EVENT_TYPE
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
 import kotlin.jvm.Synchronized
 import kotlin.native.concurrent.ThreadLocal
 
-class EventClient private constructor(private val eventAdapter: EventAdapter, private val transporter: TransporterCoroutineScope
+class EventClient private constructor(
+    private val eventAdapter: EventAdapter, private val transporter: TransporterCoroutineScope
 ) : SessionListener {
     interface Listener {
         fun onAdEventTracked(event: AdEvent?)
     }
 
-    private val listeners: MutableSet<Listener>
-    private val events: MutableSet<AdEvent>
+    private val listeners: MutableSet<Listener> = HashSet()
+    private val adEvents: MutableSet<AdEvent> = HashSet()
+    private val sdkEvents: MutableSet<SdkEvent> = HashSet()
+    private val sdkErrors: MutableSet<SdkError> = HashSet()
     private var session: Session? = null
+
+    private fun performTrackSdkEvent(name: String, params: Map<String, String>) {
+        sdkEvents.add(SdkEvent(SDK_EVENT_TYPE, name, params = params))
+    }
+
+    private fun performTrackSdkError(code: String, message: String, params: Map<String, String>) {
+        //Log.w(LOGTAG, "App Error: $code - $message")
+        sdkErrors.add(SdkError(code, message, params))
+    }
+
+    @Synchronized
+    private fun performPublishSdkErrors() {
+        if (session == null || sdkErrors.isEmpty()) {
+            return
+        }
+        val currentSdkErrors: Set<SdkError> = HashSet(sdkErrors)
+        sdkErrors.clear()
+        session?.let {
+            transporter.dispatchToBackground {
+                eventAdapter.publishSdkErrors(it, currentSdkErrors)
+            }
+        }
+    }
+
+    @Synchronized
+    private fun performPublishSdkEvents() {
+        if (session == null || sdkEvents.isEmpty()) {
+            return
+        }
+        val currentSdkEvents: Set<SdkEvent> = HashSet(sdkEvents)
+        sdkEvents.clear()
+        session?.let {
+            transporter.dispatchToBackground {
+                eventAdapter.publishSdkEvents(it, currentSdkEvents)
+            }
+        }
+    }
+
+    @Synchronized
+    private fun performPublishAdEvents() {
+        if (session == null || adEvents.isEmpty()) {
+            return
+        }
+        val currentAdEvents: Set<AdEvent> = HashSet(adEvents)
+        adEvents.clear()
+        session?.let {
+            transporter.dispatchToBackground {
+                eventAdapter.publishAdEvents(it, currentAdEvents)
+            }
+        }
+    }
 
     @Synchronized
     private fun fileEvent(ad: Ad, eventType: String) {
@@ -29,22 +85,8 @@ class EventClient private constructor(private val eventAdapter: EventAdapter, pr
             ad.impressionId,
             eventType
         )
-        events.add(event)
+        adEvents.add(event)
         notifyAdEventTracked(event)
-    }
-
-    @Synchronized
-    private fun performPublishAdEvents() {
-        if (session == null || events.isEmpty()) {
-            return
-        }
-        val currentEvents: Set<AdEvent> = HashSet(events)
-        events.clear()
-        session?.let {
-            transporter.dispatchToBackground {
-                eventAdapter.publishAdEvents(it, currentEvents)
-            }
-        }
     }
 
     private fun performAddListener(listener: Listener) {
@@ -66,6 +108,8 @@ class EventClient private constructor(private val eventAdapter: EventAdapter, pr
     override fun onPublishEvents() {
         transporter.dispatchToBackground {
             performPublishAdEvents()
+            performPublishSdkEvents()
+            performPublishSdkErrors()
         }
     }
 
@@ -73,8 +117,25 @@ class EventClient private constructor(private val eventAdapter: EventAdapter, pr
         this.session = session
     }
 
+    override fun onSessionExpired() {
+        trackSdkEvent(EventStrings.EXPIRED_EVENT)
+    }
+
     override fun onAdsAvailable(session: Session) {
         this.session = session
+    }
+
+    fun trackSdkEvent(
+        name: String,
+        params: Map<String, String> = HashMap()
+    ) {
+        transporter.dispatchToBackground { performTrackSdkEvent(name, params) }
+    }
+
+    fun trackSdkError(code: String, message: String, params: Map<String, String> = HashMap()) {
+        transporter.dispatchToBackground {
+            performTrackSdkError(code, message, params)
+        }
     }
 
     fun addListener(listener: Listener) {
@@ -123,8 +184,6 @@ class EventClient private constructor(private val eventAdapter: EventAdapter, pr
     }
 
     init {
-        events = HashSet()
-        listeners = HashSet()
         SessionClient.addListener(this)
     }
 }

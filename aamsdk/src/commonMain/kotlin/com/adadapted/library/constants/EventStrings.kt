@@ -5,8 +5,9 @@ object EventStrings {
     const val EXCEPTION_MESSAGE = "exception_message"
     const val APP_OPENED = "app_opened"
     const val GAID_UNAVAILABLE = "GAID_UNAVAILABLE"
-    const val APP_EVENT_REQUEST_FAILED = "APP_EVENT_REQUEST_FAILED"
+    const val SDK_EVENT_REQUEST_FAILED = "APP_EVENT_REQUEST_FAILED"
     const val ZONE_LOADED = "zone_loaded"
+    const val SDK_EVENT_TYPE = "sdk"
 
     const val ADDIT_PAYLOAD_FIELD_PARSE_FAILED = "ADDIT_PAYLOAD_FIELD_PARSE_FAILED"
     const val ADDIT_APP_OPENED = "addit_app_opened"

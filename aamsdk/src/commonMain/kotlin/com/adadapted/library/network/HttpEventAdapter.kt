@@ -1,29 +1,61 @@
 package com.adadapted.library.network
 
-import com.adadapted.library.event.AdEvent
-import com.adadapted.library.event.EventAdapter
-import com.adadapted.library.event.EventRequestBuilder
+import com.adadapted.library.constants.Config
+import com.adadapted.library.constants.EventStrings
+import com.adadapted.library.event.*
 import com.adadapted.library.session.Session
 import io.ktor.client.request.*
 import io.ktor.http.*
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-class HttpEventAdapter(private val adEventUrl: String, private val httpConnector: HttpConnector) :
+class HttpEventAdapter(private val adEventUrl: String, private val sdkEventUrl: String, private val errorUrl: String, private val httpConnector: HttpConnector) :
     EventAdapter {
-
     override suspend fun publishAdEvents(session: Session, adEvents: Set<AdEvent>) {
         try {
             httpConnector.client.post(adEventUrl) {
                 contentType(ContentType.Application.Json)
-                body = EventRequestBuilder.buildAdEventRequest(session, adEvents)
+                setBody(EventRequestBuilder.buildAdEventRequest(session, adEvents))
             }
         } catch (e: Exception) {
             println(e.message)
-//            HttpErrorTracker.trackHttpError(
-//                error,
-//                trackUrl,
-//                EventStrings.PAYLOAD_EVENT_REQUEST_FAILED,
-//                LOGTAG
-//            )
+            HttpErrorTracker.trackHttpError(
+                e.cause.toString(),
+                e.message.toString(),
+                EventStrings.AD_EVENT_TRACK_REQUEST_FAILED,
+                adEventUrl
+            )
+        }
+    }
+
+    override suspend fun publishSdkEvents(session: Session, events: Set<SdkEvent>) {
+        try {
+            val testCheck = Json.encodeToString(EventRequestBuilder.buildEventRequest(session, events))
+            val test = testCheck //TODO remove test check
+
+            httpConnector.client.post(sdkEventUrl) {
+                contentType(ContentType.Application.Json)
+                setBody(EventRequestBuilder.buildEventRequest(session, sdkEvents = events))
+            }
+        } catch (e: Exception) {
+            println(e.message)
+            HttpErrorTracker.trackHttpError(
+                e.cause.toString(),
+                e.message.toString(),
+                EventStrings.SDK_EVENT_REQUEST_FAILED,
+                adEventUrl
+            )
+        }
+    }
+
+    override suspend fun publishSdkErrors(session: Session, errors: Set<SdkError>) {
+        try {
+            httpConnector.client.post(errorUrl) {
+                contentType(ContentType.Application.Json)
+                setBody(EventRequestBuilder.buildEventRequest(session, sdkErrors = errors))
+            }
+        } catch (e: Exception) {
+            println(Config.LOG_TAG + "SDK Error Request Failed -> " + e.message)
         }
     }
 }

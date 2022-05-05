@@ -6,6 +6,7 @@ import com.adadapted.library.atl.AddToListContent
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
+import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
 import com.adadapted.library.event.EventClient
@@ -89,7 +90,7 @@ object AdAdapted : AdAdaptedBase() {
             }
         }
         SessionClient.start(startListener)
-        //AppEventClient.getInstance().trackSdkEvent(EventStrings.APP_OPENED)
+        EventClient.getInstance().trackSdkEvent(EventStrings.APP_OPENED)
         if (isKeywordInterceptEnabled) {
             InterceptMatcher.match("INIT") //init the matcher
         }
@@ -139,10 +140,11 @@ object AdAdapted : AdAdaptedBase() {
                 HttpConnector.getInstance()
             ), Transporter()
         )
-        //AppEventClient.createInstance(HttpAppEventSink(Config.getAppEventsUrl(), Config.getAppErrorsUrl()), Transporter())
         EventClient.createInstance(
             HttpEventAdapter(
-                Config.getAdsEventUrl(),
+                Config.getAdEventsUrl(),
+                Config.getSdkEventsUrl(),
+                Config.getSdkErrorsUrl(),
                 HttpConnector.getInstance()
             ), Transporter()
         )
@@ -158,7 +160,7 @@ object AdAdapted : AdAdaptedBase() {
                 Config.getPickupPayloadsUrl(),
                 Config.getTrackingPayloadUrl(),
                 HttpConnector.getInstance()
-            ), Transporter()
+            ), EventClient.getInstance(), Transporter()
         )
     }
 }

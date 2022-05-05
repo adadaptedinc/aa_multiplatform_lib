@@ -4,12 +4,39 @@ import com.adadapted.library.session.Session
 
 object EventRequestBuilder {
     fun buildAdEventRequest(session: Session, adEvents: Set<AdEvent>): AdEventRequest {
-        return AdEventRequest(
-            session.id,
-            session.deviceInfo.appId,
-            session.deviceInfo.udid,
-            session.deviceInfo.sdkVersion,
-            adEvents.toList()
-        )
+        session.run {
+            return AdEventRequest(
+                id,
+                deviceInfo.appId,
+                deviceInfo.udid,
+                deviceInfo.sdkVersion,
+                adEvents.toList()
+            )
+        }
+    }
+
+    fun buildEventRequest(session: Session, sdkEvents: Set<SdkEvent> = setOf(), sdkErrors: Set<SdkError> = setOf()): EventRequest {
+        session.deviceInfo.run {
+            return EventRequest(
+                appId,
+                bundleId,
+                bundleVersion,
+                udid,
+                deviceName,
+                deviceUdid,
+                os,
+                osv,
+                locale,
+                timezone,
+                carrier,
+                dw,
+                dh,
+                density,
+                sdkVersion,
+                if (isAllowRetargetingEnabled) 1 else 0,
+                sdkEvents.toList(),
+                sdkErrors.toList()
+            )
+        }
     }
 }

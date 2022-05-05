@@ -1,5 +1,7 @@
 package com.adadapted.library.atl
 
+import com.adadapted.library.constants.EventStrings
+import com.adadapted.library.event.EventClient
 import com.adadapted.library.payload.PayloadClient
 import kotlin.jvm.Synchronized
 
@@ -11,8 +13,8 @@ data class AddItContent(
     private val source: String,
     val addItSource: String,
     private val items: List<AddToListItem>,
-    private var payloadClient: PayloadClient = PayloadClient.getInstance()
-//appEventClient: AppEventClient = AppEventClient.getInstance(),
+    private val payloadClient: PayloadClient = PayloadClient.getInstance(),
+    private val eventClient: EventClient = EventClient.getInstance()
 ) : AddToListContent {
 
     internal object AddItSources {
@@ -80,7 +82,10 @@ data class AddItContent(
 
     init {
         if (items.isEmpty()) {
-            //appEventClient.trackError(EventStrings.ADDIT_PAYLOAD_IS_EMPTY, ("Payload %s has empty payload$payloadId"))
+            eventClient.trackSdkError(
+                EventStrings.ADDIT_PAYLOAD_IS_EMPTY,
+                ("Payload %s has empty payload$payloadId")
+            )
         }
         handled = false
     }
