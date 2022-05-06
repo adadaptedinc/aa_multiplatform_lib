@@ -97,7 +97,7 @@ class AndroidWebViewPopupActivity : Activity() {
                 Log.w(LOG_TAG, "onReceivedError: $request $error")
                 val params: MutableMap<String, String> = HashMap()
                 params["url"] = url
-                params["error"] = error.toString()
+                params["error"] = error.description.toString()
                 EventClient.getInstance().trackSdkError(
                     EventStrings.POPUP_URL_LOAD_FAILED,
                     "Problem loading popup url",

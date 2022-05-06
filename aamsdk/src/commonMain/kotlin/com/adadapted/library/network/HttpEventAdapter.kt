@@ -6,8 +6,6 @@ import com.adadapted.library.event.*
 import com.adadapted.library.session.Session
 import io.ktor.client.request.*
 import io.ktor.http.*
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 
 class HttpEventAdapter(private val adEventUrl: String, private val sdkEventUrl: String, private val errorUrl: String, private val httpConnector: HttpConnector) :
     EventAdapter {
@@ -30,9 +28,6 @@ class HttpEventAdapter(private val adEventUrl: String, private val sdkEventUrl: 
 
     override suspend fun publishSdkEvents(session: Session, events: Set<SdkEvent>) {
         try {
-            val testCheck = Json.encodeToString(EventRequestBuilder.buildEventRequest(session, events))
-            val test = testCheck //TODO remove test check
-
             httpConnector.client.post(sdkEventUrl) {
                 contentType(ContentType.Application.Json)
                 setBody(EventRequestBuilder.buildEventRequest(session, sdkEvents = events))
