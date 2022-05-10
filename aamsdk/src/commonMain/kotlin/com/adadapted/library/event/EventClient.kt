@@ -2,6 +2,7 @@ package com.adadapted.library.event
 
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.concurrency.TransporterCoroutineScope
+import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.constants.EventStrings.SDK_EVENT_TYPE
 import com.adadapted.library.session.Session
@@ -28,7 +29,7 @@ class EventClient private constructor(
     }
 
     private fun performTrackSdkError(code: String, message: String, params: Map<String, String>) {
-        //Log.w(LOGTAG, "App Error: $code - $message")
+        println(LOG_TAG + "App Error: $code - $message")
         sdkErrors.add(SdkError(code, message, params))
     }
 
@@ -97,6 +98,15 @@ class EventClient private constructor(
         listeners.remove(listener)
     }
 
+    private fun trackGAIDAvailability(session: Session) {
+        if (!session.deviceInfo.isAllowRetargetingEnabled) {
+            trackSdkError(
+                EventStrings.GAID_UNAVAILABLE,
+                "GAID and/or tracking has been disabled for this device."
+            )
+        }
+    }
+
     @Synchronized
     private fun notifyAdEventTracked(event: AdEvent) {
         for (l in listeners) {
@@ -115,6 +125,7 @@ class EventClient private constructor(
 
     override fun onSessionAvailable(session: Session) {
         this.session = session
+        trackGAIDAvailability(session)
     }
 
     override fun onSessionExpired() {
