@@ -94,7 +94,7 @@ object AdAdapted : AdAdaptedBase() {
         if (isKeywordInterceptEnabled) {
             InterceptMatcher.match("INIT") //init the matcher
         }
-        println(LOG_TAG + "AdAdapted Android Advertising SDK v%s initialized." + Config.VERSION_NAME)
+        println(LOG_TAG + "AdAdapted Android Advertising SDK $Config.VERSION_NAME initialized.")
     }
 
     fun setCustomIdentifier(identifier: String): AdAdaptedBase {
