@@ -8,17 +8,19 @@ import kotlinx.serialization.json.JsonPrimitive
 
 object PayloadRequestBuilder {
     fun buildRequest(deviceInfo: DeviceInfo): PayloadRequest {
-        return PayloadRequest(
-            deviceInfo.appId,
-            deviceInfo.udid,
-            deviceInfo.bundleId,
-            deviceInfo.bundleVersion,
-            deviceInfo.deviceName,
-            deviceInfo.os,
-            deviceInfo.osv,
-            deviceInfo.sdkVersion,
-            Clock.System.now().epochSeconds
-        )
+        deviceInfo.run {
+            return PayloadRequest(
+                appId,
+                udid,
+                bundleId,
+                bundleVersion,
+                deviceName,
+                os,
+                osv,
+                sdkVersion,
+                Clock.System.now().epochSeconds
+            )
+        }
     }
 
     fun buildEventRequest(deviceInfo: DeviceInfo, event: PayloadEvent): PayloadEventRequest {
@@ -33,16 +35,18 @@ object PayloadRequestBuilder {
                 )
             )
         )
-        return PayloadEventRequest(
-            deviceInfo.appId,
-            deviceInfo.udid,
-            deviceInfo.bundleId,
-            deviceInfo.bundleVersion,
-            deviceInfo.deviceName,
-            deviceInfo.os,
-            deviceInfo.osv,
-            deviceInfo.sdkVersion,
-            tracking
-        )
+        deviceInfo.run {
+            return PayloadEventRequest(
+                appId,
+                udid,
+                bundleId,
+                bundleVersion,
+                deviceName,
+                os,
+                osv,
+                sdkVersion,
+                tracking
+            )
+        }
     }
 }

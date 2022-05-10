@@ -6,13 +6,15 @@ import com.adadapted.library.ad.AdContent.Companion.createAddToListContent
 import com.adadapted.library.atl.AddToListItem
 import com.adadapted.library.atl.AddItContentPublisher
 import com.adadapted.library.atl.PopupContent.Companion.createPopupContent
+import com.adadapted.library.constants.EventStrings
+import com.adadapted.library.event.EventClient
 
 class JavascriptBridge internal constructor(private val ad: Ad) {
     @JavascriptInterface
     fun deliverAdContent() {
         val params = HashMap<String, String>()
         params["ad_id"] = ad.id
-        //AppEventClient.getInstance().trackSdkEvent(EventStrings.POPUP_CONTENT_CLICKED, params)
+        EventClient.getInstance().trackSdkEvent(EventStrings.POPUP_CONTENT_CLICKED, params)
         val content = createAddToListContent(ad)
         AddItContentPublisher.getInstance().publishAdContent(content)
     }
@@ -31,7 +33,7 @@ class JavascriptBridge internal constructor(private val ad: Ad) {
     ) {
         val params = HashMap<String, String>()
         params["tracking_id"] = trackingId
-        //AppEventClient.getInstance().trackSdkEvent(EventStrings.POPUP_ATL_CLICKED, params)
+        EventClient.getInstance().trackSdkEvent(EventStrings.POPUP_ATL_CLICKED, params)
 
         val items: MutableList<AddToListItem> = ArrayList()
         items.add(

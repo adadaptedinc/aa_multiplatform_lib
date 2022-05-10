@@ -42,17 +42,16 @@ kotlin {
     }
 
     sourceSets {
-        val ktorVersion = "1.6.7"
+        val ktorVersion = "2.0.1"
         val kotlinVersion = "1.6.0"
-        val kotlinxVersion = "1.1.0"
         val kotlinXDateTimeVersion = "0.3.0"
 
         val commonMain by getting {
             dependencies {
                 // Ktor
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxVersion")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
 
                 // DateTime
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinXDateTimeVersion")

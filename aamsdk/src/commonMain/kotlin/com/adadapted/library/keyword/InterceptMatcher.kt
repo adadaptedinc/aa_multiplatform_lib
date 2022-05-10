@@ -1,5 +1,7 @@
 package com.adadapted.library.keyword
 
+import com.adadapted.library.constants.EventStrings
+import com.adadapted.library.event.EventClient
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
@@ -50,7 +52,7 @@ class InterceptMatcher private constructor() : SessionListener, InterceptClient.
         }
 
     override fun onKeywordInterceptInitialized(intercept: Intercept) {
-        //AppEventClient.getInstance().trackSdkEvent(EventStrings.KI_INITIALIZED)
+        EventClient.getInstance().trackSdkEvent(EventStrings.KI_INITIALIZED)
         this.intercept = intercept
         mLoaded = true
     }

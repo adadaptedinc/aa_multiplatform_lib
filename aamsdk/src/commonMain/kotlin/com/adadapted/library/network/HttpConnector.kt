@@ -1,22 +1,22 @@
 package com.adadapted.library.network
 
 import io.ktor.client.HttpClient
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.features.observer.ResponseObserver
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.observer.*
 import kotlin.native.concurrent.ThreadLocal
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 
 class HttpConnector private constructor() {
-    val json = kotlinx.serialization.json.Json {
-        useAlternativeNames = false
-        ignoreUnknownKeys = true
-        isLenient = true
-        prettyPrint = true
-    }
-
     val client = HttpClient {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(json)
+        install(ContentNegotiation) {
+            json(Json {
+                useAlternativeNames = false
+                ignoreUnknownKeys = true
+                isLenient = true
+                prettyPrint = true
+            })
         }
 
         install(ResponseObserver) {
@@ -24,6 +24,8 @@ class HttpConnector private constructor() {
                 println("HTTP status: ${response.status.value}")
             }
         }
+
+        install(HttpRequestRetry)
     }
 
     @ThreadLocal
