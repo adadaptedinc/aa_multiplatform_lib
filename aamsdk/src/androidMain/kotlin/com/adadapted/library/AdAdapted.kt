@@ -54,7 +54,7 @@ object AdAdapted : AdAdaptedBase() {
     fun start(context: Context) {
         if (apiKey.isEmpty()) {
             println(LOG_TAG + "The Api Key cannot be NULL")
-            println("AdAdapted API Key Is Missing")
+            println("AdAdapted API Key is missing")
         }
         if (hasStarted) {
             if (!isProd) {
