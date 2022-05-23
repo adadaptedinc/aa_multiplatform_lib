@@ -1,8 +1,8 @@
 package com.adadapted.library.network
 
-import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.event.*
+import com.adadapted.library.log.AALogger
 import com.adadapted.library.session.Session
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -16,7 +16,7 @@ class HttpEventAdapter(private val adEventUrl: String, private val sdkEventUrl: 
                 setBody(EventRequestBuilder.buildAdEventRequest(session, adEvents))
             }
         } catch (e: Exception) {
-            println(e.message)
+            e.message?.let { AALogger.logError(it) }
             HttpErrorTracker.trackHttpError(
                 e.cause.toString(),
                 e.message.toString(),
@@ -33,7 +33,7 @@ class HttpEventAdapter(private val adEventUrl: String, private val sdkEventUrl: 
                 setBody(EventRequestBuilder.buildEventRequest(session, sdkEvents = events))
             }
         } catch (e: Exception) {
-            println(e.message)
+            e.message?.let { AALogger.logError(it) }
             HttpErrorTracker.trackHttpError(
                 e.cause.toString(),
                 e.message.toString(),
@@ -50,7 +50,7 @@ class HttpEventAdapter(private val adEventUrl: String, private val sdkEventUrl: 
                 setBody(EventRequestBuilder.buildEventRequest(session, sdkErrors = errors))
             }
         } catch (e: Exception) {
-            println(Config.LOG_TAG + "SDK Error Request Failed -> " + e.message)
+            AALogger.logError("SDK Error Request Failed -> " + e.message)
         }
     }
 }

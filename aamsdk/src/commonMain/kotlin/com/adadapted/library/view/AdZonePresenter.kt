@@ -6,9 +6,9 @@ import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionListener
 import com.adadapted.library.ad.AdContentPublisher
 import com.adadapted.library.concurrency.Timer
-import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.event.EventClient
+import com.adadapted.library.log.AALogger
 import com.adadapted.library.session.SessionClient
 
 interface AdZonePresenterListener {
@@ -44,7 +44,7 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sess
 
     fun onAttach(adZonePresenterListener: AdZonePresenterListener?) {
         if (adZonePresenterListener == null) {
-            println(LOG_TAG + "NULL Listener provided")
+            AALogger.logError("NULL Listener provided")
             return
         }
         if (!attached) {
@@ -145,7 +145,7 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sess
                 eventClient.trackSdkEvent(EventStrings.POPUP_AD_CLICKED, params)
                 handlePopupAction(ad)
             }
-            else -> println(LOG_TAG + "Cannot handle Action type: $actionType")
+            else -> AALogger.logError("AdZonePresenter Cannot handle Action type: $actionType")
         }
 
         cycleToNextAdIfPossible()
@@ -209,7 +209,7 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sess
     }
 
     private fun notifyNoAdAvailable() {
-        println(LOG_TAG + "No ad available")
+        AALogger.logInfo("No ad available")
         adZonePresenterListener?.onNoAdAvailable()
     }
 
