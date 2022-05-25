@@ -25,7 +25,7 @@ class DeeplinkInterceptActivity : AppCompatActivity() {
             ex.message?.let { errorParams.put(EventStrings.EXCEPTION_MESSAGE, it) }
             EventClient.trackSdkError(
                 EventStrings.ADDIT_DEEPLINK_HANDLING_ERROR,
-                "Problem handling deeplink",
+                "Problem handling deeplink.",
                 errorParams
             )
 

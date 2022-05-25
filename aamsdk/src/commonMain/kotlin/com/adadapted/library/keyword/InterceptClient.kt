@@ -44,7 +44,7 @@ class InterceptClient private constructor(
         events: Set<InterceptEvent>
     ): Set<InterceptEvent> {
         val resultingEvents: MutableSet<InterceptEvent> = HashSet(this.events)
-        // Create a new Set of Events not superseded by the current Event
+        // Creates a new Set of Events not superseded by the current Event
         for (e in events) {
             if (!event.supersedes(e)) {
                 resultingEvents.add(e)

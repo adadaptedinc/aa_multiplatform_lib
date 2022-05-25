@@ -14,10 +14,10 @@ data class InterceptEvent(
     val userInput: String = "",
     @SerialName("term_id")
     val termId: String = "",
-    val term: String = ""
-) {
+    val term: String = "",
     @SerialName("created_at")
     val createdAt: Long = Clock.System.now().epochSeconds
+) {
 
     fun supersedes(e: InterceptEvent): Boolean {
         return event == e.event && termId == e.termId && userInput.contains(e.userInput)

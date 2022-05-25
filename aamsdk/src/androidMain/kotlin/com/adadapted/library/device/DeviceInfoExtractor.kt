@@ -150,7 +150,7 @@ actual class DeviceInfoExtractor(context: Context) {
     }
 
     companion object {
-        private const val GooglePlayAdError = "Problem retrieving Google Play Advertiser Info"
+        private const val GooglePlayAdError = "Problem retrieving Google Play Advertising Info."
         private const val AdvertisingIdClientName = "com.google.android.gms.ads.identifier.AdvertisingIdClient"
         private const val NetworkOperatorDefault = "None"
     }

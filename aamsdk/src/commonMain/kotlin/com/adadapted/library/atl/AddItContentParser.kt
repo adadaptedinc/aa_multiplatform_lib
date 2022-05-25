@@ -14,7 +14,7 @@ object AddItContentParser {
                 it.payloadId,
                 it.payloadMessage,
                 it.payloadImage,
-                AddToListTypes.ADD_TO_LIST_ITEMS,
+                if (it.detailedListItems.count()>1) AddToListTypes.ADD_TO_LIST_ITEMS else AddToListTypes.ADD_TO_LIST_ITEM,
                 OUT_OF_APP,
                 PAYLOAD,
                 it.detailedListItems
@@ -29,7 +29,7 @@ object AddItContentParser {
             payload.payloadId,
             payload.payloadMessage,
             payload.payloadImage,
-            AddToListTypes.ADD_TO_LIST_ITEMS,
+            if (payload.detailedListItems.count()>1) AddToListTypes.ADD_TO_LIST_ITEMS else AddToListTypes.ADD_TO_LIST_ITEM,
             OUT_OF_APP,
             DEEPLINK,
             payload.detailedListItems
