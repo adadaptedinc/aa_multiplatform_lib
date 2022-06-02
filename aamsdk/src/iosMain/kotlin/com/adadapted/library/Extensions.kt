@@ -1,5 +1,6 @@
 package com.adadapted.library
 
+import platform.CoreFoundation.kCFPropertyListMutableContainers
 import platform.Foundation.*
 import platform.UIKit.*
 
@@ -23,5 +24,5 @@ private fun UIView.constraintsToFillSuperviewHorizontally(): List<NSLayoutConstr
     return listOf(leader, trailer)
 }
 
-fun String.nsData(): NSData? =
+fun String.nsDataUTF8(): NSData? =
     NSString.create(string = this).dataUsingEncoding(NSUTF8StringEncoding)

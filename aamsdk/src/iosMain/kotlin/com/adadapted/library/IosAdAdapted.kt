@@ -6,7 +6,10 @@ import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
+import com.adadapted.library.keyword.InterceptClient
+import com.adadapted.library.keyword.InterceptMatcher
 import com.adadapted.library.network.HttpConnector
+import com.adadapted.library.network.HttpInterceptAdapter
 import com.adadapted.library.network.HttpPayloadAdapter
 import com.adadapted.library.network.HttpSessionAdapter
 import com.adadapted.library.payload.PayloadClient
@@ -75,6 +78,10 @@ object IosAdAdapted : AdAdaptedBase() {
             }
         }
         SessionClient.start(startListener)
+
+        if (isKeywordInterceptEnabled) {
+            InterceptMatcher.match("INIT") //init the matcher
+        }
         println(LOG_TAG + "AdAdapted iOS Advertising SDK v%s initialized." + Config.VERSION_NAME)
     }
 
@@ -98,6 +105,10 @@ object IosAdAdapted : AdAdaptedBase() {
         preferences.setValue(value = value, forKey = Config.AASDK_PREFS_TRACKING_DISABLED_KEY)
     }
 
+    private fun iosEndpoint(string: String) : String {
+        return string.replace("android","ios", true)
+    }
+
     private fun setupClients() {
         Config.init(isProd)
 
@@ -111,11 +122,17 @@ object IosAdAdapted : AdAdaptedBase() {
             deviceInfoExtractor,
             Transporter()
         )
-
         SessionClient.createInstance(
             HttpSessionAdapter(
                 Config.getInitSessionUrl(),
                 Config.getRefreshAdsUrl(),
+                HttpConnector.getInstance()
+            ), Transporter()
+        )
+        InterceptClient.createInstance(
+            HttpInterceptAdapter(
+                Config.getRetrieveInterceptsUrl(),
+                Config.getInterceptEventsUrl(),
                 HttpConnector.getInstance()
             ), Transporter()
         )

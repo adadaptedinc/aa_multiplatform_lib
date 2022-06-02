@@ -1,7 +1,5 @@
 package com.adadapted.library.view
 
-import aa_multiplatform_lib.cinterop.UIViewWithOverridesProtocol
-import com.adadapted.library.interfaces.ZoneViewListener
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.ad.AdContentListener
 import com.adadapted.library.ad.AdContentPublisher
@@ -9,19 +7,17 @@ import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.constraintsToFillSuperview
 import com.adadapted.library.interfaces.WebViewListener
+import com.adadapted.library.interfaces.ZoneViewListener
 import com.adadapted.library.session.SessionClient
-import kotlinx.cinterop.CValue
 import kotlinx.cinterop.cValue
-import kotlinx.cinterop.useContents
-import platform.CoreGraphics.CGRect
 import platform.CoreGraphics.CGRectZero
 import platform.UIKit.*
 
 class IosZoneView : UIView(frame = cValue { CGRectZero }) {
 
-    private var webView: IosWebView = IosWebView()
     var presenter: AdZonePresenter = AdZonePresenter(AdViewHandler(), SessionClient)
     var zoneViewListener: ZoneViewListener? = null
+    private var webView: IosWebView = IosWebView()
     private var isVisible = true
     private var isAdVisible = true
 
@@ -35,15 +31,14 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }) {
         this.presenter.init(zoneId)
     }
 
-    fun onStart(
-        zoneViewListener: ZoneViewListener? = null,
-        contentListener: AdContentListener? = null
-    ) {
+    fun setZoneViewListener(listener: ZoneViewListener? = null) {
         presenter.onAttach(setAdZonePresenterListener())
-        this.zoneViewListener = zoneViewListener
+        this.zoneViewListener = listener
+    }
 
-        if (contentListener != null) {
-            AdContentPublisher.getInstance().addListener(contentListener)
+    fun setAdContentListener(listener: AdContentListener? = null) {
+        if (listener != null) {
+            AdContentPublisher.getInstance().addListener(listener)
         }
     }
 
@@ -110,7 +105,7 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }) {
 
     private fun setWebViewListener() = object : WebViewListener {
         override fun onAdLoadedInWebView(ad: Ad) {
-            println(LOG_TAG + "Ad loaded: $ad")
+            println(LOG_TAG + "Ad ${ad.id} loaded")
             presenter.onAdDisplayed(ad, isAdVisible)
             notifyClientAdLoaded()
         }
@@ -122,7 +117,7 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }) {
         }
 
         override fun onAdInWebViewClicked(ad: Ad) {
-            println("Ad clicked: $ad")
+            println(LOG_TAG + "ad ${ad.id} interaction")
             presenter.onAdClicked(ad)
         }
 

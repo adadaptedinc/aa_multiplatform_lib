@@ -1,19 +1,24 @@
 package com.adadapted.library.view
 
+import com.adadapted.library.ad.AdContentListener
+import com.adadapted.library.constants.Config.init
 import com.adadapted.library.interfaces.ZoneViewListener
 import kotlinx.cinterop.ObjCAction
 import platform.Foundation.NSSelectorFromString
+import platform.Foundation.addObserver
 import platform.UIKit.*
 
-class AAZoneView constructor(zoneId: String): ZoneViewListener {
+class AAZoneView constructor(zoneId: String, contentListener: AdContentListener? = null): ZoneViewListener {
     var zoneView = IosZoneView()
+    var detailedItem = ""
 
     init {
-        zoneView.onStart(this)
         zoneView.initZone(zoneId)
+        zoneView.setAdContentListener(contentListener)
     }
 
-    fun getZoneView(): UIView {
+    fun getZoneView(): IosZoneView {
+        zoneView.setZoneViewListener(this)
         zoneView.setNeedsDisplay()
         return zoneView
     }

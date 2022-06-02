@@ -69,7 +69,7 @@ object SessionClient : SessionAdapterListener {
         deviceInfo: DeviceInfo? = DeviceInfoClient.getInstance().getCachedDeviceInfo()
     ) {
         if (currentSession.hasExpired()) {
-            print(LOG_TAG + "Session has expired. Expired at: " + currentSession.expiration)
+            println(LOG_TAG + "Session has expired. Expired at: " + currentSession.expiration)
             notifySessionExpired()
             if (deviceInfo != null) {
                 performReinitialize(deviceInfo)
@@ -82,7 +82,7 @@ object SessionClient : SessionAdapterListener {
     private fun performReinitialize(deviceInfo: DeviceInfo) {
         if (status == Status.OK || status == Status.SHOULD_REFRESH) {
             if (presenterSize() > 0) {
-                print(LOG_TAG + "Reinitializing Session.")
+                println(LOG_TAG + "Reinitializing Session.")
                 status = Status.IS_REINITIALIZING_SESSION
                 transporter.dispatchToBackground {
                     adapter?.sendInit(deviceInfo, this@SessionClient)
@@ -96,7 +96,7 @@ object SessionClient : SessionAdapterListener {
     private fun performRefreshAds() {
         if (status == Status.OK || status == Status.SHOULD_REFRESH) {
             if (presenterSize() > 0) {
-                print(LOG_TAG + "Checking for more Ads.")
+                println(LOG_TAG + "Checking for more Ads.")
                 status = Status.IS_REFRESH_ADS
                 transporter.dispatchToBackground {
                     adapter?.sendRefreshAds(
@@ -123,11 +123,11 @@ object SessionClient : SessionAdapterListener {
 
     private fun startPollingTimer() {
         if (pollingTimerRunning || currentSession.willNotServeAds()) {
-            print(LOG_TAG + "Session will not serve Ads. Ignoring Ad polling timer.")
+            println(LOG_TAG + "Session will not serve Ads. Ignoring Ad polling timer.")
             return
         }
         pollingTimerRunning = true
-        print(LOG_TAG + "Starting Ad polling timer.")
+        println(LOG_TAG + "Starting Ad polling timer.")
 
         val refreshTimer = Timer(
             { performRefresh() },
@@ -142,7 +142,7 @@ object SessionClient : SessionAdapterListener {
             return
         }
         eventTimerRunning = true
-        print(LOG_TAG + "Starting up the Event Publisher.")
+        println(LOG_TAG + "Starting up the Event Publisher.")
 
         val eventTimer = Timer(
             { notifyPublishEvents() },

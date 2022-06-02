@@ -1,6 +1,7 @@
 package com.adadapted.library.keyword
 
 import com.adadapted.library.concurrency.TransporterCoroutineScope
+import com.adadapted.library.interfaces.InterceptListener
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
@@ -11,22 +12,19 @@ class InterceptClient private constructor(
     private val adapter: InterceptAdapter,
     private val transporter: TransporterCoroutineScope
 ) : SessionListener {
-    interface Listener {
-        fun onKeywordInterceptInitialized(intercept: Intercept)
-    }
 
     private val events: MutableSet<InterceptEvent>
     private lateinit var currentSession: Session
 
-    private fun performInitialize(session: Session?, listener: Listener?) {
-        if (session == null || listener == null) {
+    private fun performInitialize(session: Session?, interceptListener: InterceptListener?) {
+        if (session == null || interceptListener == null) {
             return
         }
         transporter.dispatchToBackground {
             adapter.retrieve(session, object :
                 InterceptAdapter.Listener {
                 override fun onSuccess(intercept: Intercept) {
-                    listener.onKeywordInterceptInitialized(intercept)
+                    interceptListener.onKeywordInterceptInitialized(intercept)
                 }
             })
         }
@@ -78,9 +76,9 @@ class InterceptClient private constructor(
         }
     }
 
-    fun initialize(session: Session?, listener: Listener?) {
+    fun initialize(session: Session?, interceptListener: InterceptListener?) {
         transporter.dispatchToBackground {
-            performInitialize(session, listener)
+            performInitialize(session, interceptListener)
         }
     }
 

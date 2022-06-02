@@ -2,7 +2,7 @@ package com.adadapted.library.view
 
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.interfaces.WebViewListener
-import com.adadapted.library.nsData
+import com.adadapted.library.nsDataUTF8
 import kotlinx.cinterop.*
 import platform.CoreGraphics.*
 import platform.Foundation.*
@@ -49,16 +49,13 @@ class IosWebView : WKWebView (frame = cValue { CGRectZero }, configuration = WKW
         val url = NSURL(string = currentAd.url )
         val request = NSURLRequest(uRL = url)
         loadRequest(request)
-
-        println("url = $url")
-        println("ad: $ad")
     }
 
     fun loadBlank() {
         currentAd = Ad()
         val dummyDocument =
             "<html><head><meta name=\"viewport\" content=\"width=device-width, user-scalable=no\" /></head><body></body></html>"
-        val data = dummyDocument.nsData()
+        val data = dummyDocument.nsDataUTF8()
         if (data != null) {
             loadData(data, "text/html", null.toString(), NSURL(string = ""))
         }
@@ -106,17 +103,6 @@ class IosWebView : WKWebView (frame = cValue { CGRectZero }, configuration = WKW
         if (currentAd.id.isNotEmpty() && !loaded) {
             loaded = true
             notifyAdLoaded()
-        }
-    }
-
-    override fun webView(
-        webView: WKWebView,
-        didFailNavigation: WKNavigation?,
-        withError: NSError
-    ) {
-        if (currentAd.id.isNotEmpty() && !loaded) {
-            loaded = true
-            notifyAdLoadFailed()
         }
     }
 
