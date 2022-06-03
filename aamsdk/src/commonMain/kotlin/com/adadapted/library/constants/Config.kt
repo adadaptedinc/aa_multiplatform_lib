@@ -33,11 +33,11 @@ object Config {
 
     fun getInitSessionUrl() = getAdServerFormattedUrl(SESSION_INIT_PATH)
     fun getRefreshAdsUrl() = getAdServerFormattedUrl(REFRESH_ADS_PATH)
-    fun getAdsEventUrl() = getAdServerFormattedUrl(AD_EVENTS_PATH)
+    fun getAdEventsUrl() = getAdServerFormattedUrl(AD_EVENTS_PATH)
     fun getRetrieveInterceptsUrl() = getAdServerFormattedUrl(RETRIEVE_INTERCEPTS_PATH)
     fun getInterceptEventsUrl() = getAdServerFormattedUrl(INTERCEPT_EVENTS_PATH)
-    fun getAppEventsUrl() = getTrackingServerFormattedUrl(EVENT_TRACK_PATH)
-    fun getAppErrorsUrl() = getTrackingServerFormattedUrl(ERROR_TRACK_PATH)
+    fun getSdkEventsUrl() = getTrackingServerFormattedUrl(EVENT_TRACK_PATH)
+    fun getSdkErrorsUrl() = getTrackingServerFormattedUrl(ERROR_TRACK_PATH)
     fun getPickupPayloadsUrl() = getPayloadServerFormattedUrl(PAYLOAD_PICKUP_PATH)
     fun getTrackingPayloadUrl() = getPayloadServerFormattedUrl(PAYLOAD_TRACK_PATH)
 

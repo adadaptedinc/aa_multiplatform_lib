@@ -1,6 +1,6 @@
 package com.adadapted.library.network
 
 import io.ktor.client.engine.*
-import io.ktor.client.engine.ios.*
+import io.ktor.client.engine.darwin.*
 
-actual val defaultPlatformEngine: HttpClientEngine = Ios.create()
+actual val defaultPlatformEngine: HttpClientEngine = Darwin.create()

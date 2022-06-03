@@ -1,27 +1,25 @@
 package com.adadapted.library.network
 
 import com.adadapted.library.constants.Config.LOG_TAG
-import io.ktor.client.*
 import io.ktor.client.engine.*
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
-import io.ktor.client.features.observer.ResponseObserver
-import kotlinx.serialization.serializer
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.observer.*
 import kotlin.native.concurrent.ThreadLocal
+import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 
 expect val defaultPlatformEngine: HttpClientEngine
-
-class HttpConnector {
-    val json = kotlinx.serialization.json.Json {
-        useAlternativeNames = false
-        ignoreUnknownKeys = true
-        isLenient = true
-        prettyPrint = true
-    }
-
-    val client = HttpClient(defaultPlatformEngine) {
-        install(JsonFeature) {
-            serializer = KotlinxSerializer(json)
+class HttpConnector private constructor() {
+    val client = HttpClient {
+        install(ContentNegotiation) {
+            json(Json {
+                useAlternativeNames = false
+                ignoreUnknownKeys = true
+                isLenient = true
+                prettyPrint = true
+            })
         }
 
         install(ResponseObserver) {
@@ -29,6 +27,8 @@ class HttpConnector {
                 println(LOG_TAG + "AA HTTP status: ${response.status.value}")
             }
         }
+
+        install(HttpRequestRetry)
     }
 
     @ThreadLocal

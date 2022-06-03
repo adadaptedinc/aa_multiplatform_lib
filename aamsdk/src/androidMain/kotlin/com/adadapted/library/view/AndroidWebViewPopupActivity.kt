@@ -14,6 +14,8 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.RelativeLayout
 import com.adadapted.library.constants.Config.LOG_TAG
+import com.adadapted.library.constants.EventStrings
+import com.adadapted.library.event.EventClient
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
@@ -51,16 +53,16 @@ class AndroidWebViewPopupActivity : Activity() {
         if (url.startsWith("http")) {
             loadPopup(ad.actionPath)
         } else {
-//            AppEventClient.getInstance().trackError(
-//                EventStrings.POPUP_URL_MALFORMED,
-//                "Incorrect Action Path URL supplied for Ad: " + ad.id
-//            )
+            EventClient.getInstance().trackSdkError(
+                EventStrings.POPUP_URL_MALFORMED,
+                "Incorrect Action Path URL supplied for Ad: " + ad.id
+            )
         }
     }
 
     public override fun onStart() {
         super.onStart()
-        //AdEventClient.getInstance().trackPopupBegin(ad)
+        EventClient.getInstance().trackPopupBegin(ad)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -95,12 +97,12 @@ class AndroidWebViewPopupActivity : Activity() {
                 Log.w(LOG_TAG, "onReceivedError: $request $error")
                 val params: MutableMap<String, String> = HashMap()
                 params["url"] = url
-                params["error"] = error.toString()
-//                AppEventClient.getInstance().trackError(
-//                    EventStrings.POPUP_URL_LOAD_FAILED,
-//                    "Problem loading popup url",
-//                    params
-//                )
+                params["error"] = error.description.toString()
+                EventClient.getInstance().trackSdkError(
+                    EventStrings.POPUP_URL_LOAD_FAILED,
+                    "Problem loading popup url",
+                    params
+                )
             }
         }
         popupWebView.loadUrl(url)

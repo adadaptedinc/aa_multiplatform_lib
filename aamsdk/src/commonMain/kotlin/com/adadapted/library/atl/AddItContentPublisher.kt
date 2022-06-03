@@ -2,6 +2,8 @@ package com.adadapted.library.atl
 
 import com.adadapted.library.ad.AdContent
 import com.adadapted.library.concurrency.Transporter
+import com.adadapted.library.constants.EventStrings
+import com.adadapted.library.event.EventClient
 import kotlin.native.concurrent.ThreadLocal
 
 class AddItContentPublisher private constructor(private val transporter: Transporter) {
@@ -17,7 +19,7 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
             return
         }
         if (!::listener.isInitialized) {
-            //AppEventClient.getInstance().trackError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
+            EventClient.trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
             return
         }
         if (publishedContent.containsKey(content.payloadId)) {
@@ -33,7 +35,7 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
             return
         }
         if (!::listener.isInitialized) {
-            //AppEventClient.getInstance().trackError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
+            EventClient.trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
             return
         }
         notifyContentAvailable(content)
@@ -44,7 +46,7 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
             return
         }
         if (!::listener.isInitialized) {
-            //AppEventClient.getInstance().trackError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
+            EventClient.trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
             return
         }
         notifyContentAvailable(content)

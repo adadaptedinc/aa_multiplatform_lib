@@ -4,14 +4,13 @@ import com.adadapted.library.atl.AddToListContent
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
+import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
+import com.adadapted.library.event.EventClient
 import com.adadapted.library.keyword.InterceptClient
 import com.adadapted.library.keyword.InterceptMatcher
-import com.adadapted.library.network.HttpConnector
-import com.adadapted.library.network.HttpInterceptAdapter
-import com.adadapted.library.network.HttpPayloadAdapter
-import com.adadapted.library.network.HttpSessionAdapter
+import com.adadapted.library.network.*
 import com.adadapted.library.payload.PayloadClient
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
@@ -78,6 +77,7 @@ object IosAdAdapted : AdAdaptedBase() {
             }
         }
         SessionClient.start(startListener)
+        EventClient.trackSdkEvent(EventStrings.APP_OPENED)
 
         if (isKeywordInterceptEnabled) {
             InterceptMatcher.match("INIT") //init the matcher
@@ -129,6 +129,14 @@ object IosAdAdapted : AdAdaptedBase() {
                 HttpConnector.getInstance()
             ), Transporter()
         )
+        EventClient.createInstance(
+            HttpEventAdapter(
+                Config.getAdEventsUrl(),
+                Config.getSdkEventsUrl(),
+                Config.getSdkErrorsUrl(),
+                HttpConnector.getInstance()
+            ), Transporter()
+        )
         InterceptClient.createInstance(
             HttpInterceptAdapter(
                 Config.getRetrieveInterceptsUrl(),
@@ -141,7 +149,7 @@ object IosAdAdapted : AdAdaptedBase() {
                 Config.getPickupPayloadsUrl(),
                 Config.getTrackingPayloadUrl(),
                 HttpConnector.getInstance()
-            ), Transporter()
+            ), EventClient, Transporter()
         )
     }
 }

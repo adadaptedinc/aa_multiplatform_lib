@@ -6,14 +6,14 @@ import com.adadapted.library.atl.AddToListContent
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
+import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
+import com.adadapted.library.event.EventClient
+import com.adadapted.library.event.EventBroadcaster
 import com.adadapted.library.keyword.InterceptClient
 import com.adadapted.library.keyword.InterceptMatcher
-import com.adadapted.library.network.HttpConnector
-import com.adadapted.library.network.HttpSessionAdapter
-import com.adadapted.library.network.HttpInterceptAdapter
-import com.adadapted.library.network.HttpPayloadAdapter
+import com.adadapted.library.network.*
 import com.adadapted.library.payload.PayloadClient
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
@@ -41,11 +41,11 @@ object AdAdapted : AdAdaptedBase() {
         return this
     }
 
-//    fun setSdkEventListener(listener: AaSdkEventListener): AdAdapted {
-//        eventListener = listener
-//        return this
-//    }
-//
+    fun setSdkEventListener(listener: (zoneId: String, eventType: String) -> Unit): AdAdapted {
+        eventListener = listener
+        return this
+    }
+
     fun setSdkAddItContentListener(listener: (atlContent: AddToListContent) -> Unit): AdAdapted {
         contentListener = listener
         return this
@@ -54,7 +54,7 @@ object AdAdapted : AdAdaptedBase() {
     fun start(context: Context) {
         if (apiKey.isEmpty()) {
             println(LOG_TAG + "The Api Key cannot be NULL")
-            println("AdAdapted API Key Is Missing")
+            println("AdAdapted API Key is missing")
         }
         if (hasStarted) {
             if (!isProd) {
@@ -63,7 +63,7 @@ object AdAdapted : AdAdaptedBase() {
         }
         hasStarted = true
         setupClients(context)
-        //eventListener?.let { SdkEventPublisher.getInstance().setListener(it) }
+        eventListener.let { EventBroadcaster.getInstance().setListener(it) }
         contentListener.let { AddItContentPublisher.getInstance().addListener(it) }
         PayloadClient.getInstance().pickupPayloads {
             if (it.isNotEmpty()) {
@@ -90,12 +90,12 @@ object AdAdapted : AdAdaptedBase() {
             }
         }
         SessionClient.start(startListener)
-        //AppEventClient.getInstance().trackSdkEvent(EventStrings.APP_OPENED)
+        EventClient.trackSdkEvent(EventStrings.APP_OPENED)
 
         if (isKeywordInterceptEnabled) {
             InterceptMatcher.match("INIT") //init the matcher
         }
-        println(LOG_TAG + "AdAdapted Android Advertising SDK v%s initialized." + Config.VERSION_NAME)
+        println(LOG_TAG + "AdAdapted Android Advertising SDK $Config.VERSION_NAME initialized.")
     }
 
     fun setCustomIdentifier(identifier: String): AdAdaptedBase {
@@ -141,8 +141,14 @@ object AdAdapted : AdAdaptedBase() {
                 HttpConnector.getInstance()
             ), Transporter()
         )
-        //AppEventClient.createInstance(HttpAppEventSink(Config.getAppEventsUrl(), Config.getAppErrorsUrl()), Transporter())
-        //AdEventClient.createInstance(HttpAdEventSink(Config.getAdsEventUrl()), Transporter())
+        EventClient.createInstance(
+            HttpEventAdapter(
+                Config.getAdEventsUrl(),
+                Config.getSdkEventsUrl(),
+                Config.getSdkErrorsUrl(),
+                HttpConnector.getInstance()
+            ), Transporter()
+        )
         InterceptClient.createInstance(
             HttpInterceptAdapter(
                 Config.getRetrieveInterceptsUrl(),
@@ -155,9 +161,8 @@ object AdAdapted : AdAdaptedBase() {
                 Config.getPickupPayloadsUrl(),
                 Config.getTrackingPayloadUrl(),
                 HttpConnector.getInstance()
-            ), Transporter()
+            ), EventClient, Transporter()
         )
-        //AppEventClient.getInstance(), Transporter())
     }
 }
 

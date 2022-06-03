@@ -49,9 +49,8 @@ kotlin {
     }
 
     sourceSets {
-        val ktorVersion = "1.6.7"
-        val kotlinVersion = "1.6.20"
-        val kotlinxVersion = "1.1.0"
+        val ktorVersion = "2.0.1"
+        val kotlinVersion = "1.6.0"
         val kotlinXDateTimeVersion = "0.3.0"
         val kotlinCoroutineVersion = "1.6.1"
 
@@ -59,8 +58,8 @@ kotlin {
             dependencies {
                 // Ktor
                 implementation("io.ktor:ktor-client-core:$ktorVersion")
-                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:$kotlinxVersion")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
 
                 // DateTime
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinXDateTimeVersion")
@@ -122,6 +121,7 @@ android {
     defaultConfig {
         minSdk = 28
         targetSdk = 31
+        consumerProguardFiles("aamsdk-proguard-rules.pro")
     }
 }
 

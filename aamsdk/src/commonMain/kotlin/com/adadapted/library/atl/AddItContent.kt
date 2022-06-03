@@ -1,6 +1,7 @@
 package com.adadapted.library.atl
 
-import com.adadapted.library.atl.AddToListContent.Sources.IN_APP
+import com.adadapted.library.constants.EventStrings
+import com.adadapted.library.event.EventClient
 import com.adadapted.library.payload.PayloadClient
 import kotlin.jvm.Synchronized
 
@@ -12,8 +13,8 @@ data class AddItContent(
     private val source: String,
     val addItSource: String,
     private val items: List<AddToListItem>,
-    private var payloadClient: PayloadClient = PayloadClient.getInstance()
-//appEventClient: AppEventClient = AppEventClient.getInstance(),
+    private val payloadClient: PayloadClient = PayloadClient.getInstance(),
+    private val eventClient: EventClient = EventClient
 ) : AddToListContent {
 
     internal object AddItSources {
@@ -79,48 +80,12 @@ data class AddItContent(
         return items.isEmpty()
     }
 
-    companion object {
-        //TODO change these to map functions
-        fun createDeeplinkContent(
-            payloadId: String,
-            message: String,
-            image: String,
-            type: Int,
-            items: List<AddToListItem>
-        ): AddItContent {
-            return AddItContent(
-                payloadId,
-                message,
-                image,
-                type,
-                AddToListContent.Sources.OUT_OF_APP,
-                AddItSources.DEEPLINK,
-                items
-            )
-        }
-
-        fun createInAppContent(
-            payloadId: String,
-            message: String,
-            image: String,
-            type: Int,
-            items: List<AddToListItem>
-        ): AddItContent {
-            return AddItContent(
-                payloadId,
-                message,
-                image,
-                type,
-                IN_APP,
-                IN_APP,
-                items
-            )
-        }
-    }
-
     init {
         if (items.isEmpty()) {
-            //appEventClient.trackError(EventStrings.ADDIT_PAYLOAD_IS_EMPTY, ("Payload %s has empty payload$payloadId"))
+            eventClient.trackSdkError(
+                EventStrings.ADDIT_PAYLOAD_IS_EMPTY,
+                ("Payload %s has empty payload$payloadId")
+            )
         }
         handled = false
     }

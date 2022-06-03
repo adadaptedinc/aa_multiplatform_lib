@@ -7,6 +7,8 @@ import com.adadapted.library.session.SessionListener
 import com.adadapted.library.ad.AdContentPublisher
 import com.adadapted.library.concurrency.Timer
 import com.adadapted.library.constants.Config.LOG_TAG
+import com.adadapted.library.constants.EventStrings
+import com.adadapted.library.event.EventClient
 import com.adadapted.library.session.SessionClient
 
 interface AdZonePresenterListener {
@@ -29,15 +31,14 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sess
     private var adCompleted = false
     private var timerRunning = false
     private lateinit var timer: Timer
-    //    private val adEventClient: AdEventClient = AdEventClient.getInstance()
-    //    private val appEventClient: AppEventClient = AppEventClient.getInstance()
+    private val eventClient: EventClient = EventClient
 
     fun init(zoneId: String) {
         if (this.zoneId.isEmpty()) {
             this.zoneId = zoneId
             val params: MutableMap<String, String> = HashMap()
             params["zone_id"] = zoneId
-            //appEventClient.trackSdkEvent(EventStrings.ZONE_LOADED, params)
+            eventClient.trackSdkEvent(EventStrings.ZONE_LOADED, params)
         }
     }
 
@@ -93,7 +94,7 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sess
     private fun completeCurrentAd() {
         if (!currentAd.isEmpty && adStarted && !adCompleted) {
             if (!currentAd.impressionWasTracked()) {
-                //adEventClient.trackInvisibleImpression(currentAd)
+                eventClient.trackInvisibleImpression(currentAd)
             }
             currentAd.resetImpressionTracking() //this is critical to make sure rotating ads can get more than one impression (total)
             adCompleted = true
@@ -129,19 +130,19 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sess
 
         when (actionType) {
             AdActionType.CONTENT -> {
-                //appEventClient.trackSdkEvent(EventStrings.ATL_AD_CLICKED, params)
+                eventClient.trackSdkEvent(EventStrings.ATL_AD_CLICKED, params)
                 handleContentAction(ad)
             }
             AdActionType.LINK, AdActionType.EXTERNAL_LINK -> {
-                //adEventClient.trackInteraction(ad)
+                eventClient.trackInteraction(ad)
                 handleLinkAction(ad)
             }
             AdActionType.POPUP -> {
-                //adEventClient.trackInteraction(ad)
+                eventClient.trackInteraction(ad)
                 handlePopupAction(ad)
             }
             AdActionType.CONTENT_POPUP -> {
-                //appEventClient.trackSdkEvent(EventStrings.POPUP_AD_CLICKED, params)
+                eventClient.trackSdkEvent(EventStrings.POPUP_AD_CLICKED, params)
                 handlePopupAction(ad)
             }
             else -> println(LOG_TAG + "Cannot handle Action type: $actionType")
@@ -153,7 +154,7 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sess
     private fun trackAdImpression(ad: Ad, isAdVisible: Boolean) {
         if (!isAdVisible || ad.impressionWasTracked() || ad.isEmpty) return
         ad.setImpressionTracked()
-        //adEventClient.trackImpression(ad)
+        eventClient.trackImpression(ad)
     }
 
     private fun startZoneTimer() {
