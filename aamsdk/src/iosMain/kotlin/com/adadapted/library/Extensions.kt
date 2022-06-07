@@ -1,6 +1,5 @@
 package com.adadapted.library
 
-import platform.CoreFoundation.kCFPropertyListMutableContainers
 import platform.Foundation.*
 import platform.UIKit.*
 

@@ -4,10 +4,10 @@ import com.adadapted.library.ad.Ad
 import com.adadapted.library.ad.AdContentListener
 import com.adadapted.library.ad.AdContentPublisher
 import com.adadapted.library.concurrency.Transporter
-import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.constraintsToFillSuperview
 import com.adadapted.library.interfaces.WebViewListener
 import com.adadapted.library.interfaces.ZoneViewListener
+import com.adadapted.library.log.AALogger
 import com.adadapted.library.session.SessionClient
 import kotlinx.cinterop.cValue
 import platform.CoreGraphics.CGRectZero
@@ -105,24 +105,24 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }) {
 
     private fun setWebViewListener() = object : WebViewListener {
         override fun onAdLoadedInWebView(ad: Ad) {
-            println(LOG_TAG + "Ad ${ad.id} loaded")
+            AALogger.logInfo("Ad ${ad.id} loaded")
             presenter.onAdDisplayed(ad, isAdVisible)
             notifyClientAdLoaded()
         }
 
         override fun onAdLoadInWebViewFailed() {
-            println(LOG_TAG + "Ad load failed")
+            AALogger.logInfo("Ad load failed")
             presenter.onAdDisplayFailed()
             notifyClientAdLoadFailed()
         }
 
         override fun onAdInWebViewClicked(ad: Ad) {
-            println(LOG_TAG + "ad ${ad.id} interaction")
+            AALogger.logInfo("ad ${ad.id} interaction")
             presenter.onAdClicked(ad)
         }
 
         override fun onBlankAdInWebViewLoaded() {
-            println(LOG_TAG + "Blank ad loaded")
+            AALogger.logInfo("Blank ad loaded")
             presenter.onBlankDisplayed()
         }
     }

@@ -30,11 +30,7 @@ class DeeplinkContentParser {
             val errorParams: MutableMap<String, String> = HashMap()
             errorParams["payload"] = "{\"raw\":\"$data\", \"parsed\":\"$jsonString\"}"
             ex.message?.let { errorParams.put(EventStrings.EXCEPTION_MESSAGE, it) }
-<<<<<<< HEAD
             EventClient.trackSdkError(EventStrings.ADDIT_PAYLOAD_PARSE_FAILED, "Problem parsing Deeplink JSON input", errorParams)
-=======
-            EventClient.getInstance().trackSdkError(EventStrings.ADDIT_PAYLOAD_PARSE_FAILED, "Problem parsing Deeplink JSON input.", errorParams)
->>>>>>> 541d746 (feat: improving error and debug logging)
             throw Exception(PAYLOAD_PARSE_ERROR)
         }
     }

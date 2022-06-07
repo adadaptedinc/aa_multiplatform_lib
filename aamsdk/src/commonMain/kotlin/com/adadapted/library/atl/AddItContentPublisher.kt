@@ -20,12 +20,8 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
             return
         }
         if (!::listener.isInitialized) {
-<<<<<<< HEAD
             EventClient.trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
-=======
-            EventClient.getInstance().trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
             contentListenerNotAdded()
->>>>>>> 541d746 (feat: improving error and debug logging)
             return
         }
         if (publishedContent.containsKey(content.payloadId)) {
@@ -41,12 +37,8 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
             return
         }
         if (!::listener.isInitialized) {
-<<<<<<< HEAD
             EventClient.trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
-=======
-            EventClient.getInstance().trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
             contentListenerNotAdded()
->>>>>>> 541d746 (feat: improving error and debug logging)
             return
         }
         notifyContentAvailable(content)
@@ -57,12 +49,8 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
             return
         }
         if (!::listener.isInitialized) {
-<<<<<<< HEAD
             EventClient.trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
-=======
-            EventClient.getInstance().trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
             contentListenerNotAdded()
->>>>>>> 541d746 (feat: improving error and debug logging)
             return
         }
         notifyContentAvailable(content)
