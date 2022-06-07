@@ -13,7 +13,7 @@ class DeeplinkInterceptActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         println(LOG_TAG + "Deeplink Intercept Activity Launched.")
         PayloadClient.getInstance().deeplinkInProgress()
-        EventClient.getInstance().trackSdkEvent(EventStrings.ADDIT_APP_OPENED)
+        EventClient.trackSdkEvent(EventStrings.ADDIT_APP_OPENED)
 
         try {
             val content = DeeplinkContentParser().parse(intent.data)
@@ -23,7 +23,7 @@ class DeeplinkInterceptActivity : AppCompatActivity() {
             println(LOG_TAG + "Problem dealing with AddIt content. Recovering. " + ex.message)
             val errorParams: MutableMap<String, String> = HashMap()
             ex.message?.let { errorParams.put(EventStrings.EXCEPTION_MESSAGE, it) }
-            EventClient.getInstance().trackSdkError(
+            EventClient.trackSdkError(
                 EventStrings.ADDIT_DEEPLINK_HANDLING_ERROR,
                 "Problem handling deeplink",
                 errorParams

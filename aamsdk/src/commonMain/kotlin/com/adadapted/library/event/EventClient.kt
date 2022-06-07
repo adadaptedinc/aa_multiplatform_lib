@@ -182,9 +182,6 @@ object EventClient : SessionListener {
         }
     }
 
-    fun hasInstance(): Boolean {
-        return hasInstance
-    }
     fun createInstance(eventAdapter: EventAdapter, transporter: TransporterCoroutineScope) {
         this.eventAdapter = eventAdapter
         this.transporter = transporter as Transporter

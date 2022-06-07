@@ -53,7 +53,7 @@ class AndroidWebViewPopupActivity : Activity() {
         if (url.startsWith("http")) {
             loadPopup(ad.actionPath)
         } else {
-            EventClient.getInstance().trackSdkError(
+            EventClient.trackSdkError(
                 EventStrings.POPUP_URL_MALFORMED,
                 "Incorrect Action Path URL supplied for Ad: " + ad.id
             )
@@ -62,7 +62,7 @@ class AndroidWebViewPopupActivity : Activity() {
 
     public override fun onStart() {
         super.onStart()
-        EventClient.getInstance().trackPopupBegin(ad)
+        EventClient.trackPopupBegin(ad)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
@@ -98,7 +98,7 @@ class AndroidWebViewPopupActivity : Activity() {
                 val params: MutableMap<String, String> = HashMap()
                 params["url"] = url
                 params["error"] = error.description.toString()
-                EventClient.getInstance().trackSdkError(
+                EventClient.trackSdkError(
                     EventStrings.POPUP_URL_LOAD_FAILED,
                     "Problem loading popup url",
                     params

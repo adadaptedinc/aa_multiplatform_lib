@@ -6,7 +6,7 @@ import com.adadapted.library.concurrency.TransporterCoroutineScope
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.device.DeviceInfo
 import com.adadapted.library.device.DeviceInfoClient
-import com.adadapted.library.interfaces.Callback
+import com.adadapted.library.interfaces.DeviceCallback
 import com.adadapted.library.event.EventClient
 import kotlin.jvm.Synchronized
 import kotlin.native.concurrent.ThreadLocal
@@ -17,7 +17,7 @@ class PayloadClient private constructor(
     private val transporter: TransporterCoroutineScope
 ) {
     private fun performPickupPayload(callback: (content: List<AddItContent>) -> Unit) {
-        DeviceInfoClient.getInstance().getDeviceInfo(object : Callback {
+        DeviceInfoClient.getInstance().getDeviceInfo(object : DeviceCallback {
             override fun onDeviceInfoCollected(deviceInfo: DeviceInfo) {
                 eventClient.trackSdkEvent(EventStrings.PAYLOAD_PICKUP_ATTEMPT)
                 transporter.dispatchToBackground {

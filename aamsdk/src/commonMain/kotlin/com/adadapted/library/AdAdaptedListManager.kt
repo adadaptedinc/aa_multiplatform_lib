@@ -15,7 +15,7 @@ object AdAdaptedListManager {
             return
         }
         EventClient.trackSdkEvent(EventStrings.USER_ADDED_TO_LIST, generateListParams(list, item))
-        print("$LOG_TAG$item was added to $list")
+        println("$LOG_TAG$item was added to $list")
     }
 
     @Synchronized

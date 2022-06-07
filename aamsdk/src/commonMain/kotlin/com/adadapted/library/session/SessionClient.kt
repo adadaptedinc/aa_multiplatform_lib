@@ -7,7 +7,7 @@ import com.adadapted.library.concurrency.TransporterCoroutineScope
 import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.device.DeviceInfoClient
-import com.adadapted.library.interfaces.Callback
+import com.adadapted.library.interfaces.DeviceCallback
 import com.adadapted.library.interfaces.SessionAdapter
 import com.adadapted.library.interfaces.SessionAdapterListener
 import kotlin.jvm.Synchronized
@@ -209,7 +209,7 @@ object SessionClient : SessionAdapterListener {
     @Synchronized
     fun start(listener: SessionListener) {
         addListener(listener)
-        DeviceInfoClient.getInstance().getDeviceInfo(object : Callback {
+        DeviceInfoClient.getInstance().getDeviceInfo(object : DeviceCallback {
             override fun onDeviceInfoCollected(deviceInfo: DeviceInfo) {
                 transporter.dispatchToMain {
                     performInitialize(deviceInfo)
