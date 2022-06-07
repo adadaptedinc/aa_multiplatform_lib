@@ -9,7 +9,7 @@ import kotlin.jvm.Synchronized
 class AdContent private constructor(
     private val ad: Ad,
     private val items: List<AddToListItem>,
-    private val eventClient: EventClient = EventClient.getInstance()
+    private val eventClient: EventClient = EventClient
 ) : AddToListContent {
     private var isHandled: Boolean
 

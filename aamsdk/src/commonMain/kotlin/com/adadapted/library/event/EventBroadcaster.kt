@@ -2,10 +2,11 @@ package com.adadapted.library.event
 
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.concurrency.TransporterCoroutineScope
+import com.adadapted.library.interfaces.EventClientListener
 import kotlin.native.concurrent.ThreadLocal
 
 class EventBroadcaster private constructor(private val transporter: TransporterCoroutineScope) :
-    EventClient.Listener {
+    EventClientListener {
 
     private lateinit var listener: (zoneId: String, eventType: String) -> Unit
 
@@ -33,6 +34,6 @@ class EventBroadcaster private constructor(private val transporter: TransporterC
     }
 
     init {
-        EventClient.getInstance().addListener(this)
+        EventClient.addListener(this)
     }
 }

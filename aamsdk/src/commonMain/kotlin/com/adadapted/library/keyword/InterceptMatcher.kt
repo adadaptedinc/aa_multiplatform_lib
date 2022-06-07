@@ -1,5 +1,6 @@
 package com.adadapted.library.keyword
 
+import com.adadapted.library.interfaces.InterceptListener
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.event.EventClient
 import com.adadapted.library.session.Session
@@ -7,10 +8,11 @@ import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
 import kotlin.native.concurrent.ThreadLocal
 
-class InterceptMatcher private constructor() : SessionListener, InterceptClient.Listener {
+@ThreadLocal
+object InterceptMatcher : SessionListener, InterceptListener {
     private var intercept: Intercept = Intercept()
     private var mLoaded = false
-
+    private var hasInstance: Boolean = false
     private fun matchKeyword(constraint: CharSequence): Set<Suggestion> {
         val suggestions: MutableSet<Suggestion> = HashSet()
         val input = constraint.toString()
@@ -19,8 +21,7 @@ class InterceptMatcher private constructor() : SessionListener, InterceptClient.
         }
         for (interceptTerm in intercept.getTerms()) {
             if (interceptTerm.term.startsWith(input, ignoreCase = true)) {
-                fileTerm(interceptTerm, constraint.toString(), suggestions)
-                break
+                fileTerm(interceptTerm, input, suggestions)
             }
         }
         if (suggestions.isEmpty()) {
@@ -52,7 +53,7 @@ class InterceptMatcher private constructor() : SessionListener, InterceptClient.
         }
 
     override fun onKeywordInterceptInitialized(intercept: Intercept) {
-        EventClient.getInstance().trackSdkEvent(EventStrings.KI_INITIALIZED)
+        EventClient.trackSdkEvent(EventStrings.KI_INITIALIZED)
         this.intercept = intercept
         mLoaded = true
     }
@@ -63,22 +64,21 @@ class InterceptMatcher private constructor() : SessionListener, InterceptClient.
         }
     }
 
-    @ThreadLocal
-    companion object {
-        private lateinit var instance: InterceptMatcher
+    private fun createInstance() {
+        this.hasInstance = true
+    }
 
-        fun match(constraint: CharSequence): Set<Suggestion> {
-            return if (this::instance.isInitialized) {
-                instance.matchKeyword(constraint)
-            } else {
-                when {
-                    SessionClient.hasInstance() -> {
-                        instance = InterceptMatcher()
-                        instance.matchKeyword(constraint)
-                    }
-                    else -> {
-                        return emptySet()
-                    }
+    fun match(constraint: CharSequence): Set<Suggestion> {
+        return if (hasInstance) {
+            matchKeyword(constraint)
+        } else {
+            when {
+                SessionClient.hasInstance() -> {
+                    createInstance()
+                    matchKeyword(constraint)
+                }
+                else -> {
+                    return emptySet()
                 }
             }
         }

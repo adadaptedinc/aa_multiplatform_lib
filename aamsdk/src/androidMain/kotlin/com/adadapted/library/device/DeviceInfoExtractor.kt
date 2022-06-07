@@ -19,7 +19,7 @@ import java.util.Locale
 actual class DeviceInfoExtractor(context: Context) {
     private var contextRef: Context? = context
 
-    actual fun extractDeviceInfo(appId: String, isProd: Boolean, customIdentifier: String, params: Map<String, String>): DeviceInfo {
+    actual fun extractDeviceInfo(appId: String, isProd: Boolean, customIdentifier: String, params: Map<String, String>,): DeviceInfo {
         var mUdid: String
         var mAllowRetargeting = false
         var mScale = 0f

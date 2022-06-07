@@ -15,7 +15,7 @@ class DeeplinkContentParser {
     @Throws(Exception::class)
     fun parse(uri: Uri?): AddItContent {
         if (uri == null) {
-            EventClient.getInstance().trackSdkError(EventStrings.ADDIT_NO_DEEPLINK_RECEIVED, NO_DEEPLINK_URL)
+            EventClient.trackSdkError(EventStrings.ADDIT_NO_DEEPLINK_RECEIVED, NO_DEEPLINK_URL)
             throw Exception(NO_DEEPLINK_URL)
         }
         val data = uri.getQueryParameter("data")
@@ -30,7 +30,7 @@ class DeeplinkContentParser {
             val errorParams: MutableMap<String, String> = HashMap()
             errorParams["payload"] = "{\"raw\":\"$data\", \"parsed\":\"$jsonString\"}"
             ex.message?.let { errorParams.put(EventStrings.EXCEPTION_MESSAGE, it) }
-            EventClient.getInstance().trackSdkError(EventStrings.ADDIT_PAYLOAD_PARSE_FAILED, "Problem parsing Deeplink JSON input", errorParams)
+            EventClient.trackSdkError(EventStrings.ADDIT_PAYLOAD_PARSE_FAILED, "Problem parsing Deeplink JSON input", errorParams)
             throw Exception(PAYLOAD_PARSE_ERROR)
         }
     }

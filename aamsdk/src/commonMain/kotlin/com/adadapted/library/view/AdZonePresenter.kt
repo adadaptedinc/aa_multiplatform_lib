@@ -11,17 +11,17 @@ import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.event.EventClient
 import com.adadapted.library.session.SessionClient
 
-internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sessionClient: SessionClient?) : SessionListener {
-    internal interface Listener {
-        fun onZoneAvailable(zone: Zone)
-        fun onAdsRefreshed(zone: Zone)
-        fun onAdAvailable(ad: Ad)
-        fun onNoAdAvailable()
-    }
+interface AdZonePresenterListener {
+    fun onZoneAvailable(zone: Zone)
+    fun onAdsRefreshed(zone: Zone)
+    fun onAdAvailable(ad: Ad)
+    fun onNoAdAvailable()
+}
 
+class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sessionClient: SessionClient?) : SessionListener {
     private var currentAd: Ad = Ad()
     private var zoneId: String = ""
-    private var zonePresenterListener: Listener? = null
+    var adZonePresenterListener: AdZonePresenterListener? = null
     private var attached: Boolean
     private var sessionId: String? = null
     private var zoneLoaded: Boolean
@@ -31,7 +31,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private
     private var adCompleted = false
     private var timerRunning = false
     private lateinit var timer: Timer
-    private val eventClient: EventClient = EventClient.getInstance()
+    private val eventClient: EventClient = EventClient
 
     fun init(zoneId: String) {
         if (this.zoneId.isEmpty()) {
@@ -42,14 +42,14 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private
         }
     }
 
-    fun onAttach(listener: Listener?) {
-        if (listener == null) {
+    fun onAttach(adZonePresenterListener: AdZonePresenterListener?) {
+        if (adZonePresenterListener == null) {
             println(LOG_TAG + "NULL Listener provided")
             return
         }
         if (!attached) {
             attached = true
-            zonePresenterListener = listener
+            this.adZonePresenterListener = adZonePresenterListener
             sessionClient?.addPresenter(this)
         }
         setNextAd()
@@ -58,7 +58,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private
     fun onDetach() {
         if (attached) {
             attached = false
-            zonePresenterListener = null
+            adZonePresenterListener = null
             completeCurrentAd()
             sessionClient?.removePresenter(this)
         }
@@ -69,13 +69,15 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private
             return
         }
         completeCurrentAd()
-        currentAd = if (zonePresenterListener != null && currentZone.hasAds()) {
+
+        currentAd = if (adZonePresenterListener != null && currentZone.hasAds()) {
             val adPosition = randomAdStartPosition % currentZone.ads.size
             randomAdStartPosition++
             currentZone.ads[adPosition]
         } else {
             Ad()
         }
+
         adStarted = false
         adCompleted = false
         displayAd()
@@ -195,19 +197,20 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private
     }
 
     private fun notifyZoneAvailable() {
-        zonePresenterListener?.onZoneAvailable(currentZone)
+        adZonePresenterListener?.onZoneAvailable(currentZone)
     }
 
     private fun notifyAdsRefreshed() {
-        zonePresenterListener?.onAdsRefreshed(currentZone)
+        adZonePresenterListener?.onAdsRefreshed(currentZone)
     }
 
     private fun notifyAdAvailable(ad: Ad) {
-        zonePresenterListener?.onAdAvailable(ad)
+        adZonePresenterListener?.onAdAvailable(ad)
     }
 
     private fun notifyNoAdAvailable() {
-        zonePresenterListener?.onNoAdAvailable()
+        println(LOG_TAG + "No ad available")
+        adZonePresenterListener?.onNoAdAvailable()
     }
 
     private fun updateSessionId(sessionId: String): Boolean {
@@ -222,6 +225,7 @@ internal class AdZonePresenter(private val adViewHandler: AdViewHandler, private
         zoneLoaded = true
         currentZone = zone
         restartTimer()
+
         if (currentAd.isEmpty) {
             setNextAd()
         }

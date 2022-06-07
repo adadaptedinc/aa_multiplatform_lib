@@ -53,7 +53,7 @@ class PopupContent(val payloadId: String, private val items: List<AddToListItem>
         fun markPopupContentAcknowledged(content: PopupContent) {
             val params: MutableMap<String, String> = HashMap()
             params[PAYLOAD_ID] = content.payloadId
-            EventClient.getInstance().trackSdkEvent(EventStrings.POPUP_ADDED_TO_LIST, params)
+            EventClient.trackSdkEvent(EventStrings.POPUP_ADDED_TO_LIST, params)
         }
 
         fun markPopupContentItemAcknowledged(content: PopupContent, item: AddToListItem) {
@@ -61,13 +61,13 @@ class PopupContent(val payloadId: String, private val items: List<AddToListItem>
             params[PAYLOAD_ID] = content.payloadId
             params[TRACKING_ID] = item.trackingId
             params[ITEM_NAME] = item.title
-            EventClient.getInstance().trackSdkEvent(EventStrings.POPUP_ITEM_ADDED_TO_LIST, params)
+            EventClient.trackSdkEvent(EventStrings.POPUP_ITEM_ADDED_TO_LIST, params)
         }
 
         fun markPopupContentFailed(content: PopupContent, message: String) {
             val eventParams: MutableMap<String, String> = HashMap()
             eventParams[PAYLOAD_ID] = content.payloadId
-            EventClient.getInstance().trackSdkError(EventStrings.POPUP_CONTENT_FAILED, message, eventParams)
+            EventClient.trackSdkError(EventStrings.POPUP_CONTENT_FAILED, message, eventParams)
         }
 
         fun markPopupContentItemFailed(
@@ -78,7 +78,7 @@ class PopupContent(val payloadId: String, private val items: List<AddToListItem>
             val eventParams: MutableMap<String, String> = HashMap()
             eventParams[PAYLOAD_ID] = content.payloadId
             eventParams[TRACKING_ID] = item.trackingId
-            EventClient.getInstance().trackSdkError(EventStrings.POPUP_CONTENT_ITEM_FAILED, message, eventParams)
+            EventClient.trackSdkError(EventStrings.POPUP_CONTENT_ITEM_FAILED, message, eventParams)
         }
 
         private const val PAYLOAD_ID = "payload_id"

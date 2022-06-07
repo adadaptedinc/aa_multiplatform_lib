@@ -9,7 +9,7 @@ object HttpErrorTracker {
         params["url"] = url
         params["data"] = errorCause
         try {
-            EventClient.getInstance().trackSdkError(errorEventCode, errorMessage, params)
+            EventClient.trackSdkError(errorEventCode, errorMessage, params)
         } catch (illegalArg: IllegalArgumentException) {
             print(Config.LOG_TAG + "AppEventClient was not initialized, is your API key valid? -DETAIL: " + illegalArg.message)
         }

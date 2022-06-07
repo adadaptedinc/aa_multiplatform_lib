@@ -14,7 +14,7 @@ data class AddItContent(
     val addItSource: String,
     private val items: List<AddToListItem>,
     private val payloadClient: PayloadClient = PayloadClient.getInstance(),
-    private val eventClient: EventClient = EventClient.getInstance()
+    private val eventClient: EventClient = EventClient
 ) : AddToListContent {
 
     internal object AddItSources {

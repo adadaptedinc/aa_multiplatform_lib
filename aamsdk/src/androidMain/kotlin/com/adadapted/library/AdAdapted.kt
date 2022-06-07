@@ -90,7 +90,8 @@ object AdAdapted : AdAdaptedBase() {
             }
         }
         SessionClient.start(startListener)
-        EventClient.getInstance().trackSdkEvent(EventStrings.APP_OPENED)
+        EventClient.trackSdkEvent(EventStrings.APP_OPENED)
+
         if (isKeywordInterceptEnabled) {
             InterceptMatcher.match("INIT") //init the matcher
         }
@@ -160,7 +161,8 @@ object AdAdapted : AdAdaptedBase() {
                 Config.getPickupPayloadsUrl(),
                 Config.getTrackingPayloadUrl(),
                 HttpConnector.getInstance()
-            ), EventClient.getInstance(), Transporter()
+            ), EventClient, Transporter()
         )
     }
 }
+

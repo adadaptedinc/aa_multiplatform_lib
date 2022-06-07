@@ -1,6 +1,7 @@
 package com.adadapted.library.device
 
 import com.adadapted.library.concurrency.TransporterCoroutineScope
+import com.adadapted.library.interfaces.DeviceCallback
 import kotlin.native.concurrent.ThreadLocal
 
 class DeviceInfoClient private constructor(
@@ -11,18 +12,15 @@ class DeviceInfoClient private constructor(
     private val deviceInfoExtractor: DeviceInfoExtractor,
     private val transporter: TransporterCoroutineScope
 ) {
-    interface Callback {
-        fun onDeviceInfoCollected(deviceInfo: DeviceInfo)
-    }
 
     private lateinit var deviceInfo: DeviceInfo
-    private val callbacks: MutableSet<Callback>
+    private val deviceCallbacks: MutableSet<DeviceCallback>
 
-    private fun performGetInfo(callback: Callback) {
+    private fun performGetInfo(deviceCallback: DeviceCallback) {
         if (this::deviceInfo.isInitialized) {
-            callback.onDeviceInfoCollected(deviceInfo)
+            deviceCallback.onDeviceInfoCollected(deviceInfo)
         } else {
-            callbacks.add(callback)
+            deviceCallbacks.add(deviceCallback)
         }
     }
 
@@ -32,16 +30,16 @@ class DeviceInfoClient private constructor(
     }
 
     private fun notifyCallbacks() {
-        val currentCallbacks: Set<Callback> = HashSet(callbacks)
-        for (caller in currentCallbacks) {
+        val currentDeviceCallbacks: Set<DeviceCallback> = HashSet(deviceCallbacks)
+        for (caller in currentDeviceCallbacks) {
             caller.onDeviceInfoCollected(deviceInfo)
-            callbacks.remove(caller)
+            deviceCallbacks.remove(caller)
         }
     }
 
-    fun getDeviceInfo(callback: Callback) {
+    fun getDeviceInfo(deviceCallback: DeviceCallback) {
         transporter.dispatchToBackground {
-            performGetInfo(callback)
+            performGetInfo(deviceCallback)
         }
     }
 
@@ -79,7 +77,7 @@ class DeviceInfoClient private constructor(
     }
 
     init {
-        callbacks = HashSet()
+        deviceCallbacks = HashSet()
         transporter.dispatchToBackground {
             collectDeviceInfo()
         }

@@ -21,6 +21,10 @@ repositories {
 kotlin {
     android()
 
+    android {
+        publishLibraryVariants("release", "debug")
+    }
+
     val xcframework = XCFramework(libraryName)
     listOf(
         iosX64(),
@@ -37,14 +41,18 @@ kotlin {
         }
     }
 
-    android {
-        publishLibraryVariants("release", "debug")
+    targets.withType(org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget::class.java) {
+        binaries.all {
+            binaryOptions["memoryModel"] = "experimental"
+            binaryOptions["freezing"] = "disabled"
+        }
     }
 
     sourceSets {
         val ktorVersion = "2.0.1"
         val kotlinVersion = "1.6.0"
         val kotlinXDateTimeVersion = "0.3.0"
+        val kotlinCoroutineVersion = "1.6.1"
 
         val commonMain by getting {
             dependencies {
@@ -56,6 +64,9 @@ kotlin {
                 // DateTime
                 implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinXDateTimeVersion")
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion")
+
+                // Coroutines
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion")
             }
         }
         val commonTest by getting {

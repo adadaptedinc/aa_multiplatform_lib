@@ -2,8 +2,10 @@ package com.adadapted.library.network
 
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.device.DeviceInfo
+import com.adadapted.library.interfaces.AdGetListener
+import com.adadapted.library.interfaces.SessionInitListener
 import com.adadapted.library.session.Session
-import com.adadapted.library.session.SessionAdapter
+import com.adadapted.library.interfaces.SessionAdapter
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.HttpResponse
@@ -15,7 +17,10 @@ class HttpSessionAdapter(
     private val refreshUrl: String,
     private val httpConnector: HttpConnector
 ) : SessionAdapter {
-    override suspend fun sendInit(deviceInfo: DeviceInfo, listener: SessionAdapter.SessionInitListener) {
+    override suspend fun sendInit(
+        deviceInfo: DeviceInfo,
+        listener: SessionInitListener
+    ) {
         try {
             val response: HttpResponse = httpConnector.client.post(initUrl) {
                 contentType(ContentType.Application.Json)
@@ -35,7 +40,7 @@ class HttpSessionAdapter(
         }
     }
 
-    override suspend fun sendRefreshAds(session: Session, listener: SessionAdapter.AdGetListener) {
+    override suspend fun sendRefreshAds(session: Session, listener: AdGetListener) {
         try {
             val url = refreshUrl + ("?aid=" + session.deviceInfo.appId + "&uid=" + session.deviceInfo.udid + "&sid=" + session.id + "&sdk=" + session.deviceInfo.sdkVersion)
             val response: HttpResponse = httpConnector.client.get(url) {

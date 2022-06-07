@@ -14,8 +14,8 @@ object AdAdaptedListManager {
         if (item.isEmpty()) {
             return
         }
-        EventClient.getInstance().trackSdkEvent(EventStrings.USER_ADDED_TO_LIST, generateListParams(list, item))
-        print("$LOG_TAG$item was added to $list")
+        EventClient.trackSdkEvent(EventStrings.USER_ADDED_TO_LIST, generateListParams(list, item))
+        println("$LOG_TAG$item was added to $list")
     }
 
     @Synchronized
@@ -23,7 +23,7 @@ object AdAdaptedListManager {
         if (item.isEmpty()) {
             return
         }
-        EventClient.getInstance().trackSdkEvent(EventStrings.USER_CROSSED_OFF_LIST, generateListParams(list, item))
+        EventClient.trackSdkEvent(EventStrings.USER_CROSSED_OFF_LIST, generateListParams(list, item))
         println("$LOG_TAG$item was crossed off $list")
     }
 
@@ -32,7 +32,7 @@ object AdAdaptedListManager {
         if (item.isEmpty()) {
             return
         }
-        EventClient.getInstance().trackSdkEvent(EventStrings.USER_DELETED_FROM_LIST, generateListParams(list, item))
+        EventClient.trackSdkEvent(EventStrings.USER_DELETED_FROM_LIST, generateListParams(list, item))
         println("$LOG_TAG$item was deleted from $list")
     }
 

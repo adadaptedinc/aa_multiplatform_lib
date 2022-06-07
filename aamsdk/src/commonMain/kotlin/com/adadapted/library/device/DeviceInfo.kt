@@ -8,6 +8,7 @@ import kotlinx.serialization.SerialName
 data class DeviceInfo(
     @SerialName("app_id")val appId: String = UNKNOWN_VALUE,
     val isProd: Boolean = false,
+    val customIdentifier: String = "",
     val scale: Float = 0f,
     val bundleId: String = "",
     val bundleVersion: String = "",

@@ -14,7 +14,7 @@ class JavascriptBridge internal constructor(private val ad: Ad) {
     fun deliverAdContent() {
         val params = HashMap<String, String>()
         params["ad_id"] = ad.id
-        EventClient.getInstance().trackSdkEvent(EventStrings.POPUP_CONTENT_CLICKED, params)
+        EventClient.trackSdkEvent(EventStrings.POPUP_CONTENT_CLICKED, params)
         val content = createAddToListContent(ad)
         AddItContentPublisher.getInstance().publishAdContent(content)
     }
@@ -33,7 +33,7 @@ class JavascriptBridge internal constructor(private val ad: Ad) {
     ) {
         val params = HashMap<String, String>()
         params["tracking_id"] = trackingId
-        EventClient.getInstance().trackSdkEvent(EventStrings.POPUP_ATL_CLICKED, params)
+        EventClient.trackSdkEvent(EventStrings.POPUP_ATL_CLICKED, params)
 
         val items: MutableList<AddToListItem> = ArrayList()
         items.add(

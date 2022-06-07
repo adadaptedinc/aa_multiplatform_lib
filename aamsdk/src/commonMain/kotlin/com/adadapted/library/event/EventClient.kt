@@ -1,28 +1,29 @@
 package com.adadapted.library.event
 
 import com.adadapted.library.ad.Ad
+import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.concurrency.TransporterCoroutineScope
 import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.constants.EventStrings.SDK_EVENT_TYPE
+import com.adadapted.library.interfaces.EventClientListener
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
 import kotlin.jvm.Synchronized
 import kotlin.native.concurrent.ThreadLocal
 
-class EventClient private constructor(
-    private val eventAdapter: EventAdapter, private val transporter: TransporterCoroutineScope
-) : SessionListener {
-    interface Listener {
-        fun onAdEventTracked(event: AdEvent?)
-    }
+@ThreadLocal
+object EventClient : SessionListener {
 
-    private val listeners: MutableSet<Listener> = HashSet()
+    private lateinit var eventAdapter: EventAdapter
+    private var transporter = Transporter()
+    private val listeners: MutableSet<EventClientListener> = HashSet()
     private val adEvents: MutableSet<AdEvent> = HashSet()
     private val sdkEvents: MutableSet<SdkEvent> = HashSet()
     private val sdkErrors: MutableSet<SdkError> = HashSet()
     private var session: Session? = null
+    private var hasInstance: Boolean = false
 
     private fun performTrackSdkEvent(name: String, params: Map<String, String>) {
         sdkEvents.add(SdkEvent(SDK_EVENT_TYPE, name, params = params))
@@ -90,11 +91,11 @@ class EventClient private constructor(
         notifyAdEventTracked(event)
     }
 
-    private fun performAddListener(listener: Listener) {
+    private fun performAddListener(listener: EventClientListener) {
         listeners.add(listener)
     }
 
-    private fun performRemoveListener(listener: Listener) {
+    private fun performRemoveListener(listener: EventClientListener) {
         listeners.remove(listener)
     }
 
@@ -149,11 +150,11 @@ class EventClient private constructor(
         }
     }
 
-    fun addListener(listener: Listener) {
+    fun addListener(listener: EventClientListener) {
         performAddListener(listener)
     }
 
-    fun removeListener(listener: Listener) {
+    fun removeListener(listener: EventClientListener) {
         performRemoveListener(listener)
     }
 
@@ -181,19 +182,11 @@ class EventClient private constructor(
         }
     }
 
-    @ThreadLocal
-    companion object {
-        private lateinit var instance: EventClient
-
-        fun createInstance(eventAdapter: EventAdapter, transporter: TransporterCoroutineScope) {
-            this.instance = EventClient(eventAdapter, transporter)
-        }
-
-        fun getInstance(): EventClient {
-            return instance
-        }
+    fun createInstance(eventAdapter: EventAdapter, transporter: TransporterCoroutineScope) {
+        this.eventAdapter = eventAdapter
+        this.transporter = transporter as Transporter
+        this.hasInstance = true
     }
-
     init {
         SessionClient.addListener(this)
     }

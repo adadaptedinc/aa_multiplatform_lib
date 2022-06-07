@@ -12,7 +12,7 @@ import com.adadapted.library.ad.AdContentListener
 import com.adadapted.library.ad.AdContentPublisher
 import com.adadapted.library.session.SessionClient
 
-class AndroidZoneView : FrameLayout, AdZonePresenter.Listener, AndroidWebView.Listener {
+class AndroidZoneView : FrameLayout, AdZonePresenterListener, AndroidWebView.Listener {
     interface Listener {
         fun onZoneHasAds(hasAds: Boolean)
         fun onAdLoaded()
