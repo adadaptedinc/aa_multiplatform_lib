@@ -3,10 +3,10 @@ package com.adadapted.library.event
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.concurrency.TransporterCoroutineScope
-import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.constants.EventStrings.SDK_EVENT_TYPE
 import com.adadapted.library.interfaces.EventClientListener
+import com.adadapted.library.log.AALogger
 import com.adadapted.library.session.Session
 import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
@@ -30,7 +30,7 @@ object EventClient : SessionListener {
     }
 
     private fun performTrackSdkError(code: String, message: String, params: Map<String, String>) {
-        println(LOG_TAG + "App Error: $code - $message")
+        AALogger.logError("App Error: $code - $message")
         sdkErrors.add(SdkError(code, message, params))
     }
 
@@ -187,6 +187,7 @@ object EventClient : SessionListener {
         this.transporter = transporter as Transporter
         this.hasInstance = true
     }
+
     init {
         SessionClient.addListener(this)
     }

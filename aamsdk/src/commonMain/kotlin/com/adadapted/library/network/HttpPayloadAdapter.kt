@@ -4,6 +4,7 @@ import com.adadapted.library.atl.AddItContent
 import com.adadapted.library.atl.AddItContentParser
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.device.DeviceInfo
+import com.adadapted.library.log.AALogger
 import com.adadapted.library.payload.PayloadAdapter
 import com.adadapted.library.payload.PayloadEvent
 import com.adadapted.library.payload.PayloadRequestBuilder
@@ -26,7 +27,7 @@ class HttpPayloadAdapter(
             }
             response.body<PayloadResponse>().apply { AddItContentParser.generateAddItContentFromPayloads(this).apply(callback) }
         } catch (e: Exception) {
-            println(e.message)
+            e.message?.let { AALogger.logError(it) }
             HttpErrorTracker.trackHttpError(
                 e.cause.toString(),
                 e.message.toString(),
@@ -43,7 +44,7 @@ class HttpPayloadAdapter(
                 setBody(PayloadRequestBuilder.buildEventRequest(deviceInfo, event))
             }
         } catch (e: Exception) {
-            println(e.message)
+            e.message?.let { AALogger.logError(it) }
             HttpErrorTracker.trackHttpError(
                 e.cause.toString(),
                 e.message.toString(),

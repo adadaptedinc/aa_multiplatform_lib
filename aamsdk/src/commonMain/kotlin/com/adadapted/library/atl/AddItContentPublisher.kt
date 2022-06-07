@@ -4,6 +4,7 @@ import com.adadapted.library.ad.AdContent
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.event.EventClient
+import com.adadapted.library.log.AALogger
 import kotlin.native.concurrent.ThreadLocal
 
 class AddItContentPublisher private constructor(private val transporter: Transporter) {
@@ -20,6 +21,7 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
         }
         if (!::listener.isInitialized) {
             EventClient.trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
+            contentListenerNotAdded()
             return
         }
         if (publishedContent.containsKey(content.payloadId)) {
@@ -36,6 +38,7 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
         }
         if (!::listener.isInitialized) {
             EventClient.trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
+            contentListenerNotAdded()
             return
         }
         notifyContentAvailable(content)
@@ -47,6 +50,7 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
         }
         if (!::listener.isInitialized) {
             EventClient.trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
+            contentListenerNotAdded()
             return
         }
         notifyContentAvailable(content)
@@ -56,6 +60,10 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
         transporter.dispatchToBackground {
             listener.invoke(content)
         }
+    }
+
+    private fun contentListenerNotAdded() {
+        AALogger.logError(LISTENER_REGISTRATION_ERROR)
     }
 
     @ThreadLocal

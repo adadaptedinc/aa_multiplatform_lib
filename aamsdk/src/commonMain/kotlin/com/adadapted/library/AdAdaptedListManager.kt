@@ -1,8 +1,8 @@
 package com.adadapted.library
 
-import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.event.EventClient
+import com.adadapted.library.log.AALogger
 import kotlin.jvm.Synchronized
 
 object AdAdaptedListManager {
@@ -15,7 +15,7 @@ object AdAdaptedListManager {
             return
         }
         EventClient.trackSdkEvent(EventStrings.USER_ADDED_TO_LIST, generateListParams(list, item))
-        println("$LOG_TAG$item was added to $list")
+        AALogger.logInfo("$item was added to $list")
     }
 
     @Synchronized
@@ -24,7 +24,7 @@ object AdAdaptedListManager {
             return
         }
         EventClient.trackSdkEvent(EventStrings.USER_CROSSED_OFF_LIST, generateListParams(list, item))
-        println("$LOG_TAG$item was crossed off $list")
+        AALogger.logInfo("$item was crossed off $list")
     }
 
     @Synchronized
@@ -33,7 +33,7 @@ object AdAdaptedListManager {
             return
         }
         EventClient.trackSdkEvent(EventStrings.USER_DELETED_FROM_LIST, generateListParams(list, item))
-        println("$LOG_TAG$item was deleted from $list")
+        AALogger.logInfo("$item was deleted from $list")
     }
 
     private fun generateListParams(list: String, item: String): MutableMap<String, String> {

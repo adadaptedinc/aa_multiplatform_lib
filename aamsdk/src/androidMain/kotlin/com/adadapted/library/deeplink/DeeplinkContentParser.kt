@@ -37,6 +37,6 @@ class DeeplinkContentParser {
 
     companion object {
         private const val NO_DEEPLINK_URL = "Did not receive a deeplink url."
-        private const val PAYLOAD_PARSE_ERROR = "Problem parsing content payload"
+        private const val PAYLOAD_PARSE_ERROR = "Problem parsing content payload."
     }
 }

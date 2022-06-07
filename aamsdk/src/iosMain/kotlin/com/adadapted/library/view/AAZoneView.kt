@@ -1,11 +1,8 @@
 package com.adadapted.library.view
 
 import com.adadapted.library.ad.AdContentListener
-import com.adadapted.library.constants.Config.init
 import com.adadapted.library.interfaces.ZoneViewListener
-import kotlinx.cinterop.ObjCAction
-import platform.Foundation.NSSelectorFromString
-import platform.Foundation.addObserver
+import com.adadapted.library.log.AALogger
 import platform.UIKit.*
 
 class AAZoneView constructor(zoneId: String, contentListener: AdContentListener? = null): ZoneViewListener {
@@ -28,14 +25,14 @@ class AAZoneView constructor(zoneId: String, contentListener: AdContentListener?
     }
 
     override fun onZoneHasAds(hasAds: Boolean) {
-        println("Zone has ads: $hasAds")
+        AALogger.logInfo("Zone has ads: $hasAds")
     }
 
     override fun onAdLoaded() {
-        println("onAdLoaded")
+        AALogger.logInfo("onAdLoaded")
     }
 
     override fun onAdLoadFailed() {
-        println("onAdLoadFailed")
+        AALogger.logInfo("onAdLoadFailed")
     }
 }

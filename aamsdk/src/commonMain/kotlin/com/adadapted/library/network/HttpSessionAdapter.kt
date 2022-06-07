@@ -2,6 +2,7 @@ package com.adadapted.library.network
 
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.device.DeviceInfo
+import com.adadapted.library.log.AALogger
 import com.adadapted.library.interfaces.AdGetListener
 import com.adadapted.library.interfaces.SessionInitListener
 import com.adadapted.library.session.Session
@@ -29,7 +30,7 @@ class HttpSessionAdapter(
             listener.onSessionInitialized(response.body<Session>().apply { this.deviceInfo = deviceInfo })
 
         } catch (e: Exception) {
-            println(e.message)
+            e.message?.let { AALogger.logError(it) }
             HttpErrorTracker.trackHttpError(
                 e.cause.toString(),
                 e.message.toString(),
@@ -48,7 +49,7 @@ class HttpSessionAdapter(
             }
             listener.onNewAdsLoaded(response.body())
         } catch (e: Exception) {
-            println(e.message)
+            e.message?.let { AALogger.logError(it) }
             HttpErrorTracker.trackHttpError(
                 e.cause.toString(),
                 e.message.toString(),

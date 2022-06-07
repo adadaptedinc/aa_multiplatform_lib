@@ -6,16 +6,15 @@ import com.adadapted.library.ad.Ad
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.KeyEvent
 import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.RelativeLayout
-import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.event.EventClient
+import com.adadapted.library.log.AALogger
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.serializer
@@ -94,7 +93,7 @@ class AndroidWebViewPopupActivity : Activity() {
                 error: WebResourceError
             ) {
                 super.onReceivedError(view, request, error)
-                Log.w(LOG_TAG, "onReceivedError: $request $error")
+                AALogger.logError("onReceivedError: $request $error")
                 val params: MutableMap<String, String> = HashMap()
                 params["url"] = url
                 params["error"] = error.description.toString()

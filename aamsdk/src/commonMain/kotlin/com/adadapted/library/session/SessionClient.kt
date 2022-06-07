@@ -5,8 +5,8 @@ import com.adadapted.library.concurrency.Timer
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.concurrency.TransporterCoroutineScope
 import com.adadapted.library.constants.Config
-import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.device.DeviceInfoClient
+import com.adadapted.library.log.AALogger
 import com.adadapted.library.interfaces.DeviceCallback
 import com.adadapted.library.interfaces.SessionAdapter
 import com.adadapted.library.interfaces.SessionAdapterListener
@@ -69,7 +69,7 @@ object SessionClient : SessionAdapterListener {
         deviceInfo: DeviceInfo? = DeviceInfoClient.getInstance().getCachedDeviceInfo()
     ) {
         if (currentSession.hasExpired()) {
-            println(LOG_TAG + "Session has expired. Expired at: " + currentSession.expiration)
+            AALogger.logInfo("Session has expired. Expired at: " + currentSession.expiration)
             notifySessionExpired()
             if (deviceInfo != null) {
                 performReinitialize(deviceInfo)
@@ -82,7 +82,7 @@ object SessionClient : SessionAdapterListener {
     private fun performReinitialize(deviceInfo: DeviceInfo) {
         if (status == Status.OK || status == Status.SHOULD_REFRESH) {
             if (presenterSize() > 0) {
-                println(LOG_TAG + "Reinitializing Session.")
+                AALogger.logInfo("Reinitializing Session.")
                 status = Status.IS_REINITIALIZING_SESSION
                 transporter.dispatchToBackground {
                     adapter?.sendInit(deviceInfo, this@SessionClient)
@@ -96,7 +96,7 @@ object SessionClient : SessionAdapterListener {
     private fun performRefreshAds() {
         if (status == Status.OK || status == Status.SHOULD_REFRESH) {
             if (presenterSize() > 0) {
-                println(LOG_TAG + "Checking for more Ads.")
+                AALogger.logInfo("Checking for more Ads.")
                 status = Status.IS_REFRESH_ADS
                 transporter.dispatchToBackground {
                     adapter?.sendRefreshAds(
@@ -123,11 +123,11 @@ object SessionClient : SessionAdapterListener {
 
     private fun startPollingTimer() {
         if (pollingTimerRunning || currentSession.willNotServeAds()) {
-            println(LOG_TAG + "Session will not serve Ads. Ignoring Ad polling timer.")
+            AALogger.logInfo("Session will not serve Ads. Ignoring Ad polling timer.")
             return
         }
         pollingTimerRunning = true
-        println(LOG_TAG + "Starting Ad polling timer.")
+        AALogger.logInfo("Starting Ad polling timer.")
 
         val refreshTimer = Timer(
             { performRefresh() },
@@ -142,7 +142,6 @@ object SessionClient : SessionAdapterListener {
             return
         }
         eventTimerRunning = true
-        println(LOG_TAG + "Starting up the Event Publisher.")
 
         val eventTimer = Timer(
             { notifyPublishEvents() },

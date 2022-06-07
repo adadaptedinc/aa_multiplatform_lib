@@ -4,6 +4,7 @@ import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.keyword.InterceptAdapter
 import com.adadapted.library.keyword.InterceptEvent
 import com.adadapted.library.keyword.InterceptEventWrapper
+import com.adadapted.library.log.AALogger
 import com.adadapted.library.session.Session
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -22,7 +23,7 @@ class HttpInterceptAdapter(private val initUrl: String, private val eventUrl: St
             }
             listener.onSuccess(response.body())
         } catch (e: Exception) {
-            println(e.message)
+            e.message?.let { AALogger.logError(it) }
             HttpErrorTracker.trackHttpError(
                 e.cause.toString(),
                 e.message.toString(),
@@ -46,7 +47,7 @@ class HttpInterceptAdapter(private val initUrl: String, private val eventUrl: St
                 setBody(compiledInterceptEventRequest)
             }
         } catch (e: Exception) {
-            println(e.message)
+            e.message?.let { AALogger.logError(it) }
             HttpErrorTracker.trackHttpError(
                 e.cause.toString(),
                 e.message.toString(),

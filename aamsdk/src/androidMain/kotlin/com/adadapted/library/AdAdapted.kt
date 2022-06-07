@@ -5,7 +5,6 @@ import com.adadapted.library.atl.AddItContentPublisher
 import com.adadapted.library.atl.AddToListContent
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.Config
-import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
@@ -13,6 +12,7 @@ import com.adadapted.library.event.EventClient
 import com.adadapted.library.event.EventBroadcaster
 import com.adadapted.library.keyword.InterceptClient
 import com.adadapted.library.keyword.InterceptMatcher
+import com.adadapted.library.log.AALogger
 import com.adadapted.library.network.*
 import com.adadapted.library.payload.PayloadClient
 import com.adadapted.library.session.Session
@@ -53,12 +53,11 @@ object AdAdapted : AdAdaptedBase() {
 
     fun start(context: Context) {
         if (apiKey.isEmpty()) {
-            println(LOG_TAG + "The Api Key cannot be NULL")
-            println("AdAdapted API Key is missing")
+            AALogger.logError("The AdAdapted Api Key is missing or NULL")
         }
         if (hasStarted) {
             if (!isProd) {
-                println(LOG_TAG + "AdAdapted Android Advertising SDK has already been started")
+                AALogger.logError("AdAdapted Android Advertising SDK has already been started.")
             }
         }
         hasStarted = true
@@ -77,7 +76,7 @@ object AdAdapted : AdAdaptedBase() {
             override fun onSessionAvailable(session: Session) {
                 sessionListener(session.hasActiveCampaigns())
                 if (session.hasActiveCampaigns() && !session.hasZoneAds()) {
-                    println(LOG_TAG + "Session has ads to show but none were loaded properly. Is an obfuscation tool obstructing the AdAdapted Library?")
+                    AALogger.logError("The session has ads to show but none were loaded properly. Is an obfuscation tool obstructing the AdAdapted Library?")
                 }
             }
 
@@ -95,7 +94,7 @@ object AdAdapted : AdAdaptedBase() {
         if (isKeywordInterceptEnabled) {
             InterceptMatcher.match("INIT") //init the matcher
         }
-        println(LOG_TAG + "AdAdapted Android Advertising SDK $Config.VERSION_NAME initialized.")
+        AALogger.logInfo("AdAdapted Android Multiplatform SDK ${Config.VERSION_NAME} initialized.")
     }
 
     fun setCustomIdentifier(identifier: String): AdAdaptedBase {

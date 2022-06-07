@@ -1,9 +1,9 @@
 package com.adadapted.library.view
 
 import com.adadapted.library.ad.Ad
-import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.constraintsToFillSuperview
 import com.adadapted.library.helpers.Base64.base64decoded
+import com.adadapted.library.log.AALogger
 import com.adadapted.library.nsDataUTF8
 import kotlinx.cinterop.ExportObjCClass
 import kotlinx.cinterop.ObjCAction
@@ -90,7 +90,7 @@ class LinkOrPopup : UIViewController,
                 return null
             }
         } catch (error: Throwable) {
-            println(LOG_TAG + "Error parsing JSON: $error")
+            AALogger.logError("Error parsing JSON: $error")
         }
         return json as NSDictionary
     }
@@ -178,6 +178,6 @@ class LinkOrPopup : UIViewController,
         didFailNavigation: WKNavigation?,
         withError: NSError
     ) {
-        println(LOG_TAG + withError.localizedDescription)
+        AALogger.logError(withError.localizedDescription)
     }
 }

@@ -6,9 +6,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
 import android.telephony.TelephonyManager
-import android.util.Log
 import com.adadapted.library.constants.Config
-import com.adadapted.library.constants.Config.LOG_TAG
+import com.adadapted.library.log.AALogger
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
@@ -147,11 +146,11 @@ actual class DeviceInfoExtractor(context: Context) {
     }
 
     private fun trackGooglePlayAdError(ex: Exception) {
-        Log.w(LOG_TAG, GooglePlayAdError)
+        AALogger.logError(GooglePlayAdError + ": " + ex.message)
     }
 
     companion object {
-        private const val GooglePlayAdError = "Problem retrieving Google Play Advertiser Info"
+        private const val GooglePlayAdError = "Problem retrieving Google Play Advertising Info."
         private const val AdvertisingIdClientName = "com.google.android.gms.ads.identifier.AdvertisingIdClient"
         private const val NetworkOperatorDefault = "None"
     }

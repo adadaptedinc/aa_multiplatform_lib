@@ -3,13 +3,13 @@ package com.adadapted.library
 import com.adadapted.library.atl.AddToListContent
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.Config
-import com.adadapted.library.constants.Config.LOG_TAG
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
 import com.adadapted.library.event.EventClient
 import com.adadapted.library.keyword.InterceptClient
 import com.adadapted.library.keyword.InterceptMatcher
+import com.adadapted.library.log.AALogger
 import com.adadapted.library.network.*
 import com.adadapted.library.payload.PayloadClient
 import com.adadapted.library.session.Session
@@ -17,7 +17,6 @@ import com.adadapted.library.session.SessionClient
 import com.adadapted.library.session.SessionListener
 import platform.Foundation.NSUserDefaults
 import platform.Foundation.setValue
-import platform.Foundation.valueForKey
 
 object IosAdAdapted : AdAdaptedBase() {
 
@@ -49,12 +48,12 @@ object IosAdAdapted : AdAdaptedBase() {
     @Throws(Exception::class)
     fun start() {
         if (apiKey.isEmpty()) {
-            println(LOG_TAG + "The Api Key cannot be NULL")
-            println("AdAdapted API Key Is Missing")
+            AALogger.logError("The Api Key cannot be NULL")
+            AALogger.logError("AdAdapted API Key Is Missing")
         }
         if (hasStarted) {
             if (!isProd) {
-                println(LOG_TAG + "AdAdapted iOS Advertising SDK has already been started")
+                AALogger.logError("AdAdapted iOS Advertising SDK has already been started")
             }
         }
         hasStarted = true
@@ -64,7 +63,7 @@ object IosAdAdapted : AdAdaptedBase() {
             override fun onSessionAvailable(session: Session) {
                 sessionListener(session.hasActiveCampaigns())
                 if (session.hasActiveCampaigns() && !session.hasZoneAds()) {
-                    println(LOG_TAG + "Session has ads to show but none were loaded properly. Is an obfuscation tool obstructing the AdAdapted Library?")
+                    AALogger.logError("Session has ads to show but none were loaded properly. Is an obfuscation tool obstructing the AdAdapted Library?")
                 }
             }
 
@@ -82,7 +81,7 @@ object IosAdAdapted : AdAdaptedBase() {
         if (isKeywordInterceptEnabled) {
             InterceptMatcher.match("INIT") //init the matcher
         }
-        println(LOG_TAG + "AdAdapted iOS Advertising SDK v%s initialized." + Config.VERSION_NAME)
+        AALogger.logInfo("AdAdapted iOS Advertising SDK v%s initialized." + Config.VERSION_NAME)
     }
 
     fun setCustomIdentifier(identifier: String): AdAdaptedBase {
