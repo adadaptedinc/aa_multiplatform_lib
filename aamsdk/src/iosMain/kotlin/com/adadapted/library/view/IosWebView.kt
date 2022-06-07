@@ -112,6 +112,10 @@ class IosWebView : WKWebView (frame = cValue { CGRectZero }, configuration = WKW
         notifyAdClicked()
     }
 
+    override fun webView(webView: WKWebView, didFailProvisionalNavigation: WKNavigation?, withError: NSError) {
+        //forced override
+    }
+
     override fun gestureRecognizer(
         gestureRecognizer: UIGestureRecognizer,
         shouldRecognizeSimultaneouslyWithGestureRecognizer: UIGestureRecognizer

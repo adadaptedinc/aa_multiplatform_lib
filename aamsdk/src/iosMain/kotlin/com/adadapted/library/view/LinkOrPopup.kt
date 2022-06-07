@@ -148,6 +148,14 @@ class LinkOrPopup : UIViewController,
         )
     }
 
+    override fun webView(webView: WKWebView, contextMenuWillPresentForElement: WKContextMenuElementInfo) {
+        //forced override
+    }
+
+    override fun webView(webView: WKWebView, didCommitNavigation: WKNavigation?) {
+        //forced override
+    }
+
     // WKWebView Navigation Delegate
     override fun webView(
         webView: WKWebView,
