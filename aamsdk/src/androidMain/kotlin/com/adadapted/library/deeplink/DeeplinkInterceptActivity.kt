@@ -12,13 +12,13 @@ class DeeplinkInterceptActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AALogger.logInfo("Deeplink Intercept Activity Launched.")
-        PayloadClient.getInstance().deeplinkInProgress()
+        PayloadClient.deeplinkInProgress()
         EventClient.trackSdkEvent(EventStrings.ADDIT_APP_OPENED)
 
         try {
             val content = DeeplinkContentParser().parse(intent.data)
             AALogger.logInfo("AddIt content dispatched to App.")
-            AddItContentPublisher.getInstance().publishAddItContent(content)
+            AddItContentPublisher.publishAddItContent(content)
         } catch (ex: Exception) {
             AALogger.logError("Problem dealing with AddIt content from DeeplinkInterceptActivity. Recovering. " + ex.message)
             val errorParams: MutableMap<String, String> = HashMap()
@@ -32,7 +32,7 @@ class DeeplinkInterceptActivity : AppCompatActivity() {
         } finally {
             startActivity(packageManager.getLaunchIntentForPackage(packageName))
         }
-        PayloadClient.getInstance().deeplinkCompleted()
+        PayloadClient.deeplinkCompleted()
         finish()
     }
 }

@@ -11,7 +11,9 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 
 expect val defaultPlatformEngine: HttpClientEngine
-class HttpConnector private constructor() {
+
+@ThreadLocal
+object HttpConnector {
     val client = HttpClient {
         install(ContentNegotiation) {
             json(Json {
@@ -27,19 +29,6 @@ class HttpConnector private constructor() {
                 AALogger.logInfo("HTTP status: ${response.status.value}")
             }
         }
-
         install(HttpRequestRetry)
-    }
-
-    @ThreadLocal
-    companion object {
-        private lateinit var instance: HttpConnector
-
-        fun getInstance(): HttpConnector {
-            if (!this::instance.isInitialized) {
-                instance = HttpConnector()
-            }
-            return instance
-        }
     }
 }

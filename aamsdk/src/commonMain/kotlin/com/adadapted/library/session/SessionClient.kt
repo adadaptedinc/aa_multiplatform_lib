@@ -66,7 +66,7 @@ object SessionClient : SessionAdapterListener {
     }
 
     private fun performRefresh(
-        deviceInfo: DeviceInfo? = DeviceInfoClient.getInstance().getCachedDeviceInfo()
+        deviceInfo: DeviceInfo? = DeviceInfoClient.getCachedDeviceInfo()
     ) {
         if (currentSession.hasExpired()) {
             AALogger.logInfo("Session has expired. Expired at: " + currentSession.expiration)
@@ -208,7 +208,7 @@ object SessionClient : SessionAdapterListener {
     @Synchronized
     fun start(listener: SessionListener) {
         addListener(listener)
-        DeviceInfoClient.getInstance().getDeviceInfo(object : DeviceCallback {
+        DeviceInfoClient.getDeviceInfo(object : DeviceCallback {
             override fun onDeviceInfoCollected(deviceInfo: DeviceInfo) {
                 transporter.dispatchToMain {
                     performInitialize(deviceInfo)

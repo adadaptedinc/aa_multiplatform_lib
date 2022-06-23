@@ -55,7 +55,7 @@ class AndroidZoneView : FrameLayout, AdZonePresenterListener, AndroidWebView.Lis
         presenter.onAttach(this)
         this.zoneViewListener = listener
         if (contentListener != null) {
-            AdContentPublisher.getInstance().addListener(contentListener)
+            AdContentPublisher.addListener(contentListener)
         }
     }
 
@@ -63,7 +63,7 @@ class AndroidZoneView : FrameLayout, AdZonePresenterListener, AndroidWebView.Lis
         this.zoneViewListener = null
         presenter.onDetach()
         if (contentListener != null) {
-            AdContentPublisher.getInstance().removeListener(contentListener)
+            AdContentPublisher.removeListener(contentListener)
         }
     }
 

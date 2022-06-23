@@ -38,7 +38,7 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }) {
 
     fun setAdContentListener(listener: AdContentListener? = null) {
         if (listener != null) {
-            AdContentPublisher.getInstance().addListener(listener)
+            AdContentPublisher.addListener(listener)
         }
     }
 
@@ -55,7 +55,7 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }) {
         this.zoneViewListener = null
         presenter.onDetach()
         if (contentListener != null) {
-            AdContentPublisher.getInstance().removeListener(contentListener)
+            AdContentPublisher.removeListener(contentListener)
         }
     }
 

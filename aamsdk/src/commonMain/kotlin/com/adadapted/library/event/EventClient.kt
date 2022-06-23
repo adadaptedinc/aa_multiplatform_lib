@@ -27,6 +27,7 @@ object EventClient : SessionListener {
 
     private fun performTrackSdkEvent(name: String, params: Map<String, String>) {
         sdkEvents.add(SdkEvent(SDK_EVENT_TYPE, name, params = params))
+        println("SdkEvents @ performTrackSdkEvent: $sdkEvents")
     }
 
     private fun performTrackSdkError(code: String, message: String, params: Map<String, String>) {
@@ -42,7 +43,7 @@ object EventClient : SessionListener {
         val currentSdkErrors: Set<SdkError> = HashSet(sdkErrors)
         sdkErrors.clear()
         session?.let {
-            transporter.dispatchToBackground {
+            transporter.dispatchToMain {
                 eventAdapter.publishSdkErrors(it, currentSdkErrors)
             }
         }
@@ -56,7 +57,7 @@ object EventClient : SessionListener {
         val currentSdkEvents: Set<SdkEvent> = HashSet(sdkEvents)
         sdkEvents.clear()
         session?.let {
-            transporter.dispatchToBackground {
+            transporter.dispatchToMain {
                 eventAdapter.publishSdkEvents(it, currentSdkEvents)
             }
         }
@@ -70,7 +71,7 @@ object EventClient : SessionListener {
         val currentAdEvents: Set<AdEvent> = HashSet(adEvents)
         adEvents.clear()
         session?.let {
-            transporter.dispatchToBackground {
+            transporter.dispatchToMain {
                 eventAdapter.publishAdEvents(it, currentAdEvents)
             }
         }
@@ -141,11 +142,13 @@ object EventClient : SessionListener {
         name: String,
         params: Map<String, String> = HashMap()
     ) {
-        transporter.dispatchToBackground { performTrackSdkEvent(name, params) }
+        transporter.dispatchToMain {
+            performTrackSdkEvent(name, params)
+        }
     }
 
     fun trackSdkError(code: String, message: String, params: Map<String, String> = HashMap()) {
-        transporter.dispatchToBackground {
+        transporter.dispatchToMain {
             performTrackSdkError(code, message, params)
         }
     }
@@ -159,33 +162,35 @@ object EventClient : SessionListener {
     }
 
     fun trackImpression(ad: Ad) {
-        transporter.dispatchToBackground {
+        transporter.dispatchToMain {
             fileEvent(ad, AdEventTypes.IMPRESSION)
         }
     }
 
     fun trackInvisibleImpression(ad: Ad) {
-        transporter.dispatchToBackground {
+        transporter.dispatchToMain {
             fileEvent(ad, AdEventTypes.INVISIBLE_IMPRESSION)
         }
     }
 
     fun trackInteraction(ad: Ad) {
-        transporter.dispatchToBackground {
+        transporter.dispatchToMain {
             fileEvent(ad, AdEventTypes.INTERACTION)
         }
     }
 
     fun trackPopupBegin(ad: Ad) {
-        transporter.dispatchToBackground {
+        transporter.dispatchToMain {
             fileEvent(ad, AdEventTypes.POPUP_BEGIN)
         }
     }
 
     fun createInstance(eventAdapter: EventAdapter, transporter: TransporterCoroutineScope) {
-        this.eventAdapter = eventAdapter
-        this.transporter = transporter as Transporter
-        this.hasInstance = true
+        if (!hasInstance) {
+            this.eventAdapter = eventAdapter
+            this.transporter = transporter as Transporter
+            this.hasInstance = true
+        }
     }
 
     init {

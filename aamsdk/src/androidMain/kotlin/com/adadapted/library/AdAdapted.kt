@@ -10,6 +10,8 @@ import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
 import com.adadapted.library.event.EventClient
 import com.adadapted.library.event.EventBroadcaster
+import com.adadapted.library.interfaces.AddItContentListener
+import com.adadapted.library.interfaces.EventBroadcastListener
 import com.adadapted.library.keyword.InterceptClient
 import com.adadapted.library.keyword.InterceptMatcher
 import com.adadapted.library.log.AALogger
@@ -41,12 +43,12 @@ object AdAdapted : AdAdaptedBase() {
         return this
     }
 
-    fun setSdkEventListener(listener: (zoneId: String, eventType: String) -> Unit): AdAdapted {
+    fun setSdkEventListener(listener: EventBroadcastListener): AdAdapted {
         eventListener = listener
         return this
     }
 
-    fun setSdkAddItContentListener(listener: (atlContent: AddToListContent) -> Unit): AdAdapted {
+    fun setSdkAddItContentListener(listener: AddItContentListener): AdAdapted {
         contentListener = listener
         return this
     }
@@ -62,12 +64,12 @@ object AdAdapted : AdAdaptedBase() {
         }
         hasStarted = true
         setupClients(context)
-        eventListener.let { EventBroadcaster.getInstance().setListener(it) }
-        contentListener.let { AddItContentPublisher.getInstance().addListener(it) }
-        PayloadClient.getInstance().pickupPayloads {
+        eventListener.let { EventBroadcaster.setListener(it) }
+        contentListener.let { AddItContentPublisher.addListener(it) }
+        PayloadClient.pickupPayloads {
             if (it.isNotEmpty()) {
                 for (content in it) {
-                    AddItContentPublisher.getInstance().publishAddItContent(content)
+                    AddItContentPublisher.publishAddItContent(content)
                 }
             }
         }
@@ -137,7 +139,7 @@ object AdAdapted : AdAdaptedBase() {
             HttpSessionAdapter(
                 Config.getInitSessionUrl(),
                 Config.getRefreshAdsUrl(),
-                HttpConnector.getInstance()
+                HttpConnector
             ), Transporter()
         )
         EventClient.createInstance(
@@ -145,21 +147,21 @@ object AdAdapted : AdAdaptedBase() {
                 Config.getAdEventsUrl(),
                 Config.getSdkEventsUrl(),
                 Config.getSdkErrorsUrl(),
-                HttpConnector.getInstance()
+                HttpConnector
             ), Transporter()
         )
         InterceptClient.createInstance(
             HttpInterceptAdapter(
                 Config.getRetrieveInterceptsUrl(),
                 Config.getInterceptEventsUrl(),
-                HttpConnector.getInstance()
+                HttpConnector
             ), Transporter()
         )
         PayloadClient.createInstance(
             HttpPayloadAdapter(
                 Config.getPickupPayloadsUrl(),
                 Config.getTrackingPayloadUrl(),
-                HttpConnector.getInstance()
+                HttpConnector
             ), EventClient, Transporter()
         )
     }

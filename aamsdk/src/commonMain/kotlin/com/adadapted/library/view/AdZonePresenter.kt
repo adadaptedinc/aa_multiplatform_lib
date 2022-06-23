@@ -185,7 +185,7 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sess
 
     private fun handleContentAction(ad: Ad) {
         val zoneId = ad.zoneId
-        AdContentPublisher.getInstance().publishContent(zoneId, ad.getContent())
+        AdContentPublisher.publishContent(zoneId, ad.getContent())
     }
 
     private fun handleLinkAction(ad: Ad) {

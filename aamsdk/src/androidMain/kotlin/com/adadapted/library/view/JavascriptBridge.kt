@@ -16,7 +16,7 @@ class JavascriptBridge internal constructor(private val ad: Ad) {
         params["ad_id"] = ad.id
         EventClient.trackSdkEvent(EventStrings.POPUP_CONTENT_CLICKED, params)
         val content = createAddToListContent(ad)
-        AddItContentPublisher.getInstance().publishAdContent(content)
+        AddItContentPublisher.publishAdContent(content)
     }
 
     @JavascriptInterface
@@ -49,6 +49,6 @@ class JavascriptBridge internal constructor(private val ad: Ad) {
             )
         )
         val content = createPopupContent(payloadId, items)
-        AddItContentPublisher.getInstance().publishPopupContent(content)
+        AddItContentPublisher.publishPopupContent(content)
     }
 }

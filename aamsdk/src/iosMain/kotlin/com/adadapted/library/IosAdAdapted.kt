@@ -1,12 +1,16 @@
 package com.adadapted.library
 
-import com.adadapted.library.atl.AddToListContent
+import com.adadapted.library.atl.AddItContentPublisher
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.Config
 import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
+import com.adadapted.library.event.EventBroadcaster
 import com.adadapted.library.event.EventClient
+import com.adadapted.library.interfaces.AddItContentListener
+import com.adadapted.library.interfaces.EventBroadcastListener
+import com.adadapted.library.interfaces.EventClientListener
 import com.adadapted.library.keyword.InterceptClient
 import com.adadapted.library.keyword.InterceptMatcher
 import com.adadapted.library.log.AALogger
@@ -40,7 +44,12 @@ object IosAdAdapted : AdAdaptedBase() {
         return this
     }
 
-    fun setSdkAddItContentListener(listener: (atlContent: AddToListContent) -> Unit): IosAdAdapted {
+    fun setSdkEventListener(listener: EventBroadcastListener): IosAdAdapted {
+        eventListener = listener
+        return this
+    }
+
+    fun setSdkAddItContentListener(listener: AddItContentListener): IosAdAdapted {
         contentListener = listener
         return this
     }
@@ -48,8 +57,7 @@ object IosAdAdapted : AdAdaptedBase() {
     @Throws(Exception::class)
     fun start() {
         if (apiKey.isEmpty()) {
-            AALogger.logError("The Api Key cannot be NULL")
-            AALogger.logError("AdAdapted API Key Is Missing")
+            AALogger.logError("The AdAdapted Api Key is missing or NULL")
         }
         if (hasStarted) {
             if (!isProd) {
@@ -58,6 +66,21 @@ object IosAdAdapted : AdAdaptedBase() {
         }
         hasStarted = true
         setupClients()
+
+        eventListener.let {
+            EventBroadcaster.setListener(it)
+        }
+        contentListener.let {
+            AddItContentPublisher.addListener(it)
+        }
+
+        PayloadClient.pickupPayloads {
+            if (it.isNotEmpty()) {
+                for (content in it) {
+                    AddItContentPublisher.publishAddItContent(content)
+                }
+            }
+        }
 
         val startListener: SessionListener = object : SessionListener {
             override fun onSessionAvailable(session: Session) {
@@ -104,10 +127,6 @@ object IosAdAdapted : AdAdaptedBase() {
         preferences.setValue(value = value, forKey = Config.AASDK_PREFS_TRACKING_DISABLED_KEY)
     }
 
-    private fun iosEndpoint(string: String) : String {
-        return string.replace("android","ios", true)
-    }
-
     private fun setupClients() {
         Config.init(isProd)
 
@@ -125,7 +144,7 @@ object IosAdAdapted : AdAdaptedBase() {
             HttpSessionAdapter(
                 Config.getInitSessionUrl(),
                 Config.getRefreshAdsUrl(),
-                HttpConnector.getInstance()
+                HttpConnector
             ), Transporter()
         )
         EventClient.createInstance(
@@ -133,21 +152,21 @@ object IosAdAdapted : AdAdaptedBase() {
                 Config.getAdEventsUrl(),
                 Config.getSdkEventsUrl(),
                 Config.getSdkErrorsUrl(),
-                HttpConnector.getInstance()
+                HttpConnector
             ), Transporter()
         )
         InterceptClient.createInstance(
             HttpInterceptAdapter(
                 Config.getRetrieveInterceptsUrl(),
                 Config.getInterceptEventsUrl(),
-                HttpConnector.getInstance()
+                HttpConnector
             ), Transporter()
         )
         PayloadClient.createInstance(
             HttpPayloadAdapter(
                 Config.getPickupPayloadsUrl(),
                 Config.getTrackingPayloadUrl(),
-                HttpConnector.getInstance()
+                HttpConnector
             ), EventClient, Transporter()
         )
     }
