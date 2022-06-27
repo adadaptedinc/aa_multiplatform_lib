@@ -232,7 +232,10 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sess
     }
 
     override fun onSessionAvailable(session: Session) {
-        updateCurrentZone(zoneId.let { session.getZone(it) })
+        if (zoneId.isEmpty()) {
+            AALogger.logError("AdZoneId is empty. Was onStop() called outside the host view's overriding function?")
+        }
+        updateCurrentZone(session.getZone(zoneId))
         if (updateSessionId(session.id)) {
             notifyZoneAvailable()
         }

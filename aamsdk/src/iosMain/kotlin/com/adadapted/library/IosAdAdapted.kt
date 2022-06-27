@@ -45,6 +45,26 @@ object IosAdAdapted : AdAdaptedBase() {
         return this
     }
 
+    fun enableDebugLogging(): IosAdAdapted {
+        AALogger.enableDebugLogging()
+        return this
+    }
+
+    fun setCustomIdentifier(identifier: String): IosAdAdapted {
+        customIdentifier = identifier
+        return this
+    }
+
+    fun disableAdTracking(): IosAdAdapted {
+        setAdTracking(true)
+        return this
+    }
+
+    fun enableAdTracking(): IosAdAdapted {
+        setAdTracking(false)
+        return this
+    }
+
     @Throws(Exception::class)
     fun start() {
         if (apiKey.isEmpty()) {
@@ -82,21 +102,6 @@ object IosAdAdapted : AdAdaptedBase() {
             InterceptMatcher.match("INIT") //init the matcher
         }
         AALogger.logInfo("AdAdapted iOS Advertising SDK v%s initialized." + Config.VERSION_NAME)
-    }
-
-    fun setCustomIdentifier(identifier: String): AdAdaptedBase {
-        customIdentifier = identifier
-        return this
-    }
-
-    fun disableAdTracking(): AdAdaptedBase {
-        setAdTracking(true)
-        return this
-    }
-
-    fun enableAdTracking(): AdAdaptedBase {
-        setAdTracking(false)
-        return this
     }
 
     private fun setAdTracking(value: Boolean) {

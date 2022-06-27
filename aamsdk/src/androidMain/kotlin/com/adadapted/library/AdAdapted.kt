@@ -51,6 +51,26 @@ object AdAdapted : AdAdaptedBase() {
         return this
     }
 
+    fun enableDebugLogging(): AdAdapted {
+        AALogger.enableDebugLogging()
+        return this
+    }
+
+    fun setCustomIdentifier(identifier: String): AdAdapted {
+        customIdentifier = identifier
+        return this
+    }
+
+    fun disableAdTracking(context: Context): AdAdapted {
+        setAdTracking(context, true)
+        return this
+    }
+
+    fun enableAdTracking(context: Context): AdAdapted {
+        setAdTracking(context, false)
+        return this
+    }
+
     fun start(context: Context) {
         if (apiKey.isEmpty()) {
             AALogger.logError("The AdAdapted Api Key is missing or NULL")
@@ -95,21 +115,6 @@ object AdAdapted : AdAdaptedBase() {
             InterceptMatcher.match("INIT") //init the matcher
         }
         AALogger.logInfo("AdAdapted Android Multiplatform SDK ${Config.VERSION_NAME} initialized.")
-    }
-
-    fun setCustomIdentifier(identifier: String): AdAdaptedBase {
-        customIdentifier = identifier
-        return this
-    }
-
-    fun disableAdTracking(context: Context): AdAdaptedBase {
-        setAdTracking(context, true)
-        return this
-    }
-
-    fun enableAdTracking(context: Context): AdAdaptedBase {
-        setAdTracking(context, false)
-        return this
     }
 
     private fun setAdTracking(context: Context, value: Boolean) {
