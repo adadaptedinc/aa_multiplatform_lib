@@ -1,4 +1,4 @@
-image: androidsdk/android-31
+image: androidsdk/android-31:latest
 
 build-library:
   stage: build
