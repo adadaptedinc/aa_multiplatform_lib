@@ -162,7 +162,8 @@ object EventClient : SessionListener {
     }
 
     fun trackImpression(ad: Ad) {
-        transporter.dispatchToMain {
+        AALogger.logDebug("Ad Impression Tracked.")
+        transporter.dispatchToBackground {
             fileEvent(ad, AdEventTypes.IMPRESSION)
         }
     }
@@ -174,7 +175,8 @@ object EventClient : SessionListener {
     }
 
     fun trackInteraction(ad: Ad) {
-        transporter.dispatchToMain {
+        AALogger.logDebug("Ad Interaction Tracked.")
+        transporter.dispatchToBackground {
             fileEvent(ad, AdEventTypes.INTERACTION)
         }
     }

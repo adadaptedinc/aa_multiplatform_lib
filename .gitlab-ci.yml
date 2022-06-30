@@ -1,0 +1,13 @@
+image: androidsdk/android-31
+
+build-library:
+  stage: build
+  script:
+    - echo "Attempting to build library modules..."
+    - ./gradlew build
+
+test-debug:
+  stage: test
+  script:
+    - echo "Running unit tests..."
+    - ./gradlew testDebugUnitTest

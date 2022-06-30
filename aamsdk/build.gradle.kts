@@ -53,7 +53,7 @@ kotlin {
         val kotlinVersion = "1.6.0"
         val kotlinXDateTimeVersion = "0.3.0"
         val kotlinCoroutineVersion = "1.6.1"
-        val kermitLogVersion = "1.1.2"
+        val napierVersion = "2.6.1"
 
         val commonMain by getting {
             dependencies {
@@ -70,7 +70,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinCoroutineVersion")
 
                 //Logging
-                implementation("co.touchlab:kermit:$kermitLogVersion")
+                implementation("io.github.aakira:napier:$napierVersion")
             }
         }
         val commonTest by getting {
@@ -87,7 +87,7 @@ kotlin {
         }
         val androidTest by getting {
             dependencies {
-                implementation("junit:junit:4.13")
+                implementation("junit:junit:4.13.2")
                 implementation("io.ktor:ktor-client-mock:$ktorVersion")
             }
         }

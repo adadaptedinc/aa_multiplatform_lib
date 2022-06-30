@@ -10,6 +10,7 @@ import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.event.EventClient
 import com.adadapted.library.log.AALogger
 import com.adadapted.library.session.SessionClient
+import kotlinx.datetime.Clock
 
 interface AdZonePresenterListener {
     fun onZoneAvailable(zone: Zone)
@@ -232,7 +233,10 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sess
     }
 
     override fun onSessionAvailable(session: Session) {
-        updateCurrentZone(zoneId.let { session.getZone(it) })
+        if (zoneId.isEmpty()) {
+            AALogger.logError("AdZoneId is empty. Was onStop() called outside the host view's overriding function?")
+        }
+        updateCurrentZone(session.getZone(zoneId))
         if (updateSessionId(session.id)) {
             notifyZoneAvailable()
         }
@@ -251,6 +255,6 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sess
         attached = false
         zoneLoaded = false
         currentZone = Zone()
-        randomAdStartPosition = ((0..100).random() * 10)
+        randomAdStartPosition = (Clock.System.now().epochSeconds.toInt() % 10)
     }
 }
