@@ -47,7 +47,7 @@ class HttpSessionAdapter(
             val response: HttpResponse = httpConnector.client.get(url) {
                 contentType(ContentType.Application.Json)
             }
-            listener.onNewAdsLoaded(response.body())
+            listener.onNewAdsLoaded(response.body<Session>().apply{ this.deviceInfo = session.deviceInfo })
         } catch (e: Exception) {
             e.message?.let { AALogger.logError(it) }
             HttpErrorTracker.trackHttpError(
