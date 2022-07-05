@@ -20,7 +20,7 @@ object EventBroadcaster : EventClientListener {
         if (listener == null || event == null) {
             return
         }
-        transporter.dispatchToMain { listener?.onAdEventTracked(event.zoneId, event.eventType) }
+        transporter.dispatchToThread { listener?.onAdEventTracked(event.zoneId, event.eventType) }
     }
 
     init {

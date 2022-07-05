@@ -327,7 +327,7 @@ __attribute__((swift_name("Kotlinx_coroutines_coreCoroutineScope")))
 __attribute__((swift_name("TransporterCoroutineScope")))
 @protocol Aa_multiplatform_libTransporterCoroutineScope <Aa_multiplatform_libKotlinx_coroutines_coreCoroutineScope>
 @required
-- (id<Aa_multiplatform_libKotlinx_coroutines_coreJob>)dispatchToMainMainFunc:(id<Aa_multiplatform_libKotlinSuspendFunction1>)mainFunc __attribute__((swift_name("dispatchToMain(mainFunc:)")));
+- (id<Aa_multiplatform_libKotlinx_coroutines_coreJob>)dispatchToThreadFunc:(id<Aa_multiplatform_libKotlinSuspendFunction1>)func __attribute__((swift_name("dispatchToThread(func:)")));
 @end;
 
 __attribute__((objc_subclassing_restricted))
@@ -335,7 +335,6 @@ __attribute__((swift_name("Transporter")))
 @interface Aa_multiplatform_libTransporter : Aa_multiplatform_libBase <Aa_multiplatform_libTransporterCoroutineScope>
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
 + (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
-- (id<Aa_multiplatform_libKotlinx_coroutines_coreJob>)dispatchToMainMainFunc:(id<Aa_multiplatform_libKotlinSuspendFunction1>)mainFunc __attribute__((swift_name("dispatchToMain(mainFunc:)")));
 @property (readonly) id<Aa_multiplatform_libKotlinCoroutineContext> coroutineContext __attribute__((swift_name("coroutineContext")));
 @end;
 

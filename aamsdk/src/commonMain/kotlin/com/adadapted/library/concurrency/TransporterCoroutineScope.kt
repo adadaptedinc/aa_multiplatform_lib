@@ -3,6 +3,6 @@ package com.adadapted.library.concurrency
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 
-interface TransporterCoroutineScope : CoroutineScope {
-    fun dispatchToMain(mainFunc: suspend CoroutineScope.() -> Unit): Job
+expect interface TransporterCoroutineScope : CoroutineScope {
+    open fun dispatchToThread(func: suspend CoroutineScope.() -> Unit): Job
 }

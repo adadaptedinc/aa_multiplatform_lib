@@ -42,7 +42,7 @@ object EventClient : SessionListener {
         val currentSdkErrors: Set<SdkError> = HashSet(sdkErrors)
         sdkErrors.clear()
         session?.let {
-            transporter.dispatchToMain {
+            transporter.dispatchToThread {
                 eventAdapter.publishSdkErrors(it, currentSdkErrors)
             }
         }
@@ -56,7 +56,7 @@ object EventClient : SessionListener {
         val currentSdkEvents: Set<SdkEvent> = HashSet(sdkEvents)
         sdkEvents.clear()
         session?.let {
-            transporter.dispatchToMain {
+            transporter.dispatchToThread {
                 eventAdapter.publishSdkEvents(it, currentSdkEvents)
             }
         }
@@ -70,7 +70,7 @@ object EventClient : SessionListener {
         val currentAdEvents: Set<AdEvent> = HashSet(adEvents)
         adEvents.clear()
         session?.let {
-            transporter.dispatchToMain {
+            transporter.dispatchToThread {
                 eventAdapter.publishAdEvents(it, currentAdEvents)
             }
         }
@@ -117,7 +117,7 @@ object EventClient : SessionListener {
 
     @Synchronized
     override fun onPublishEvents() {
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             performPublishAdEvents()
             performPublishSdkEvents()
             performPublishSdkErrors()
@@ -141,13 +141,13 @@ object EventClient : SessionListener {
         name: String,
         params: Map<String, String> = HashMap()
     ) {
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             performTrackSdkEvent(name, params)
         }
     }
 
     fun trackSdkError(code: String, message: String, params: Map<String, String> = HashMap()) {
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             performTrackSdkError(code, message, params)
         }
     }
@@ -162,26 +162,26 @@ object EventClient : SessionListener {
 
     fun trackImpression(ad: Ad) {
         AALogger.logDebug("Ad Impression Tracked.")
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             fileEvent(ad, AdEventTypes.IMPRESSION)
         }
     }
 
     fun trackInvisibleImpression(ad: Ad) {
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             fileEvent(ad, AdEventTypes.INVISIBLE_IMPRESSION)
         }
     }
 
     fun trackInteraction(ad: Ad) {
         AALogger.logDebug("Ad Interaction Tracked.")
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             fileEvent(ad, AdEventTypes.INTERACTION)
         }
     }
 
     fun trackPopupBegin(ad: Ad) {
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             fileEvent(ad, AdEventTypes.POPUP_BEGIN)
         }
     }

@@ -39,7 +39,7 @@ object DeviceInfoClient {
     }
 
     fun getDeviceInfo(deviceCallback: DeviceCallback) {
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             performGetInfo(deviceCallback)
         }
     }
@@ -67,7 +67,7 @@ object DeviceInfoClient {
             this.deviceInfoExtractor = deviceInfoExtractor
             this.transporter = transporter
 
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             collectDeviceInfo()
         }
     }

@@ -20,7 +20,7 @@ class InterceptClient private constructor(
         if (session == null || interceptListener == null) {
             return
         }
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             adapter.retrieve(session, object :
                 InterceptAdapter.Listener {
                 override fun onSuccess(intercept: Intercept) {
@@ -61,7 +61,7 @@ class InterceptClient private constructor(
         }
         val currentEvents: MutableSet<InterceptEvent> = HashSet(events)
         events.clear()
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             adapter.sendEvents(currentSession, currentEvents)
         }
     }
@@ -71,13 +71,13 @@ class InterceptClient private constructor(
     }
 
     override fun onPublishEvents() {
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             performPublishEvents()
         }
     }
 
     fun initialize(session: Session?, interceptListener: InterceptListener?) {
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             performInitialize(session, interceptListener)
         }
     }
@@ -134,7 +134,7 @@ class InterceptClient private constructor(
             term
         )
 
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
             fileEvent(event)
         }
     }

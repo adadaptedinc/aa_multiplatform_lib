@@ -60,19 +60,19 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }) {
     }
 
     private fun notifyClientZoneHasAds(hasAds: Boolean) {
-        Transporter().dispatchToMain {
+        Transporter().dispatchToThread {
             zoneViewListener?.onZoneHasAds(hasAds)
         }
     }
 
     private fun notifyClientAdLoaded() {
-        Transporter().dispatchToMain {
+        Transporter().dispatchToThread {
             zoneViewListener?.onAdLoaded()
         }
     }
 
     private fun notifyClientAdLoadFailed() {
-        Transporter().dispatchToMain {
+        Transporter().dispatchToThread {
             zoneViewListener?.onAdLoadFailed()
         }
     }
@@ -88,7 +88,7 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }) {
 
         override fun onAdAvailable(ad: Ad) {
             if (isVisible) {
-                Transporter().dispatchToMain {
+                Transporter().dispatchToThread {
                     webView.loadAd(ad)
                     setNeedsDisplay()
                 }
@@ -96,7 +96,7 @@ class IosZoneView : UIView(frame = cValue { CGRectZero }) {
         }
 
         override fun onNoAdAvailable() {
-            Transporter().dispatchToMain {
+            Transporter().dispatchToThread {
                 webView.loadBlank()
                 setNeedsDisplay()
             }

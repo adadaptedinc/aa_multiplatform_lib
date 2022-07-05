@@ -21,7 +21,7 @@ object AdContentPublisher {
         if (content.hasNoItems()) {
             return
         }
-        transporter.dispatchToMain {
+        transporter.dispatchToThread {
         for (listener in listeners) {
                 listener.onContentAvailable(zoneId, content)
             }

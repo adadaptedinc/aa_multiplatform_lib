@@ -62,7 +62,7 @@ object SessionClient : SessionAdapterListener {
     private fun presenterSize() = presenters.size
 
     private fun performInitialize(deviceInfo: DeviceInfo) {
-        transporter.dispatchToMain { adapter?.sendInit(deviceInfo, this@SessionClient) }
+        transporter.dispatchToThread { adapter?.sendInit(deviceInfo, this@SessionClient) }
     }
 
     private fun performRefresh(
@@ -84,7 +84,7 @@ object SessionClient : SessionAdapterListener {
             if (presenterSize() > 0) {
                 AALogger.logInfo("Reinitializing Session.")
                 status = Status.IS_REINITIALIZING_SESSION
-                transporter.dispatchToMain {
+                transporter.dispatchToThread {
                     adapter?.sendInit(deviceInfo, this@SessionClient)
                 }
             } else {
@@ -98,7 +98,7 @@ object SessionClient : SessionAdapterListener {
             if (presenterSize() > 0) {
                 AALogger.logInfo("Checking for more Ads.")
                 status = Status.IS_REFRESH_ADS
-                transporter.dispatchToMain {
+                transporter.dispatchToThread {
                     adapter?.sendRefreshAds(
                         currentSession,
                         this@SessionClient
@@ -210,7 +210,7 @@ object SessionClient : SessionAdapterListener {
         addListener(listener)
         DeviceInfoClient.getDeviceInfo(object : DeviceCallback {
             override fun onDeviceInfoCollected(deviceInfo: DeviceInfo) {
-                transporter.dispatchToMain {
+                transporter.dispatchToThread {
                     performInitialize(deviceInfo)
                 }
             }
