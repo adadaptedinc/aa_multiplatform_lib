@@ -27,7 +27,6 @@ object EventClient : SessionListener {
 
     private fun performTrackSdkEvent(name: String, params: Map<String, String>) {
         sdkEvents.add(SdkEvent(SDK_EVENT_TYPE, name, params = params))
-        println("SdkEvents @ performTrackSdkEvent: $sdkEvents")
     }
 
     private fun performTrackSdkError(code: String, message: String, params: Map<String, String>) {
@@ -118,7 +117,7 @@ object EventClient : SessionListener {
 
     @Synchronized
     override fun onPublishEvents() {
-        transporter.dispatchToBackground {
+        transporter.dispatchToMain {
             performPublishAdEvents()
             performPublishSdkEvents()
             performPublishSdkErrors()
@@ -163,7 +162,7 @@ object EventClient : SessionListener {
 
     fun trackImpression(ad: Ad) {
         AALogger.logDebug("Ad Impression Tracked.")
-        transporter.dispatchToBackground {
+        transporter.dispatchToMain {
             fileEvent(ad, AdEventTypes.IMPRESSION)
         }
     }
@@ -176,7 +175,7 @@ object EventClient : SessionListener {
 
     fun trackInteraction(ad: Ad) {
         AALogger.logDebug("Ad Interaction Tracked.")
-        transporter.dispatchToBackground {
+        transporter.dispatchToMain {
             fileEvent(ad, AdEventTypes.INTERACTION)
         }
     }

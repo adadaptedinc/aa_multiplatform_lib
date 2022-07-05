@@ -84,7 +84,7 @@ object SessionClient : SessionAdapterListener {
             if (presenterSize() > 0) {
                 AALogger.logInfo("Reinitializing Session.")
                 status = Status.IS_REINITIALIZING_SESSION
-                transporter.dispatchToBackground {
+                transporter.dispatchToMain {
                     adapter?.sendInit(deviceInfo, this@SessionClient)
                 }
             } else {
@@ -98,7 +98,7 @@ object SessionClient : SessionAdapterListener {
             if (presenterSize() > 0) {
                 AALogger.logInfo("Checking for more Ads.")
                 status = Status.IS_REFRESH_ADS
-                transporter.dispatchToBackground {
+                transporter.dispatchToMain {
                     adapter?.sendRefreshAds(
                         currentSession,
                         this@SessionClient

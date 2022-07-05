@@ -3,13 +3,12 @@ package com.adadapted.library.deeplink
 import com.adadapted.library.atl.AddItContentParser
 import com.adadapted.library.atl.AddItContentPublisher
 import com.adadapted.library.constants.EventStrings
+import com.adadapted.library.constants.EventStrings.NO_DEEPLINK_URL
 import com.adadapted.library.event.EventClient
 import com.adadapted.library.helpers.Base64.base64decoded
 import com.adadapted.library.payload.Payload
 import kotlinx.serialization.decodeFromString
 import platform.Foundation.*
-
-private const val NO_DEEPLINK_URL = "Did not receive a deeplink url."
 
 class DeeplinkContentParser {
 

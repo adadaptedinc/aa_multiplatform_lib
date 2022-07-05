@@ -3,6 +3,7 @@ package com.adadapted.library.atl
 import com.adadapted.library.ad.AdContent
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.EventStrings
+import com.adadapted.library.constants.EventStrings.LISTENER_REGISTRATION_ERROR
 import com.adadapted.library.event.EventClient
 import com.adadapted.library.interfaces.AddItContentListener
 import com.adadapted.library.log.AALogger
@@ -14,7 +15,6 @@ object AddItContentPublisher {
     private var transporter: Transporter = Transporter()
     private val publishedContent: MutableMap<String, AddItContent> = HashMap()
     private var listener: AddItContentListener? = null
-    private const val LISTENER_REGISTRATION_ERROR = "App did not register an AddIt Content listener"
 
     fun addListener(listener: AddItContentListener) {
         this.listener = listener

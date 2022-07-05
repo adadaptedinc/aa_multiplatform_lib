@@ -209,12 +209,13 @@ __attribute__((swift_name("IosAdAdapted")))
 + (instancetype)new __attribute__((unavailable));
 + (instancetype)iosAdAdapted __attribute__((swift_name("init()")));
 @property (class, readonly, getter=shared) Aa_multiplatform_libIosAdAdapted *shared __attribute__((swift_name("shared")));
-- (Aa_multiplatform_libAdAdaptedBase *)disableAdTracking __attribute__((swift_name("disableAdTracking()")));
-- (Aa_multiplatform_libAdAdaptedBase *)enableAdTracking __attribute__((swift_name("enableAdTracking()")));
+- (Aa_multiplatform_libIosAdAdapted *)disableAdTracking __attribute__((swift_name("disableAdTracking()")));
+- (Aa_multiplatform_libIosAdAdapted *)enableAdTracking __attribute__((swift_name("enableAdTracking()")));
+- (Aa_multiplatform_libIosAdAdapted *)enableDebugLogging __attribute__((swift_name("enableDebugLogging()")));
 - (Aa_multiplatform_libIosAdAdapted *)enableKeywordInterceptValue:(BOOL)value __attribute__((swift_name("enableKeywordIntercept(value:)")));
 - (Aa_multiplatform_libIosAdAdapted *)inEnvironmentEnv:(Aa_multiplatform_libAdAdaptedEnv *)env __attribute__((swift_name("inEnvironment(env:)")));
 - (Aa_multiplatform_libIosAdAdapted *)onHasAdsToServeListener:(void (^)(Aa_multiplatform_libBoolean *))listener __attribute__((swift_name("onHasAdsToServe(listener:)")));
-- (Aa_multiplatform_libAdAdaptedBase *)setCustomIdentifierIdentifier:(NSString *)identifier __attribute__((swift_name("setCustomIdentifier(identifier:)")));
+- (Aa_multiplatform_libIosAdAdapted *)setCustomIdentifierIdentifier:(NSString *)identifier __attribute__((swift_name("setCustomIdentifier(identifier:)")));
 - (Aa_multiplatform_libIosAdAdapted *)setSdkAddItContentListenerListener:(id<Aa_multiplatform_libAddItContentListener>)listener __attribute__((swift_name("setSdkAddItContentListener(listener:)")));
 - (Aa_multiplatform_libIosAdAdapted *)setSdkEventListenerListener:(id<Aa_multiplatform_libEventBroadcastListener>)listener __attribute__((swift_name("setSdkEventListener(listener:)")));
 
@@ -326,7 +327,6 @@ __attribute__((swift_name("Kotlinx_coroutines_coreCoroutineScope")))
 __attribute__((swift_name("TransporterCoroutineScope")))
 @protocol Aa_multiplatform_libTransporterCoroutineScope <Aa_multiplatform_libKotlinx_coroutines_coreCoroutineScope>
 @required
-- (id<Aa_multiplatform_libKotlinx_coroutines_coreJob>)dispatchToBackgroundBackgroundFunc:(id<Aa_multiplatform_libKotlinSuspendFunction1>)backgroundFunc __attribute__((swift_name("dispatchToBackground(backgroundFunc:)")));
 - (id<Aa_multiplatform_libKotlinx_coroutines_coreJob>)dispatchToMainMainFunc:(id<Aa_multiplatform_libKotlinSuspendFunction1>)mainFunc __attribute__((swift_name("dispatchToMain(mainFunc:)")));
 @end;
 
@@ -335,7 +335,6 @@ __attribute__((swift_name("Transporter")))
 @interface Aa_multiplatform_libTransporter : Aa_multiplatform_libBase <Aa_multiplatform_libTransporterCoroutineScope>
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
 + (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
-- (id<Aa_multiplatform_libKotlinx_coroutines_coreJob>)dispatchToBackgroundBackgroundFunc:(id<Aa_multiplatform_libKotlinSuspendFunction1>)backgroundFunc __attribute__((swift_name("dispatchToBackground(backgroundFunc:)")));
 - (id<Aa_multiplatform_libKotlinx_coroutines_coreJob>)dispatchToMainMainFunc:(id<Aa_multiplatform_libKotlinSuspendFunction1>)mainFunc __attribute__((swift_name("dispatchToMain(mainFunc:)")));
 @property (readonly) id<Aa_multiplatform_libKotlinCoroutineContext> coroutineContext __attribute__((swift_name("coroutineContext")));
 @end;
@@ -1079,7 +1078,9 @@ __attribute__((swift_name("EventStrings")))
 @property (readonly) NSString *KI_EVENT_REQUEST_FAILED __attribute__((swift_name("KI_EVENT_REQUEST_FAILED")));
 @property (readonly) NSString *KI_INITIALIZED __attribute__((swift_name("KI_INITIALIZED")));
 @property (readonly) NSString *KI_INIT_REQUEST_FAILED __attribute__((swift_name("KI_INIT_REQUEST_FAILED")));
+@property (readonly) NSString *LISTENER_REGISTRATION_ERROR __attribute__((swift_name("LISTENER_REGISTRATION_ERROR")));
 @property (readonly) NSString *NO_ADDIT_CONTENT_LISTENER __attribute__((swift_name("NO_ADDIT_CONTENT_LISTENER")));
+@property (readonly) NSString *NO_DEEPLINK_URL __attribute__((swift_name("NO_DEEPLINK_URL")));
 @property (readonly) NSString *PAYLOAD_EVENT_REQUEST_FAILED __attribute__((swift_name("PAYLOAD_EVENT_REQUEST_FAILED")));
 @property (readonly) NSString *PAYLOAD_PICKUP_ATTEMPT __attribute__((swift_name("PAYLOAD_PICKUP_ATTEMPT")));
 @property (readonly) NSString *PAYLOAD_PICKUP_REQUEST_FAILED __attribute__((swift_name("PAYLOAD_PICKUP_REQUEST_FAILED")));
@@ -1434,6 +1435,8 @@ __attribute__((swift_name("AALogger")))
 + (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
 + (instancetype)aALogger __attribute__((swift_name("init()")));
 @property (class, readonly, getter=shared) Aa_multiplatform_libAALogger *shared __attribute__((swift_name("shared")));
+- (void)enableDebugLogging __attribute__((swift_name("enableDebugLogging()")));
+- (void)logDebugMessage:(NSString *)message __attribute__((swift_name("logDebug(message:)")));
 - (void)logErrorMessage:(NSString *)message __attribute__((swift_name("logError(message:)")));
 - (void)logInfoMessage:(NSString *)message __attribute__((swift_name("logInfo(message:)")));
 @end;

@@ -20,6 +20,8 @@ object EventStrings {
     const val ADDIT_CONTENT_FAILED = "ADDIT_CONTENT_FAILED"
     const val ADDIT_CONTENT_ITEM_FAILED = "ADDIT_CONTENT_ITEM_FAILED"
     const val NO_ADDIT_CONTENT_LISTENER = "NO_ADDIT_CONTENT_LISTENER"
+    const val LISTENER_REGISTRATION_ERROR = "App did not register an AddIt Content listener"
+
 
     const val AD_PAYLOAD_IS_EMPTY = "AD_PAYLOAD_IS_EMPTY"
     const val AD_GET_REQUEST_FAILED = "AD_GET_REQUEST_FAILED"
@@ -28,6 +30,7 @@ object EventStrings {
     const val PAYLOAD_PICKUP_ATTEMPT = "payload_pickup_attempt"
     const val PAYLOAD_PICKUP_REQUEST_FAILED = "PAYLOAD_PICKUP_REQUEST_FAILED"
     const val PAYLOAD_EVENT_REQUEST_FAILED = "PAYLOAD_EVENT_REQUEST_FAILED"
+    const val NO_DEEPLINK_URL = "Did not receive a deeplink url."
 
     const val SESSION_REQUEST_FAILED = "SESSION_REQUEST_FAILED"
 

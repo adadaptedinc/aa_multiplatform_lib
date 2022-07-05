@@ -127,7 +127,6 @@ class LinkOrPopup : UIViewController,
         val params = HashMap<String, String>()
         params["tracking_id"] = trackingId
         EventClient.trackSdkEvent(EventStrings.POPUP_ATL_CLICKED, params)
-        println("TrackDetailedItem id: $trackingId")
     }
 
     private fun trackingIdFromDecodedData(itemData: NSData?): String {
@@ -220,9 +219,9 @@ class LinkOrPopup : UIViewController,
         if (decidePolicyForNavigationAction.navigationType == WKNavigationTypeOther) {
             decisionHandler(WKNavigationActionPolicy.WKNavigationActionPolicyAllow)
         } else {
-            val rawString = decidePolicyForNavigationAction.request.URL?.absoluteString
-            if (rawString?.startsWith("content:") == true) {
-                val data = rawString.substring(8)
+            val rawString = decidePolicyForNavigationAction.request.URL?.absoluteString as String
+            if (rawString.startsWith("content:")) {
+                val data = rawString.removePrefix("content:")
                 createAddToListItem(data)
                 trackDetailedItem(data)
                 decisionHandler(WKNavigationActionPolicy.WKNavigationActionPolicyCancel)

@@ -18,7 +18,6 @@ object AdContentPublisher {
     }
 
     fun publishContent(zoneId: String, content: AdContent) {
-        println("AdContentPublisher.publishContent zoneId: $zoneId \n with content: $content")
         if (content.hasNoItems()) {
             return
         }

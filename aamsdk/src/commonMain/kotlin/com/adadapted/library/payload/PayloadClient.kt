@@ -39,7 +39,7 @@ object PayloadClient {
 
     private fun trackPayload(content: AddItContent, result: String) {
         val event = PayloadEvent(content.payloadId, result)
-        transporter.dispatchToBackground {
+        transporter.dispatchToMain {
             DeviceInfoClient.getCachedDeviceInfo()
                 ?.let { adapter?.publishEvent(it, event) }
         }
@@ -47,7 +47,6 @@ object PayloadClient {
 
     fun pickupPayloads(callback: (content: List<AddItContent>) -> Unit) {
         if (deeplinkInProgress) {
-            println("pickupPayloads deeplink is in progress - return")
             return
         }
         transporter.dispatchToMain {
@@ -66,21 +65,19 @@ object PayloadClient {
     }
 
     fun markContentAcknowledged(content: AddItContent) {
-        transporter.dispatchToBackground {
+        transporter.dispatchToMain {
             val eventParams: MutableMap<String, String> = HashMap()
             eventParams[PAYLOAD_ID] = content.payloadId
             eventParams[SOURCE] = content.addItSource
             eventClient?.trackSdkEvent(EventStrings.ADDIT_ADDED_TO_LIST, eventParams)
             if (content.isPayloadSource) {
-                println("PayloadClient.markContentAcknowledged with ${content.payloadId}, ${content.getItems()}")
                 trackPayload(content, "delivered")
             }
         }
     }
 
     fun markContentItemAcknowledged(content: AddItContent, item: AddToListItem) {
-        transporter.dispatchToBackground {
-            println("PayloadClient.markContentItemAcknowledged() dispatched to background with item: $item")
+        transporter.dispatchToMain {
             val eventParams: MutableMap<String, String> = HashMap()
             eventParams[PAYLOAD_ID] = content.payloadId
             eventParams[TRACKING_ID] = item.trackingId
@@ -91,8 +88,7 @@ object PayloadClient {
     }
 
     fun markContentDuplicate(content: AddItContent) {
-        transporter.dispatchToBackground {
-            println("PayloadClient.markContentDuplicate() dispatched to background with content: $content")
+        transporter.dispatchToMain {
             val eventParams: MutableMap<String, String> = HashMap()
             eventParams[PAYLOAD_ID] = content.payloadId
             eventClient?.trackSdkEvent(EventStrings.ADDIT_DUPLICATE_PAYLOAD, eventParams)
@@ -103,8 +99,7 @@ object PayloadClient {
     }
 
     fun markContentFailed(content: AddItContent, message: String) {
-        transporter.dispatchToBackground {
-            println("PayloadClient.markContentFailed() dispatched to background with content: $content and message: $message")
+        transporter.dispatchToMain {
             val eventParams: MutableMap<String, String> = HashMap()
             eventParams[PAYLOAD_ID] = content.payloadId
             eventClient?.trackSdkError(EventStrings.ADDIT_CONTENT_FAILED, message, eventParams)
@@ -115,8 +110,7 @@ object PayloadClient {
     }
 
     fun markContentItemFailed(content: AddItContent, item: AddToListItem, message: String) {
-        transporter.dispatchToBackground {
-            println("PayloadClient.markContentItemFailed() dispatched to background with content: $content and message: $message")
+        transporter.dispatchToMain {
             val eventParams: MutableMap<String, String> = HashMap()
             eventParams[PAYLOAD_ID] = content.payloadId
             eventParams[TRACKING_ID] = item.trackingId
