@@ -62,7 +62,7 @@ object AddItContentPublisher {
     }
 
     private fun notifyContentAvailable(content: AddToListContent) {
-        transporter.dispatchToThread {
+        transporter.dispatchToMain {
             listener?.onContentAvailable(content)
         }
     }

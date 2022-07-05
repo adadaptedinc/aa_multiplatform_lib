@@ -11,4 +11,10 @@ actual interface TransporterCoroutineScope: CoroutineScope {
             func()
         }
     }
+
+    actual fun dispatchToMain(func: suspend CoroutineScope.() -> Unit): Job {
+        return launch(Dispatchers.Main) {
+            func()
+        }
+    }
 }
