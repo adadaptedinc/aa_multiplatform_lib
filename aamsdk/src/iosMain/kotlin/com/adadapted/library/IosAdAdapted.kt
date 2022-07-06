@@ -10,7 +10,7 @@ import com.adadapted.library.event.EventBroadcaster
 import com.adadapted.library.event.EventClient
 import com.adadapted.library.interfaces.AddItContentListener
 import com.adadapted.library.interfaces.EventBroadcastListener
-import com.adadapted.library.interfaces.EventClientListener
+import com.adadapted.library.interfaces.SessionBroadcastListener
 import com.adadapted.library.keyword.InterceptClient
 import com.adadapted.library.keyword.InterceptMatcher
 import com.adadapted.library.log.AALogger
@@ -34,7 +34,7 @@ object IosAdAdapted : AdAdaptedBase() {
         return this
     }
 
-    fun onHasAdsToServe(listener: (hasAds: Boolean) -> Unit): IosAdAdapted {
+    fun setSdkSessionListener(listener: SessionBroadcastListener): IosAdAdapted {
         sessionListener = listener
         return this
     }
@@ -104,18 +104,18 @@ object IosAdAdapted : AdAdaptedBase() {
 
         val startListener: SessionListener = object : SessionListener {
             override fun onSessionAvailable(session: Session) {
-                sessionListener(session.hasActiveCampaigns())
+                sessionListener.onHasAdsToServe(session.hasActiveCampaigns())
                 if (session.hasActiveCampaigns() && !session.hasZoneAds()) {
                     AALogger.logError("Session has ads to show but none were loaded properly. Is an obfuscation tool obstructing the AdAdapted Library?")
                 }
             }
 
             override fun onAdsAvailable(session: Session) {
-                sessionListener(session.hasActiveCampaigns())
+                sessionListener.onHasAdsToServe(session.hasActiveCampaigns())
             }
 
             override fun onSessionInitFailed() {
-                sessionListener(false)
+                sessionListener.onHasAdsToServe(false)
             }
         }
         SessionClient.start(startListener)
