@@ -62,11 +62,11 @@ object SessionClient : SessionAdapterListener {
     private fun presenterSize() = presenters.size
 
     private fun performInitialize(deviceInfo: DeviceInfo) {
-        transporter.dispatchToMain { adapter?.sendInit(deviceInfo, this@SessionClient) }
+        transporter.dispatchToThread { adapter?.sendInit(deviceInfo, this@SessionClient) }
     }
 
     private fun performRefresh(
-        deviceInfo: DeviceInfo? = DeviceInfoClient.getInstance().getCachedDeviceInfo()
+        deviceInfo: DeviceInfo? = DeviceInfoClient.getCachedDeviceInfo()
     ) {
         if (currentSession.hasExpired()) {
             AALogger.logInfo("Session has expired. Expired at: " + currentSession.expiration)
@@ -84,7 +84,7 @@ object SessionClient : SessionAdapterListener {
             if (presenterSize() > 0) {
                 AALogger.logInfo("Reinitializing Session.")
                 status = Status.IS_REINITIALIZING_SESSION
-                transporter.dispatchToBackground {
+                transporter.dispatchToThread {
                     adapter?.sendInit(deviceInfo, this@SessionClient)
                 }
             } else {
@@ -98,7 +98,7 @@ object SessionClient : SessionAdapterListener {
             if (presenterSize() > 0) {
                 AALogger.logInfo("Checking for more Ads.")
                 status = Status.IS_REFRESH_ADS
-                transporter.dispatchToBackground {
+                transporter.dispatchToThread {
                     adapter?.sendRefreshAds(
                         currentSession,
                         this@SessionClient
@@ -208,9 +208,9 @@ object SessionClient : SessionAdapterListener {
     @Synchronized
     fun start(listener: SessionListener) {
         addListener(listener)
-        DeviceInfoClient.getInstance().getDeviceInfo(object : DeviceCallback {
+        DeviceInfoClient.getDeviceInfo(object : DeviceCallback {
             override fun onDeviceInfoCollected(deviceInfo: DeviceInfo) {
-                transporter.dispatchToMain {
+                transporter.dispatchToThread {
                     performInitialize(deviceInfo)
                 }
             }

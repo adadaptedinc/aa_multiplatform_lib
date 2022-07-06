@@ -3,15 +3,20 @@ package com.adadapted.library.atl
 import com.adadapted.library.ad.AdContent
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.EventStrings
+import com.adadapted.library.constants.EventStrings.LISTENER_REGISTRATION_ERROR
 import com.adadapted.library.event.EventClient
+import com.adadapted.library.interfaces.AddItContentListener
 import com.adadapted.library.log.AALogger
 import kotlin.native.concurrent.ThreadLocal
 
-class AddItContentPublisher private constructor(private val transporter: Transporter) {
-    private val publishedContent: MutableMap<String, AddItContent> = HashMap()
-    private lateinit var listener: (atlContent: AddToListContent) -> Unit
+@ThreadLocal
+object AddItContentPublisher {
 
-    fun addListener(listener: (atlContent: AddToListContent) -> Unit) {
+    private var transporter: Transporter = Transporter()
+    private val publishedContent: MutableMap<String, AddItContent> = HashMap()
+    private var listener: AddItContentListener? = null
+
+    fun addListener(listener: AddItContentListener) {
         this.listener = listener
     }
 
@@ -19,14 +24,14 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
         if (content.hasNoItems()) {
             return
         }
-        if (!::listener.isInitialized) {
+        if (listener == null) {
             EventClient.trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
             contentListenerNotAdded()
             return
         }
         if (publishedContent.containsKey(content.payloadId)) {
             content.duplicate()
-        } else if (::listener.isInitialized) {
+        } else if (listener != null) {
             publishedContent[content.payloadId] = content
             notifyContentAvailable(content)
         }
@@ -36,7 +41,7 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
         if (content.hasNoItems()) {
             return
         }
-        if (!::listener.isInitialized) {
+        if (listener == null) {
             EventClient.trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
             contentListenerNotAdded()
             return
@@ -48,7 +53,7 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
         if (content.hasNoItems()) {
             return
         }
-        if (!::listener.isInitialized) {
+        if (listener == null) {
             EventClient.trackSdkError(EventStrings.NO_ADDIT_CONTENT_LISTENER, LISTENER_REGISTRATION_ERROR)
             contentListenerNotAdded()
             return
@@ -57,25 +62,12 @@ class AddItContentPublisher private constructor(private val transporter: Transpo
     }
 
     private fun notifyContentAvailable(content: AddToListContent) {
-        transporter.dispatchToBackground {
-            listener.invoke(content)
+        transporter.dispatchToMain {
+            listener?.onContentAvailable(content)
         }
     }
 
     private fun contentListenerNotAdded() {
         AALogger.logError(LISTENER_REGISTRATION_ERROR)
-    }
-
-    @ThreadLocal
-    companion object {
-        private const val LISTENER_REGISTRATION_ERROR = "App did not register an AddIt Content listener"
-        private lateinit var instance: AddItContentPublisher
-
-        fun getInstance(transporter: Transporter = Transporter()): AddItContentPublisher {
-            if (!this::instance.isInitialized) {
-                instance = AddItContentPublisher(transporter)
-            }
-            return instance
-        }
     }
 }

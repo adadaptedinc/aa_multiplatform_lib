@@ -13,7 +13,7 @@ data class AddItContent(
     private val source: String,
     val addItSource: String,
     private val items: List<AddToListItem>,
-    private val payloadClient: PayloadClient = PayloadClient.getInstance(),
+    private val payloadClient: PayloadClient = PayloadClient,
     private val eventClient: EventClient = EventClient
 ) : AddToListContent {
 

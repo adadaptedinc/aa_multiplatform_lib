@@ -6,9 +6,9 @@
 #import <Foundation/NSString.h>
 #import <Foundation/NSValue.h>
 
-@class Aa_multiplatform_libKotlinEnumCompanion, Aa_multiplatform_libKotlinEnum<E>, Aa_multiplatform_libAdAdaptedEnv, Aa_multiplatform_libKotlinArray<T>, Aa_multiplatform_libAdAdaptedListManager, Aa_multiplatform_libAdAdaptedBase, Aa_multiplatform_libIosAdAdapted, Aa_multiplatform_libSession, Aa_multiplatform_libDeviceInfo, Aa_multiplatform_libAdEvent, Aa_multiplatform_libIntercept, Aa_multiplatform_libKotlinUnit, Aa_multiplatform_libAd, Aa_multiplatform_libZone, Aa_multiplatform_libSessionCompanion, Aa_multiplatform_libSessionClient, Aa_multiplatform_libSessionClientStatus, Aa_multiplatform_libAdEventCompanion, Aa_multiplatform_libAdEventRequestCompanion, Aa_multiplatform_libAdEventRequest, Aa_multiplatform_libAdEventTypes, Aa_multiplatform_libSdkError, Aa_multiplatform_libSdkEvent, Aa_multiplatform_libEventBroadcasterCompanion, Aa_multiplatform_libEventBroadcaster, Aa_multiplatform_libTransporter, Aa_multiplatform_libEventClient, Aa_multiplatform_libEventRequestCompanion, Aa_multiplatform_libEventRequest, Aa_multiplatform_libEventRequestBuilder, Aa_multiplatform_libSdkErrorCompanion, Aa_multiplatform_libSdkEventCompanion, Aa_multiplatform_libDeviceIdGenerator, Aa_multiplatform_libDeviceInfoCompanion, Aa_multiplatform_libDeviceInfoClientCompanion, Aa_multiplatform_libDeviceInfoExtractor, Aa_multiplatform_libDeviceInfoClient, Aa_multiplatform_libHttpConnectorCompanion, Aa_multiplatform_libKtor_client_coreHttpClient, Aa_multiplatform_libHttpConnector, Aa_multiplatform_libHttpErrorTracker, Aa_multiplatform_libInterceptEvent, Aa_multiplatform_libAddItContent, Aa_multiplatform_libPayloadEvent, UIView, Aa_multiplatform_libAdViewHandler, Aa_multiplatform_libLinkType, Aa_multiplatform_libZoneCompanion, Aa_multiplatform_libAddToListTypes, Aa_multiplatform_libConfig, Aa_multiplatform_libEventStrings, Aa_multiplatform_libBase64, Aa_multiplatform_libAddToListItem, Aa_multiplatform_libPayloadClient, Aa_multiplatform_libAddItContentParser, Aa_multiplatform_libPayload, Aa_multiplatform_libPayloadResponse, Aa_multiplatform_libAddItContentPublisherCompanion, Aa_multiplatform_libAdContent, Aa_multiplatform_libPopupContent, Aa_multiplatform_libAddItContentPublisher, Aa_multiplatform_libAddToListContentSources, Aa_multiplatform_libAddToListItemCompanion, Aa_multiplatform_libPopupContentCompanion, Aa_multiplatform_libPayloadCompanion, Aa_multiplatform_libPayloadClientCompanion, Aa_multiplatform_libKotlinx_serialization_jsonJsonElement, Aa_multiplatform_libPayloadEventRequestCompanion, Aa_multiplatform_libPayloadEventRequest, Aa_multiplatform_libPayloadRequestCompanion, Aa_multiplatform_libPayloadRequest, Aa_multiplatform_libPayloadRequestBuilder, Aa_multiplatform_libPayloadResponseCompanion, Aa_multiplatform_libTerm, Aa_multiplatform_libInterceptCompanion, Aa_multiplatform_libInterceptClientCompanion, Aa_multiplatform_libInterceptClient, Aa_multiplatform_libInterceptEventCompanion, Aa_multiplatform_libInterceptEventWrapperCompanion, Aa_multiplatform_libInterceptEventWrapper, Aa_multiplatform_libInterceptMatcher, Aa_multiplatform_libSuggestion, Aa_multiplatform_libSuggestionTracker, Aa_multiplatform_libTermCompanion, Aa_multiplatform_libAdCompanion, Aa_multiplatform_libAdActionType, Aa_multiplatform_libAdContentCompanion, Aa_multiplatform_libAdContentPublisherCompanion, Aa_multiplatform_libAdContentPublisher, NSLayoutConstraint, NSData, Aa_multiplatform_libKotlinThrowable, Aa_multiplatform_libKotlinException, Aa_multiplatform_libKotlinRuntimeException, Aa_multiplatform_libKotlinIllegalStateException, Aa_multiplatform_libKotlinCancellationException, Aa_multiplatform_libKtor_client_coreHttpClientEngineConfig, Aa_multiplatform_libKtor_client_coreHttpClientConfig<T>, Aa_multiplatform_libKtor_eventsEvents, Aa_multiplatform_libKtor_client_coreHttpReceivePipeline, Aa_multiplatform_libKtor_client_coreHttpRequestPipeline, Aa_multiplatform_libKtor_client_coreHttpResponsePipeline, Aa_multiplatform_libKtor_client_coreHttpSendPipeline, Aa_multiplatform_libKotlinx_serialization_jsonJsonElementCompanion, Aa_multiplatform_libKtor_client_coreHttpRequestData, Aa_multiplatform_libKtor_client_coreHttpResponseData, Aa_multiplatform_libKotlinx_coroutines_coreCoroutineDispatcher, Aa_multiplatform_libKotlinx_serialization_coreSerializersModule, Aa_multiplatform_libKotlinx_serialization_coreSerialKind, Aa_multiplatform_libKotlinNothing, Aa_multiplatform_libKtor_client_coreProxyConfig, Aa_multiplatform_libKtor_utilsAttributeKey<T>, Aa_multiplatform_libKtor_eventsEventDefinition<T>, Aa_multiplatform_libKtor_utilsPipelinePhase, Aa_multiplatform_libKtor_utilsPipeline<TSubject, TContext>, Aa_multiplatform_libKtor_client_coreHttpReceivePipelinePhases, Aa_multiplatform_libKtor_client_coreHttpResponse, Aa_multiplatform_libKtor_client_coreHttpRequestPipelinePhases, Aa_multiplatform_libKtor_client_coreHttpRequestBuilder, Aa_multiplatform_libKtor_client_coreHttpResponsePipelinePhases, Aa_multiplatform_libKtor_client_coreHttpResponseContainer, Aa_multiplatform_libKtor_client_coreHttpClientCall, Aa_multiplatform_libKtor_client_coreHttpSendPipelinePhases, Aa_multiplatform_libKtor_httpUrl, Aa_multiplatform_libKtor_httpHttpMethod, Aa_multiplatform_libKtor_httpOutgoingContent, Aa_multiplatform_libKtor_httpHttpStatusCode, Aa_multiplatform_libKtor_utilsGMTDate, Aa_multiplatform_libKtor_httpHttpProtocolVersion, Aa_multiplatform_libKotlinAbstractCoroutineContextElement, Aa_multiplatform_libKotlinx_coroutines_coreCoroutineDispatcherKey, Aa_multiplatform_libKotlinx_coroutines_coreAtomicDesc, Aa_multiplatform_libKotlinx_coroutines_coreLockFreeLinkedListNodePrepareOp, Aa_multiplatform_libKtor_httpHeadersBuilder, Aa_multiplatform_libKtor_client_coreHttpRequestBuilderCompanion, Aa_multiplatform_libKtor_httpURLBuilder, Aa_multiplatform_libKtor_utilsTypeInfo, Aa_multiplatform_libKtor_client_coreHttpClientCallCompanion, Aa_multiplatform_libKtor_httpUrlCompanion, Aa_multiplatform_libKtor_httpURLProtocol, Aa_multiplatform_libKtor_httpHttpMethodCompanion, Aa_multiplatform_libKtor_httpContentType, Aa_multiplatform_libKtor_httpHttpStatusCodeCompanion, Aa_multiplatform_libKtor_utilsGMTDateCompanion, Aa_multiplatform_libKtor_utilsWeekDay, Aa_multiplatform_libKtor_utilsMonth, Aa_multiplatform_libKtor_httpHttpProtocolVersionCompanion, Aa_multiplatform_libKotlinAbstractCoroutineContextKey<B, E>, Aa_multiplatform_libKotlinx_coroutines_coreAtomicOp<__contravariant T>, Aa_multiplatform_libKotlinx_coroutines_coreOpDescriptor, Aa_multiplatform_libKotlinx_coroutines_coreLockFreeLinkedListNode, Aa_multiplatform_libKotlinx_coroutines_coreLockFreeLinkedListNodeAbstractAtomicDesc, Aa_multiplatform_libKtor_ioMemory, Aa_multiplatform_libKtor_ioChunkBuffer, Aa_multiplatform_libKotlinByteArray, Aa_multiplatform_libKtor_ioBuffer, Aa_multiplatform_libKtor_ioByteReadPacket, Aa_multiplatform_libKtor_utilsStringValuesBuilderImpl, Aa_multiplatform_libKtor_httpURLBuilderCompanion, Aa_multiplatform_libKtor_httpURLProtocolCompanion, Aa_multiplatform_libKtor_httpHeaderValueParam, Aa_multiplatform_libKtor_httpHeaderValueWithParametersCompanion, Aa_multiplatform_libKtor_httpHeaderValueWithParameters, Aa_multiplatform_libKtor_httpContentTypeCompanion, Aa_multiplatform_libKtor_utilsWeekDayCompanion, Aa_multiplatform_libKtor_utilsMonthCompanion, Aa_multiplatform_libKotlinx_coroutines_coreLockFreeLinkedListNodeAddLastDesc<T>, Aa_multiplatform_libKotlinx_coroutines_coreLockFreeLinkedListNodeRemoveFirstDesc<T>, Aa_multiplatform_libKtor_ioMemoryCompanion, Aa_multiplatform_libKtor_ioBufferCompanion, Aa_multiplatform_libKtor_ioChunkBufferCompanion, Aa_multiplatform_libKotlinByteIterator, Aa_multiplatform_libKtor_ioInputCompanion, Aa_multiplatform_libKtor_ioInput, Aa_multiplatform_libKtor_ioByteReadPacketCompanion, Aa_multiplatform_libKotlinKTypeProjection, Aa_multiplatform_libKotlinKVariance, Aa_multiplatform_libKotlinKTypeProjectionCompanion;
+@class Aa_multiplatform_libKotlinEnumCompanion, Aa_multiplatform_libKotlinEnum<E>, Aa_multiplatform_libAdAdaptedEnv, Aa_multiplatform_libKotlinArray<T>, Aa_multiplatform_libAdAdaptedListManager, Aa_multiplatform_libAdAdaptedBase, Aa_multiplatform_libIosAdAdapted, Aa_multiplatform_libSession, Aa_multiplatform_libDeviceInfo, Aa_multiplatform_libAdEvent, Aa_multiplatform_libIntercept, Aa_multiplatform_libKotlinUnit, Aa_multiplatform_libAd, Aa_multiplatform_libZone, Aa_multiplatform_libSessionCompanion, Aa_multiplatform_libSessionClient, Aa_multiplatform_libSessionClientStatus, Aa_multiplatform_libAdEventCompanion, Aa_multiplatform_libAdEventRequestCompanion, Aa_multiplatform_libAdEventRequest, Aa_multiplatform_libAdEventTypes, Aa_multiplatform_libSdkError, Aa_multiplatform_libSdkEvent, Aa_multiplatform_libEventBroadcaster, Aa_multiplatform_libEventClient, Aa_multiplatform_libEventRequestCompanion, Aa_multiplatform_libEventRequest, Aa_multiplatform_libEventRequestBuilder, Aa_multiplatform_libSdkErrorCompanion, Aa_multiplatform_libSdkEventCompanion, Aa_multiplatform_libDeviceIdGenerator, Aa_multiplatform_libDeviceInfoCompanion, Aa_multiplatform_libDeviceInfoClient, Aa_multiplatform_libDeviceInfoExtractor, Aa_multiplatform_libHttpConnector, Aa_multiplatform_libKtor_client_coreHttpClient, Aa_multiplatform_libHttpErrorTracker, Aa_multiplatform_libInterceptEvent, Aa_multiplatform_libAddItContent, Aa_multiplatform_libPayloadEvent, UIView, Aa_multiplatform_libAdViewHandler, Aa_multiplatform_libLinkType, Aa_multiplatform_libZoneCompanion, Aa_multiplatform_libAddToListTypes, Aa_multiplatform_libConfig, Aa_multiplatform_libEventStrings, Aa_multiplatform_libBase64, Aa_multiplatform_libAddToListItem, Aa_multiplatform_libPayloadClient, Aa_multiplatform_libAddItContentParser, Aa_multiplatform_libPayload, Aa_multiplatform_libPayloadResponse, Aa_multiplatform_libAddItContentPublisher, Aa_multiplatform_libAdContent, Aa_multiplatform_libPopupContent, Aa_multiplatform_libAddToListContentSources, Aa_multiplatform_libAddToListItemCompanion, Aa_multiplatform_libPopupContentCompanion, Aa_multiplatform_libPayloadCompanion, Aa_multiplatform_libKotlinx_serialization_jsonJsonElement, Aa_multiplatform_libPayloadEventRequestCompanion, Aa_multiplatform_libPayloadEventRequest, Aa_multiplatform_libPayloadRequestCompanion, Aa_multiplatform_libPayloadRequest, Aa_multiplatform_libPayloadRequestBuilder, Aa_multiplatform_libPayloadResponseCompanion, Aa_multiplatform_libAALogger, Aa_multiplatform_libTerm, Aa_multiplatform_libInterceptCompanion, Aa_multiplatform_libInterceptClientCompanion, Aa_multiplatform_libInterceptClient, Aa_multiplatform_libInterceptEventCompanion, Aa_multiplatform_libInterceptEventWrapperCompanion, Aa_multiplatform_libInterceptEventWrapper, Aa_multiplatform_libInterceptMatcher, Aa_multiplatform_libSuggestion, Aa_multiplatform_libSuggestionTracker, Aa_multiplatform_libTermCompanion, Aa_multiplatform_libAdCompanion, Aa_multiplatform_libAdActionType, Aa_multiplatform_libAdContentCompanion, Aa_multiplatform_libAdContentPublisher, NSUserActivity, NSLayoutConstraint, NSData, Aa_multiplatform_libKotlinThrowable, Aa_multiplatform_libKotlinException, Aa_multiplatform_libKotlinRuntimeException, Aa_multiplatform_libKotlinIllegalStateException, Aa_multiplatform_libKotlinCancellationException, Aa_multiplatform_libKtor_client_coreHttpClientEngineConfig, Aa_multiplatform_libKtor_client_coreHttpClientConfig<T>, Aa_multiplatform_libKtor_eventsEvents, Aa_multiplatform_libKtor_client_coreHttpReceivePipeline, Aa_multiplatform_libKtor_client_coreHttpRequestPipeline, Aa_multiplatform_libKtor_client_coreHttpResponsePipeline, Aa_multiplatform_libKtor_client_coreHttpSendPipeline, Aa_multiplatform_libKotlinx_serialization_jsonJsonElementCompanion, Aa_multiplatform_libKtor_client_coreHttpRequestData, Aa_multiplatform_libKtor_client_coreHttpResponseData, Aa_multiplatform_libKotlinx_coroutines_coreCoroutineDispatcher, Aa_multiplatform_libKotlinx_serialization_coreSerializersModule, Aa_multiplatform_libKotlinx_serialization_coreSerialKind, Aa_multiplatform_libKotlinNothing, Aa_multiplatform_libKtor_client_coreProxyConfig, Aa_multiplatform_libKtor_utilsAttributeKey<T>, Aa_multiplatform_libKtor_eventsEventDefinition<T>, Aa_multiplatform_libKtor_utilsPipelinePhase, Aa_multiplatform_libKtor_utilsPipeline<TSubject, TContext>, Aa_multiplatform_libKtor_client_coreHttpReceivePipelinePhases, Aa_multiplatform_libKtor_client_coreHttpResponse, Aa_multiplatform_libKtor_client_coreHttpRequestPipelinePhases, Aa_multiplatform_libKtor_client_coreHttpRequestBuilder, Aa_multiplatform_libKtor_client_coreHttpResponsePipelinePhases, Aa_multiplatform_libKtor_client_coreHttpResponseContainer, Aa_multiplatform_libKtor_client_coreHttpClientCall, Aa_multiplatform_libKtor_client_coreHttpSendPipelinePhases, Aa_multiplatform_libKtor_httpUrl, Aa_multiplatform_libKtor_httpHttpMethod, Aa_multiplatform_libKtor_httpOutgoingContent, Aa_multiplatform_libKtor_httpHttpStatusCode, Aa_multiplatform_libKtor_utilsGMTDate, Aa_multiplatform_libKtor_httpHttpProtocolVersion, Aa_multiplatform_libKotlinAbstractCoroutineContextElement, Aa_multiplatform_libKotlinx_coroutines_coreCoroutineDispatcherKey, Aa_multiplatform_libKotlinx_coroutines_coreAtomicDesc, Aa_multiplatform_libKotlinx_coroutines_coreLockFreeLinkedListNodePrepareOp, Aa_multiplatform_libKtor_httpHeadersBuilder, Aa_multiplatform_libKtor_client_coreHttpRequestBuilderCompanion, Aa_multiplatform_libKtor_httpURLBuilder, Aa_multiplatform_libKtor_utilsTypeInfo, Aa_multiplatform_libKtor_client_coreHttpClientCallCompanion, Aa_multiplatform_libKtor_httpUrlCompanion, Aa_multiplatform_libKtor_httpURLProtocol, Aa_multiplatform_libKtor_httpHttpMethodCompanion, Aa_multiplatform_libKtor_httpContentType, Aa_multiplatform_libKtor_httpHttpStatusCodeCompanion, Aa_multiplatform_libKtor_utilsGMTDateCompanion, Aa_multiplatform_libKtor_utilsWeekDay, Aa_multiplatform_libKtor_utilsMonth, Aa_multiplatform_libKtor_httpHttpProtocolVersionCompanion, Aa_multiplatform_libKotlinAbstractCoroutineContextKey<B, E>, Aa_multiplatform_libKotlinx_coroutines_coreAtomicOp<__contravariant T>, Aa_multiplatform_libKotlinx_coroutines_coreOpDescriptor, Aa_multiplatform_libKotlinx_coroutines_coreLockFreeLinkedListNode, Aa_multiplatform_libKotlinx_coroutines_coreLockFreeLinkedListNodeAbstractAtomicDesc, Aa_multiplatform_libKtor_ioMemory, Aa_multiplatform_libKtor_ioChunkBuffer, Aa_multiplatform_libKotlinByteArray, Aa_multiplatform_libKtor_ioBuffer, Aa_multiplatform_libKtor_ioByteReadPacket, Aa_multiplatform_libKtor_utilsStringValuesBuilderImpl, Aa_multiplatform_libKtor_httpURLBuilderCompanion, Aa_multiplatform_libKtor_httpURLProtocolCompanion, Aa_multiplatform_libKtor_httpHeaderValueParam, Aa_multiplatform_libKtor_httpHeaderValueWithParametersCompanion, Aa_multiplatform_libKtor_httpHeaderValueWithParameters, Aa_multiplatform_libKtor_httpContentTypeCompanion, Aa_multiplatform_libKtor_utilsWeekDayCompanion, Aa_multiplatform_libKtor_utilsMonthCompanion, Aa_multiplatform_libKotlinx_coroutines_coreLockFreeLinkedListNodeAddLastDesc<T>, Aa_multiplatform_libKotlinx_coroutines_coreLockFreeLinkedListNodeRemoveFirstDesc<T>, Aa_multiplatform_libKtor_ioMemoryCompanion, Aa_multiplatform_libKtor_ioBufferCompanion, Aa_multiplatform_libKtor_ioChunkBufferCompanion, Aa_multiplatform_libKotlinByteIterator, Aa_multiplatform_libKtor_ioInputCompanion, Aa_multiplatform_libKtor_ioInput, Aa_multiplatform_libKtor_ioByteReadPacketCompanion, Aa_multiplatform_libKotlinKTypeProjection, Aa_multiplatform_libKotlinKVariance, Aa_multiplatform_libKotlinKTypeProjectionCompanion;
 
-@protocol Aa_multiplatform_libAddToListContent, Aa_multiplatform_libKotlinComparable, Aa_multiplatform_libSessionInitListener, Aa_multiplatform_libAdGetListener, Aa_multiplatform_libKotlinx_coroutines_coreJob, Aa_multiplatform_libKotlinSuspendFunction1, Aa_multiplatform_libKotlinCoroutineContext, Aa_multiplatform_libKotlinx_coroutines_coreCoroutineScope, Aa_multiplatform_libTransporterCoroutineScope, Aa_multiplatform_libKotlinx_serialization_coreKSerializer, Aa_multiplatform_libSessionAdapterListener, Aa_multiplatform_libSessionListener, Aa_multiplatform_libSessionAdapter, Aa_multiplatform_libEventClientListener, Aa_multiplatform_libEventAdapter, Aa_multiplatform_libDeviceCallback, Aa_multiplatform_libInterceptAdapterListener, Aa_multiplatform_libInterceptAdapter, Aa_multiplatform_libPayloadAdapter, Aa_multiplatform_libZoneViewListener, Aa_multiplatform_libAdContentListener, Aa_multiplatform_libAdZonePresenterListener, Aa_multiplatform_libInterceptListener, Aa_multiplatform_libKtor_client_coreHttpClientEngine, Aa_multiplatform_libKotlinIterator, Aa_multiplatform_libKotlinx_coroutines_coreChildHandle, Aa_multiplatform_libKotlinx_coroutines_coreChildJob, Aa_multiplatform_libKotlinx_coroutines_coreDisposableHandle, Aa_multiplatform_libKotlinSequence, Aa_multiplatform_libKotlinx_coroutines_coreSelectClause0, Aa_multiplatform_libKotlinCoroutineContextKey, Aa_multiplatform_libKotlinCoroutineContextElement, Aa_multiplatform_libKotlinFunction, Aa_multiplatform_libKotlinx_serialization_coreEncoder, Aa_multiplatform_libKotlinx_serialization_coreSerialDescriptor, Aa_multiplatform_libKotlinx_serialization_coreSerializationStrategy, Aa_multiplatform_libKotlinx_serialization_coreDecoder, Aa_multiplatform_libKotlinx_serialization_coreDeserializationStrategy, Aa_multiplatform_libKtor_ioCloseable, Aa_multiplatform_libKtor_client_coreHttpClientEngineCapability, Aa_multiplatform_libKtor_utilsAttributes, Aa_multiplatform_libKotlinx_coroutines_coreParentJob, Aa_multiplatform_libKotlinx_coroutines_coreSelectInstance, Aa_multiplatform_libKotlinSuspendFunction0, Aa_multiplatform_libKotlinx_serialization_coreCompositeEncoder, Aa_multiplatform_libKotlinAnnotation, Aa_multiplatform_libKotlinx_serialization_coreCompositeDecoder, Aa_multiplatform_libKtor_client_coreHttpClientPlugin, Aa_multiplatform_libKotlinSuspendFunction2, Aa_multiplatform_libKtor_httpHeaders, Aa_multiplatform_libKotlinContinuation, Aa_multiplatform_libKotlinContinuationInterceptor, Aa_multiplatform_libKotlinx_coroutines_coreRunnable, Aa_multiplatform_libKotlinx_serialization_coreSerializersModuleCollector, Aa_multiplatform_libKotlinKClass, Aa_multiplatform_libKtor_httpHttpMessage, Aa_multiplatform_libKtor_ioByteReadChannel, Aa_multiplatform_libKtor_httpHttpMessageBuilder, Aa_multiplatform_libKtor_client_coreHttpRequest, Aa_multiplatform_libKtor_httpParameters, Aa_multiplatform_libKotlinMapEntry, Aa_multiplatform_libKtor_utilsStringValues, Aa_multiplatform_libKotlinKDeclarationContainer, Aa_multiplatform_libKotlinKAnnotatedElement, Aa_multiplatform_libKotlinKClassifier, Aa_multiplatform_libKtor_ioReadSession, Aa_multiplatform_libKotlinAppendable, Aa_multiplatform_libKtor_utilsStringValuesBuilder, Aa_multiplatform_libKtor_httpParametersBuilder, Aa_multiplatform_libKotlinKType, Aa_multiplatform_libKtor_ioObjectPool;
+@protocol Aa_multiplatform_libAddItContentListener, Aa_multiplatform_libEventBroadcastListener, Aa_multiplatform_libKotlinComparable, Aa_multiplatform_libAddToListContent, Aa_multiplatform_libSessionInitListener, Aa_multiplatform_libAdGetListener, Aa_multiplatform_libKotlinx_coroutines_coreJob, Aa_multiplatform_libKotlinSuspendFunction1, Aa_multiplatform_libKotlinCoroutineContext, Aa_multiplatform_libKotlinx_coroutines_coreCoroutineScope, Aa_multiplatform_libTransporterCoroutineScope, Aa_multiplatform_libKotlinx_serialization_coreKSerializer, Aa_multiplatform_libSessionAdapterListener, Aa_multiplatform_libSessionListener, Aa_multiplatform_libSessionAdapter, Aa_multiplatform_libEventClientListener, Aa_multiplatform_libEventAdapter, Aa_multiplatform_libDeviceCallback, Aa_multiplatform_libInterceptAdapterListener, Aa_multiplatform_libInterceptAdapter, Aa_multiplatform_libPayloadAdapter, Aa_multiplatform_libZoneViewListener, Aa_multiplatform_libAdContentListener, Aa_multiplatform_libAdZonePresenterListener, Aa_multiplatform_libInterceptListener, Aa_multiplatform_libKtor_client_coreHttpClientEngine, Aa_multiplatform_libKotlinIterator, Aa_multiplatform_libKotlinx_coroutines_coreChildHandle, Aa_multiplatform_libKotlinx_coroutines_coreChildJob, Aa_multiplatform_libKotlinx_coroutines_coreDisposableHandle, Aa_multiplatform_libKotlinSequence, Aa_multiplatform_libKotlinx_coroutines_coreSelectClause0, Aa_multiplatform_libKotlinCoroutineContextKey, Aa_multiplatform_libKotlinCoroutineContextElement, Aa_multiplatform_libKotlinFunction, Aa_multiplatform_libKotlinx_serialization_coreEncoder, Aa_multiplatform_libKotlinx_serialization_coreSerialDescriptor, Aa_multiplatform_libKotlinx_serialization_coreSerializationStrategy, Aa_multiplatform_libKotlinx_serialization_coreDecoder, Aa_multiplatform_libKotlinx_serialization_coreDeserializationStrategy, Aa_multiplatform_libKtor_ioCloseable, Aa_multiplatform_libKtor_client_coreHttpClientEngineCapability, Aa_multiplatform_libKtor_utilsAttributes, Aa_multiplatform_libKotlinx_coroutines_coreParentJob, Aa_multiplatform_libKotlinx_coroutines_coreSelectInstance, Aa_multiplatform_libKotlinSuspendFunction0, Aa_multiplatform_libKotlinx_serialization_coreCompositeEncoder, Aa_multiplatform_libKotlinAnnotation, Aa_multiplatform_libKotlinx_serialization_coreCompositeDecoder, Aa_multiplatform_libKtor_client_coreHttpClientPlugin, Aa_multiplatform_libKotlinSuspendFunction2, Aa_multiplatform_libKtor_httpHeaders, Aa_multiplatform_libKotlinContinuation, Aa_multiplatform_libKotlinContinuationInterceptor, Aa_multiplatform_libKotlinx_coroutines_coreRunnable, Aa_multiplatform_libKotlinx_serialization_coreSerializersModuleCollector, Aa_multiplatform_libKotlinKClass, Aa_multiplatform_libKtor_httpHttpMessage, Aa_multiplatform_libKtor_ioByteReadChannel, Aa_multiplatform_libKtor_httpHttpMessageBuilder, Aa_multiplatform_libKtor_client_coreHttpRequest, Aa_multiplatform_libKtor_httpParameters, Aa_multiplatform_libKotlinMapEntry, Aa_multiplatform_libKtor_utilsStringValues, Aa_multiplatform_libKotlinKDeclarationContainer, Aa_multiplatform_libKotlinKAnnotatedElement, Aa_multiplatform_libKotlinKClassifier, Aa_multiplatform_libKtor_ioReadSession, Aa_multiplatform_libKotlinAppendable, Aa_multiplatform_libKtor_utilsStringValuesBuilder, Aa_multiplatform_libKtor_httpParametersBuilder, Aa_multiplatform_libKotlinKType, Aa_multiplatform_libKtor_ioObjectPool;
 
 NS_ASSUME_NONNULL_BEGIN
 #pragma clang diagnostic push
@@ -149,9 +149,9 @@ __attribute__((swift_name("AdAdaptedBase")))
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
 + (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
 @property NSString *apiKey __attribute__((swift_name("apiKey")));
-@property void (^contentListener)(id<Aa_multiplatform_libAddToListContent>) __attribute__((swift_name("contentListener")));
+@property id<Aa_multiplatform_libAddItContentListener> contentListener __attribute__((swift_name("contentListener")));
 @property NSString *customIdentifier __attribute__((swift_name("customIdentifier")));
-@property void (^eventListener)(NSString *, NSString *) __attribute__((swift_name("eventListener")));
+@property id<Aa_multiplatform_libEventBroadcastListener> eventListener __attribute__((swift_name("eventListener")));
 @property BOOL hasStarted __attribute__((swift_name("hasStarted")));
 @property BOOL isKeywordInterceptEnabled __attribute__((swift_name("isKeywordInterceptEnabled")));
 @property BOOL isProd __attribute__((swift_name("isProd")));
@@ -209,13 +209,15 @@ __attribute__((swift_name("IosAdAdapted")))
 + (instancetype)new __attribute__((unavailable));
 + (instancetype)iosAdAdapted __attribute__((swift_name("init()")));
 @property (class, readonly, getter=shared) Aa_multiplatform_libIosAdAdapted *shared __attribute__((swift_name("shared")));
-- (Aa_multiplatform_libAdAdaptedBase *)disableAdTracking __attribute__((swift_name("disableAdTracking()")));
-- (Aa_multiplatform_libAdAdaptedBase *)enableAdTracking __attribute__((swift_name("enableAdTracking()")));
+- (Aa_multiplatform_libIosAdAdapted *)disableAdTracking __attribute__((swift_name("disableAdTracking()")));
+- (Aa_multiplatform_libIosAdAdapted *)enableAdTracking __attribute__((swift_name("enableAdTracking()")));
+- (Aa_multiplatform_libIosAdAdapted *)enableDebugLogging __attribute__((swift_name("enableDebugLogging()")));
 - (Aa_multiplatform_libIosAdAdapted *)enableKeywordInterceptValue:(BOOL)value __attribute__((swift_name("enableKeywordIntercept(value:)")));
 - (Aa_multiplatform_libIosAdAdapted *)inEnvironmentEnv:(Aa_multiplatform_libAdAdaptedEnv *)env __attribute__((swift_name("inEnvironment(env:)")));
 - (Aa_multiplatform_libIosAdAdapted *)onHasAdsToServeListener:(void (^)(Aa_multiplatform_libBoolean *))listener __attribute__((swift_name("onHasAdsToServe(listener:)")));
-- (Aa_multiplatform_libAdAdaptedBase *)setCustomIdentifierIdentifier:(NSString *)identifier __attribute__((swift_name("setCustomIdentifier(identifier:)")));
-- (Aa_multiplatform_libIosAdAdapted *)setSdkAddItContentListenerListener:(void (^)(id<Aa_multiplatform_libAddToListContent>))listener __attribute__((swift_name("setSdkAddItContentListener(listener:)")));
+- (Aa_multiplatform_libIosAdAdapted *)setCustomIdentifierIdentifier:(NSString *)identifier __attribute__((swift_name("setCustomIdentifier(identifier:)")));
+- (Aa_multiplatform_libIosAdAdapted *)setSdkAddItContentListenerListener:(id<Aa_multiplatform_libAddItContentListener>)listener __attribute__((swift_name("setSdkAddItContentListener(listener:)")));
+- (Aa_multiplatform_libIosAdAdapted *)setSdkEventListenerListener:(id<Aa_multiplatform_libEventBroadcastListener>)listener __attribute__((swift_name("setSdkEventListener(listener:)")));
 
 /**
  @note This method converts instances of Exception to errors.
@@ -232,10 +234,22 @@ __attribute__((swift_name("AdGetListener")))
 - (void)onNewAdsLoadedSession:(Aa_multiplatform_libSession *)session __attribute__((swift_name("onNewAdsLoaded(session:)")));
 @end;
 
+__attribute__((swift_name("AddItContentListener")))
+@protocol Aa_multiplatform_libAddItContentListener
+@required
+- (void)onContentAvailableContent:(id<Aa_multiplatform_libAddToListContent>)content __attribute__((swift_name("onContentAvailable(content:)")));
+@end;
+
 __attribute__((swift_name("DeviceCallback")))
 @protocol Aa_multiplatform_libDeviceCallback
 @required
 - (void)onDeviceInfoCollectedDeviceInfo:(Aa_multiplatform_libDeviceInfo *)deviceInfo __attribute__((swift_name("onDeviceInfoCollected(deviceInfo:)")));
+@end;
+
+__attribute__((swift_name("EventBroadcastListener")))
+@protocol Aa_multiplatform_libEventBroadcastListener
+@required
+- (void)onAdEventTrackedZoneId:(NSString *)zoneId eventType:(NSString *)eventType __attribute__((swift_name("onAdEventTracked(zoneId:eventType:)")));
 @end;
 
 __attribute__((swift_name("EventClientListener")))
@@ -313,8 +327,7 @@ __attribute__((swift_name("Kotlinx_coroutines_coreCoroutineScope")))
 __attribute__((swift_name("TransporterCoroutineScope")))
 @protocol Aa_multiplatform_libTransporterCoroutineScope <Aa_multiplatform_libKotlinx_coroutines_coreCoroutineScope>
 @required
-- (id<Aa_multiplatform_libKotlinx_coroutines_coreJob>)dispatchToBackgroundBackgroundFunc:(id<Aa_multiplatform_libKotlinSuspendFunction1>)backgroundFunc __attribute__((swift_name("dispatchToBackground(backgroundFunc:)")));
-- (id<Aa_multiplatform_libKotlinx_coroutines_coreJob>)dispatchToMainMainFunc:(id<Aa_multiplatform_libKotlinSuspendFunction1>)mainFunc __attribute__((swift_name("dispatchToMain(mainFunc:)")));
+- (id<Aa_multiplatform_libKotlinx_coroutines_coreJob>)dispatchToThreadFunc:(id<Aa_multiplatform_libKotlinSuspendFunction1>)func __attribute__((swift_name("dispatchToThread(func:)")));
 @end;
 
 __attribute__((objc_subclassing_restricted))
@@ -322,8 +335,6 @@ __attribute__((swift_name("Transporter")))
 @interface Aa_multiplatform_libTransporter : Aa_multiplatform_libBase <Aa_multiplatform_libTransporterCoroutineScope>
 - (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
 + (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
-- (id<Aa_multiplatform_libKotlinx_coroutines_coreJob>)dispatchToBackgroundBackgroundFunc:(id<Aa_multiplatform_libKotlinSuspendFunction1>)backgroundFunc __attribute__((swift_name("dispatchToBackground(backgroundFunc:)")));
-- (id<Aa_multiplatform_libKotlinx_coroutines_coreJob>)dispatchToMainMainFunc:(id<Aa_multiplatform_libKotlinSuspendFunction1>)mainFunc __attribute__((swift_name("dispatchToMain(mainFunc:)")));
 @property (readonly) id<Aa_multiplatform_libKotlinCoroutineContext> coroutineContext __attribute__((swift_name("coroutineContext")));
 @end;
 
@@ -509,19 +520,12 @@ __attribute__((swift_name("EventAdapter")))
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("EventBroadcaster")))
 @interface Aa_multiplatform_libEventBroadcaster : Aa_multiplatform_libBase <Aa_multiplatform_libEventClientListener>
-@property (class, readonly, getter=companion) Aa_multiplatform_libEventBroadcasterCompanion *companion __attribute__((swift_name("companion")));
-- (void)onAdEventTrackedEvent:(Aa_multiplatform_libAdEvent * _Nullable)event __attribute__((swift_name("onAdEventTracked(event:)")));
-- (void)setListenerListener:(void (^)(NSString *, NSString *))listener __attribute__((swift_name("setListener(listener:)")));
-@end;
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("EventBroadcaster.Companion")))
-@interface Aa_multiplatform_libEventBroadcasterCompanion : Aa_multiplatform_libBase
 + (instancetype)alloc __attribute__((unavailable));
 + (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) Aa_multiplatform_libEventBroadcasterCompanion *shared __attribute__((swift_name("shared")));
-- (Aa_multiplatform_libEventBroadcaster *)getInstanceTransporter:(Aa_multiplatform_libTransporter *)transporter __attribute__((swift_name("getInstance(transporter:)")));
++ (instancetype)eventBroadcaster __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) Aa_multiplatform_libEventBroadcaster *shared __attribute__((swift_name("shared")));
+- (void)onAdEventTrackedEvent:(Aa_multiplatform_libAdEvent * _Nullable)event __attribute__((swift_name("onAdEventTracked(event:)")));
+- (void)setListenerListener:(id<Aa_multiplatform_libEventBroadcastListener>)listener __attribute__((swift_name("setListener(listener:)")));
 @end;
 
 __attribute__((objc_subclassing_restricted))
@@ -742,7 +746,6 @@ __attribute__((swift_name("DeviceInfo.Companion")))
 + (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
 + (instancetype)companion __attribute__((swift_name("init()")));
 @property (class, readonly, getter=shared) Aa_multiplatform_libDeviceInfoCompanion *shared __attribute__((swift_name("shared")));
-- (Aa_multiplatform_libDeviceInfo *)empty __attribute__((swift_name("empty()")));
 - (id<Aa_multiplatform_libKotlinx_serialization_coreKSerializer>)serializer __attribute__((swift_name("serializer()")));
 @property (readonly) NSString *UNKNOWN_VALUE __attribute__((swift_name("UNKNOWN_VALUE")));
 @end;
@@ -750,20 +753,13 @@ __attribute__((swift_name("DeviceInfo.Companion")))
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("DeviceInfoClient")))
 @interface Aa_multiplatform_libDeviceInfoClient : Aa_multiplatform_libBase
-@property (class, readonly, getter=companion) Aa_multiplatform_libDeviceInfoClientCompanion *companion __attribute__((swift_name("companion")));
-- (Aa_multiplatform_libDeviceInfo * _Nullable)getCachedDeviceInfo __attribute__((swift_name("getCachedDeviceInfo()")));
-- (void)getDeviceInfoDeviceCallback:(id<Aa_multiplatform_libDeviceCallback>)deviceCallback __attribute__((swift_name("getDeviceInfo(deviceCallback:)")));
-@end;
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("DeviceInfoClient.Companion")))
-@interface Aa_multiplatform_libDeviceInfoClientCompanion : Aa_multiplatform_libBase
 + (instancetype)alloc __attribute__((unavailable));
 + (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) Aa_multiplatform_libDeviceInfoClientCompanion *shared __attribute__((swift_name("shared")));
++ (instancetype)deviceInfoClient __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) Aa_multiplatform_libDeviceInfoClient *shared __attribute__((swift_name("shared")));
 - (void)createInstanceAppId:(NSString *)appId isProd:(BOOL)isProd params:(NSDictionary<NSString *, NSString *> *)params customIdentifier:(NSString *)customIdentifier deviceInfoExtractor:(Aa_multiplatform_libDeviceInfoExtractor *)deviceInfoExtractor transporter:(id<Aa_multiplatform_libTransporterCoroutineScope>)transporter __attribute__((swift_name("createInstance(appId:isProd:params:customIdentifier:deviceInfoExtractor:transporter:)")));
-- (Aa_multiplatform_libDeviceInfoClient *)getInstance __attribute__((swift_name("getInstance()")));
+- (Aa_multiplatform_libDeviceInfo * _Nullable)getCachedDeviceInfo __attribute__((swift_name("getCachedDeviceInfo()")));
+- (void)getDeviceInfoDeviceCallback:(id<Aa_multiplatform_libDeviceCallback>)deviceCallback __attribute__((swift_name("getDeviceInfo(deviceCallback:)")));
 @end;
 
 __attribute__((objc_subclassing_restricted))
@@ -777,18 +773,11 @@ __attribute__((swift_name("DeviceInfoExtractor")))
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("HttpConnector")))
 @interface Aa_multiplatform_libHttpConnector : Aa_multiplatform_libBase
-@property (class, readonly, getter=companion) Aa_multiplatform_libHttpConnectorCompanion *companion __attribute__((swift_name("companion")));
-@property (readonly) Aa_multiplatform_libKtor_client_coreHttpClient *client __attribute__((swift_name("client")));
-@end;
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("HttpConnector.Companion")))
-@interface Aa_multiplatform_libHttpConnectorCompanion : Aa_multiplatform_libBase
 + (instancetype)alloc __attribute__((unavailable));
 + (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) Aa_multiplatform_libHttpConnectorCompanion *shared __attribute__((swift_name("shared")));
-- (Aa_multiplatform_libHttpConnector *)getInstance __attribute__((swift_name("getInstance()")));
++ (instancetype)httpConnector __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) Aa_multiplatform_libHttpConnector *shared __attribute__((swift_name("shared")));
+@property (readonly) Aa_multiplatform_libKtor_client_coreHttpClient *client __attribute__((swift_name("client")));
 @end;
 
 __attribute__((objc_subclassing_restricted))
@@ -1088,7 +1077,9 @@ __attribute__((swift_name("EventStrings")))
 @property (readonly) NSString *KI_EVENT_REQUEST_FAILED __attribute__((swift_name("KI_EVENT_REQUEST_FAILED")));
 @property (readonly) NSString *KI_INITIALIZED __attribute__((swift_name("KI_INITIALIZED")));
 @property (readonly) NSString *KI_INIT_REQUEST_FAILED __attribute__((swift_name("KI_INIT_REQUEST_FAILED")));
+@property (readonly) NSString *LISTENER_REGISTRATION_ERROR __attribute__((swift_name("LISTENER_REGISTRATION_ERROR")));
 @property (readonly) NSString *NO_ADDIT_CONTENT_LISTENER __attribute__((swift_name("NO_ADDIT_CONTENT_LISTENER")));
+@property (readonly) NSString *NO_DEEPLINK_URL __attribute__((swift_name("NO_DEEPLINK_URL")));
 @property (readonly) NSString *PAYLOAD_EVENT_REQUEST_FAILED __attribute__((swift_name("PAYLOAD_EVENT_REQUEST_FAILED")));
 @property (readonly) NSString *PAYLOAD_PICKUP_ATTEMPT __attribute__((swift_name("PAYLOAD_PICKUP_ATTEMPT")));
 @property (readonly) NSString *PAYLOAD_PICKUP_REQUEST_FAILED __attribute__((swift_name("PAYLOAD_PICKUP_REQUEST_FAILED")));
@@ -1176,21 +1167,14 @@ __attribute__((swift_name("AddItContentParser")))
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("AddItContentPublisher")))
 @interface Aa_multiplatform_libAddItContentPublisher : Aa_multiplatform_libBase
-@property (class, readonly, getter=companion) Aa_multiplatform_libAddItContentPublisherCompanion *companion __attribute__((swift_name("companion")));
-- (void)addListenerListener:(void (^)(id<Aa_multiplatform_libAddToListContent>))listener __attribute__((swift_name("addListener(listener:)")));
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)addItContentPublisher __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) Aa_multiplatform_libAddItContentPublisher *shared __attribute__((swift_name("shared")));
+- (void)addListenerListener:(id<Aa_multiplatform_libAddItContentListener>)listener __attribute__((swift_name("addListener(listener:)")));
 - (void)publishAdContentContent:(Aa_multiplatform_libAdContent *)content __attribute__((swift_name("publishAdContent(content:)")));
 - (void)publishAddItContentContent:(Aa_multiplatform_libAddItContent *)content __attribute__((swift_name("publishAddItContent(content:)")));
 - (void)publishPopupContentContent:(Aa_multiplatform_libPopupContent *)content __attribute__((swift_name("publishPopupContent(content:)")));
-@end;
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("AddItContentPublisher.Companion")))
-@interface Aa_multiplatform_libAddItContentPublisherCompanion : Aa_multiplatform_libBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) Aa_multiplatform_libAddItContentPublisherCompanion *shared __attribute__((swift_name("shared")));
-- (Aa_multiplatform_libAddItContentPublisher *)getInstanceTransporter:(Aa_multiplatform_libTransporter *)transporter __attribute__((swift_name("getInstance(transporter:)")));
 @end;
 
 __attribute__((objc_subclassing_restricted))
@@ -1308,7 +1292,11 @@ __attribute__((swift_name("Payload.Companion")))
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("PayloadClient")))
 @interface Aa_multiplatform_libPayloadClient : Aa_multiplatform_libBase
-@property (class, readonly, getter=companion) Aa_multiplatform_libPayloadClientCompanion *companion __attribute__((swift_name("companion")));
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)payloadClient __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) Aa_multiplatform_libPayloadClient *shared __attribute__((swift_name("shared")));
+- (void)createInstanceAdapter:(id<Aa_multiplatform_libPayloadAdapter>)adapter eventClient:(Aa_multiplatform_libEventClient *)eventClient transporter:(id<Aa_multiplatform_libTransporterCoroutineScope>)transporter __attribute__((swift_name("createInstance(adapter:eventClient:transporter:)")));
 - (void)deeplinkCompleted __attribute__((swift_name("deeplinkCompleted()")));
 - (void)deeplinkInProgress __attribute__((swift_name("deeplinkInProgress()")));
 - (void)markContentAcknowledgedContent:(Aa_multiplatform_libAddItContent *)content __attribute__((swift_name("markContentAcknowledged(content:)")));
@@ -1317,17 +1305,6 @@ __attribute__((swift_name("PayloadClient")))
 - (void)markContentItemAcknowledgedContent:(Aa_multiplatform_libAddItContent *)content item:(Aa_multiplatform_libAddToListItem *)item __attribute__((swift_name("markContentItemAcknowledged(content:item:)")));
 - (void)markContentItemFailedContent:(Aa_multiplatform_libAddItContent *)content item:(Aa_multiplatform_libAddToListItem *)item message:(NSString *)message __attribute__((swift_name("markContentItemFailed(content:item:message:)")));
 - (void)pickupPayloadsCallback:(void (^)(NSArray<Aa_multiplatform_libAddItContent *> *))callback __attribute__((swift_name("pickupPayloads(callback:)")));
-@end;
-
-__attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("PayloadClient.Companion")))
-@interface Aa_multiplatform_libPayloadClientCompanion : Aa_multiplatform_libBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) Aa_multiplatform_libPayloadClientCompanion *shared __attribute__((swift_name("shared")));
-- (void)createInstanceAdapter:(id<Aa_multiplatform_libPayloadAdapter>)adapter eventClient:(Aa_multiplatform_libEventClient *)eventClient transporter:(id<Aa_multiplatform_libTransporterCoroutineScope>)transporter __attribute__((swift_name("createInstance(adapter:eventClient:transporter:)")));
-- (Aa_multiplatform_libPayloadClient *)getInstance __attribute__((swift_name("getInstance()")));
 @end;
 
 __attribute__((objc_subclassing_restricted))
@@ -1451,6 +1428,19 @@ __attribute__((swift_name("PayloadResponse.Companion")))
 @end;
 
 __attribute__((objc_subclassing_restricted))
+__attribute__((swift_name("AALogger")))
+@interface Aa_multiplatform_libAALogger : Aa_multiplatform_libBase
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)aALogger __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) Aa_multiplatform_libAALogger *shared __attribute__((swift_name("shared")));
+- (void)enableDebugLogging __attribute__((swift_name("enableDebugLogging()")));
+- (void)logDebugMessage:(NSString *)message __attribute__((swift_name("logDebug(message:)")));
+- (void)logErrorMessage:(NSString *)message __attribute__((swift_name("logError(message:)")));
+- (void)logInfoMessage:(NSString *)message __attribute__((swift_name("logInfo(message:)")));
+@end;
+
+__attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("Intercept")))
 @interface Aa_multiplatform_libIntercept : Aa_multiplatform_libBase
 - (instancetype)initWithSearchId:(NSString *)searchId refreshTime:(int64_t)refreshTime minMatchLength:(int32_t)minMatchLength terms:(NSArray<Aa_multiplatform_libTerm *> *)terms __attribute__((swift_name("init(searchId:refreshTime:minMatchLength:terms:)"))) __attribute__((objc_designated_initializer));
@@ -1511,14 +1501,15 @@ __attribute__((swift_name("InterceptClient.Companion")))
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("InterceptEvent")))
 @interface Aa_multiplatform_libInterceptEvent : Aa_multiplatform_libBase
-- (instancetype)initWithSearchId:(NSString *)searchId event:(NSString *)event userInput:(NSString *)userInput termId:(NSString *)termId term:(NSString *)term __attribute__((swift_name("init(searchId:event:userInput:termId:term:)"))) __attribute__((objc_designated_initializer));
+- (instancetype)initWithSearchId:(NSString *)searchId event:(NSString *)event userInput:(NSString *)userInput termId:(NSString *)termId term:(NSString *)term createdAt:(int64_t)createdAt __attribute__((swift_name("init(searchId:event:userInput:termId:term:createdAt:)"))) __attribute__((objc_designated_initializer));
 @property (class, readonly, getter=companion) Aa_multiplatform_libInterceptEventCompanion *companion __attribute__((swift_name("companion")));
 - (NSString *)component1 __attribute__((swift_name("component1()")));
 - (NSString *)component2 __attribute__((swift_name("component2()")));
 - (NSString *)component3 __attribute__((swift_name("component3()")));
 - (NSString *)component4 __attribute__((swift_name("component4()")));
 - (NSString *)component5 __attribute__((swift_name("component5()")));
-- (Aa_multiplatform_libInterceptEvent *)doCopySearchId:(NSString *)searchId event:(NSString *)event userInput:(NSString *)userInput termId:(NSString *)termId term:(NSString *)term __attribute__((swift_name("doCopy(searchId:event:userInput:termId:term:)")));
+- (int64_t)component6 __attribute__((swift_name("component6()")));
+- (Aa_multiplatform_libInterceptEvent *)doCopySearchId:(NSString *)searchId event:(NSString *)event userInput:(NSString *)userInput termId:(NSString *)termId term:(NSString *)term createdAt:(int64_t)createdAt __attribute__((swift_name("doCopy(searchId:event:userInput:termId:term:createdAt:)")));
 - (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
 - (NSUInteger)hash __attribute__((swift_name("hash()")));
 - (BOOL)supersedesE:(Aa_multiplatform_libInterceptEvent *)e __attribute__((swift_name("supersedes(e:)")));
@@ -1741,20 +1732,26 @@ __attribute__((swift_name("AdContentListener")))
 __attribute__((objc_subclassing_restricted))
 __attribute__((swift_name("AdContentPublisher")))
 @interface Aa_multiplatform_libAdContentPublisher : Aa_multiplatform_libBase
-@property (class, readonly, getter=companion) Aa_multiplatform_libAdContentPublisherCompanion *companion __attribute__((swift_name("companion")));
++ (instancetype)alloc __attribute__((unavailable));
++ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
++ (instancetype)adContentPublisher __attribute__((swift_name("init()")));
+@property (class, readonly, getter=shared) Aa_multiplatform_libAdContentPublisher *shared __attribute__((swift_name("shared")));
 - (void)addListenerListener:(id<Aa_multiplatform_libAdContentListener>)listener __attribute__((swift_name("addListener(listener:)")));
 - (void)publishContentZoneId:(NSString *)zoneId content:(Aa_multiplatform_libAdContent *)content __attribute__((swift_name("publishContent(zoneId:content:)")));
 - (void)removeListenerListener:(id<Aa_multiplatform_libAdContentListener>)listener __attribute__((swift_name("removeListener(listener:)")));
 @end;
 
 __attribute__((objc_subclassing_restricted))
-__attribute__((swift_name("AdContentPublisher.Companion")))
-@interface Aa_multiplatform_libAdContentPublisherCompanion : Aa_multiplatform_libBase
-+ (instancetype)alloc __attribute__((unavailable));
-+ (instancetype)allocWithZone:(struct _NSZone *)zone __attribute__((unavailable));
-+ (instancetype)companion __attribute__((swift_name("init()")));
-@property (class, readonly, getter=shared) Aa_multiplatform_libAdContentPublisherCompanion *shared __attribute__((swift_name("shared")));
-- (Aa_multiplatform_libAdContentPublisher *)getInstanceTransporter:(Aa_multiplatform_libTransporter *)transporter __attribute__((swift_name("getInstance(transporter:)")));
+__attribute__((swift_name("DeeplinkContentParser")))
+@interface Aa_multiplatform_libDeeplinkContentParser : Aa_multiplatform_libBase
+- (instancetype)init __attribute__((swift_name("init()"))) __attribute__((objc_designated_initializer));
++ (instancetype)new __attribute__((availability(swift, unavailable, message="use object initializers instead")));
+
+/**
+ @note This method converts instances of Exception to errors.
+ Other uncaught Kotlin exceptions are fatal.
+*/
+- (BOOL)handleDeeplinkUserActivity:(NSUserActivity * _Nullable)userActivity error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("handleDeeplink(userActivity:)")));
 @end;
 
 __attribute__((objc_subclassing_restricted))

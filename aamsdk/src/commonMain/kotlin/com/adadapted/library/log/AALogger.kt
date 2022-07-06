@@ -3,7 +3,9 @@ package com.adadapted.library.log
 import com.adadapted.library.constants.Config
 import io.github.aakira.napier.DebugAntilog
 import io.github.aakira.napier.Napier
+import kotlin.native.concurrent.ThreadLocal
 
+@ThreadLocal
 object AALogger {
     private var isDebugLoggingEnabled = false
 

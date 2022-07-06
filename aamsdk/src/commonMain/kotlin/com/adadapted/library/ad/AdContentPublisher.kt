@@ -3,7 +3,10 @@ package com.adadapted.library.ad
 import com.adadapted.library.concurrency.Transporter
 import kotlin.native.concurrent.ThreadLocal
 
-class AdContentPublisher private constructor(private val transporter: Transporter) {
+@ThreadLocal
+object AdContentPublisher {
+
+    private var transporter: Transporter = Transporter()
     private val listeners: MutableSet<AdContentListener> = HashSet()
 
     fun addListener(listener: AdContentListener) {
@@ -22,18 +25,6 @@ class AdContentPublisher private constructor(private val transporter: Transporte
         for (listener in listeners) {
                 listener.onContentAvailable(zoneId, content)
             }
-        }
-    }
-
-    @ThreadLocal
-    companion object {
-        private lateinit var instance: AdContentPublisher
-
-        fun getInstance(transporter: Transporter = Transporter()): AdContentPublisher {
-            if (!this::instance.isInitialized) {
-                instance = AdContentPublisher(transporter)
-            }
-            return instance
         }
     }
 }
