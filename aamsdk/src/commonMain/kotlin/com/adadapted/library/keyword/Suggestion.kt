@@ -8,8 +8,8 @@ data class Suggestion(val searchId: String, private val term: Term) {
     val name: String = term.replacement
     val icon: String = term.icon
     val tagline: String = term.tagline
-    var presented: Boolean
-    var selected: Boolean
+    private var presented: Boolean
+    private var selected: Boolean
 
     init {
         presented = false
