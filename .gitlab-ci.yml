@@ -5,9 +5,13 @@ build-library:
   script:
     - echo "Attempting to build library modules..."
     - ./gradlew build
+  tags:
+    - gcp
 
 test-debug:
   stage: test
   script:
     - echo "Running unit tests..."
     - ./gradlew testDebugUnitTest
+  tags:
+    - gcp
