@@ -20,7 +20,7 @@ object InterceptMatcher : SessionListener, InterceptListener {
             return suggestions
         }
         for (interceptTerm in intercept.getTerms()) {
-            if (interceptTerm.term.startsWith(input, ignoreCase = true)) {
+            if (interceptTerm.searchTerm.startsWith(input, ignoreCase = true)) {
                 fileTerm(interceptTerm, input, suggestions)
             }
         }
@@ -36,7 +36,7 @@ object InterceptMatcher : SessionListener, InterceptListener {
             SuggestionTracker.suggestionMatched(
                 intercept.searchId,
                 term.termId,
-                term.term,
+                term.searchTerm,
                 term.replacement,
                 input
             )

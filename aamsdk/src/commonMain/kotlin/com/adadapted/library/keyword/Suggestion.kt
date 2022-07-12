@@ -3,7 +3,7 @@ package com.adadapted.library.keyword
 import com.adadapted.library.keyword.SuggestionTracker.suggestionPresented
 import com.adadapted.library.keyword.SuggestionTracker.suggestionSelected
 
-data class Suggestion(val searchId: String, private val term: Term) {
+data class Suggestion(val searchId: String, val term: Term) {
     val termId: String = term.termId
     val name: String = term.replacement
     val icon: String = term.icon
