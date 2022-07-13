@@ -25,7 +25,7 @@ enum class LinkType {
 }
 
 @ExportObjCClass
-class LinkOrPopup : UIViewController,
+class Popup : UIViewController,
     WKUIDelegateProtocol,
     WKNavigationDelegateProtocol,
     UIGestureRecognizerDelegateProtocol {
@@ -39,6 +39,7 @@ class LinkOrPopup : UIViewController,
     constructor(coder: NSCoder) : super(coder)
 
     constructor(ad: Ad, linkType: LinkType) : super(nibName = null, bundle = null) {
+        EventClient.trackPopupBegin(ad)
         view.translatesAutoresizingMaskIntoConstraints = false
         setupWebView()
         setupDoneButton()
