@@ -3,10 +3,8 @@ package com.adadapted.library.constants
 object EventStrings {
     const val EXPIRED_EVENT = "session_expired"
     const val EXCEPTION_MESSAGE = "exception_message"
-    const val APP_OPENED = "app_opened"
     const val GAID_UNAVAILABLE = "GAID_UNAVAILABLE"
     const val SDK_EVENT_REQUEST_FAILED = "APP_EVENT_REQUEST_FAILED"
-    const val ZONE_LOADED = "zone_loaded"
     const val SDK_EVENT_TYPE = "sdk"
 
     const val ADDIT_APP_OPENED = "addit_app_opened"
@@ -36,7 +34,6 @@ object EventStrings {
 
     const val KI_INIT_REQUEST_FAILED = "KI_INIT_REQUEST_FAILED"
     const val KI_EVENT_REQUEST_FAILED = "KI_EVENT_REQUEST_FAILED"
-    const val KI_INITIALIZED = "ki_initialized"
 
     const val USER_ADDED_TO_LIST = "user_added_to_list"
     const val USER_CROSSED_OFF_LIST = "user_crossed_off_list"

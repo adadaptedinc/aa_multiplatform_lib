@@ -53,7 +53,6 @@ object InterceptMatcher : SessionListener, InterceptListener {
         }
 
     override fun onKeywordInterceptInitialized(intercept: Intercept) {
-        EventClient.trackSdkEvent(EventStrings.KI_INITIALIZED)
         this.intercept = intercept
         mLoaded = true
     }

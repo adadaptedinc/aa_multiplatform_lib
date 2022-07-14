@@ -39,7 +39,6 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sess
             this.zoneId = zoneId
             val params: MutableMap<String, String> = HashMap()
             params["zone_id"] = zoneId
-            eventClient.trackSdkEvent(EventStrings.ZONE_LOADED, params)
         }
     }
 

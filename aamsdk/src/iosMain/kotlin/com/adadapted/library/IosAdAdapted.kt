@@ -119,7 +119,6 @@ object IosAdAdapted : AdAdaptedBase() {
             }
         }
         SessionClient.start(startListener)
-        EventClient.trackSdkEvent(EventStrings.APP_OPENED)
 
         if (isKeywordInterceptEnabled) {
             InterceptMatcher.match("INIT") //init the matcher
