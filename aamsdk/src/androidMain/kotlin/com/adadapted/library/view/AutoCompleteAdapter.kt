@@ -19,11 +19,11 @@ class AutoCompleteAdapter(context: Context, resource: Int, items: List<String>) 
     }
 
     private val interceptFilter: Filter = object : Filter() {
-        override fun performFiltering(constraint: CharSequence): FilterResults {
+        override fun performFiltering(constraint: CharSequence?): FilterResults {
             val filterResults = FilterResults()
             val listItems: MutableList<String> = ArrayList()
             currentSuggestions.clear()
-            currentSuggestions.addAll(InterceptMatcher.match(constraint))
+            constraint?.let { InterceptMatcher.match(it) }?.let { currentSuggestions.addAll(it) }
 
             for (suggestion in currentSuggestions) {
                 listItems.add(suggestion.name)

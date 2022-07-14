@@ -5,7 +5,7 @@ import kotlin.native.concurrent.ThreadLocal
 object Config {
     private var isProd = false
 
-    const val LIBRARY_VERSION = "0.0.1"
+    const val LIBRARY_VERSION: String = "0.0.1"
     const val VERSION_NAME = "AA_MULTIPLATFORM_LIB"
     const val LOG_TAG = "ADADAPTED_MULTIPLATFORM_LIBRARY"
 

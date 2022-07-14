@@ -1,6 +1,5 @@
 package com.adadapted.library.device
 
-import com.adadapted.library.constants.Config
 import kotlinx.datetime.Clock
 import kotlinx.serialization.SerialName
 
@@ -24,7 +23,7 @@ data class DeviceInfo(
     @SerialName("device_height") val dh: Int = 0,
     @SerialName("device_density") val density: String = "",
     @SerialName("allow_retargeting") val isAllowRetargetingEnabled: Boolean = false,
-    @SerialName("sdk_version") val sdkVersion: String = Config.LIBRARY_VERSION,
+    @SerialName("sdk_version") val sdkVersion: String = "",
     @SerialName("created_at") val createdAt: Long = Clock.System.now().epochSeconds,
     val params: Map<String, String> = mapOf()
 ) {
