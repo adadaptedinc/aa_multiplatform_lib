@@ -11,6 +11,7 @@ import com.adadapted.library.log.AALogger
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
+import kotlinx.datetime.Clock
 import java.io.IOException
 import java.util.TimeZone
 import java.util.Locale
@@ -89,7 +90,8 @@ actual class DeviceInfoExtractor(context: Context) {
             dh = mHeight,
             dw = mWidth,
             density = mDensity.toString(),
-            sdkVersion = Config.LIBRARY_VERSION
+            sdkVersion = Config.LIBRARY_VERSION,
+            createdAt = Clock.System.now().epochSeconds
         )
     }
 

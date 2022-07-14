@@ -1,6 +1,7 @@
 package com.adadapted.library.device
 
 import com.adadapted.library.constants.Config
+import kotlinx.datetime.Clock
 import platform.AdSupport.ASIdentifierManager
 import platform.AppTrackingTransparency.ATTrackingManager
 import platform.CoreGraphics.CGRectGetHeight
@@ -59,7 +60,8 @@ actual class DeviceInfoExtractor {
             dh = height.toInt(),
             dw = width.toInt(),
             density = UIScreen.mainScreen.scale.toString(),
-            sdkVersion = Config.LIBRARY_VERSION
+            sdkVersion = Config.LIBRARY_VERSION,
+            createdAt = Clock.System.now().epochSeconds
         )
     }
 }
