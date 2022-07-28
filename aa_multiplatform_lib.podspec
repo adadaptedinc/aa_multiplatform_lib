@@ -10,7 +10,7 @@ Pod::Spec.new do |spec|
       This SDK allows you to utilize AdAdapted's service platform for displaying ads, keyword intercepts, tracking events, and more.
                        DESC
 
-    spec.vendored_frameworks      = "swiftpackage/aa_multiplatform_lib.xcframework"
+    spec.vendored_frameworks      = "aa_multiplatform_lib.xcframework"
     spec.pod_target_xcconfig      = { 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'arm64' }
     spec.libraries                = "c++"
 

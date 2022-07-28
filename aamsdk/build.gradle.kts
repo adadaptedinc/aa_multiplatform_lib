@@ -132,7 +132,7 @@ android {
 multiplatformSwiftPackage {
     swiftToolsVersion("5.3")
     targetPlatforms {
-        iOS { v("14.1") }
+        iOS { v("14") }
     }
     distributionMode {
         remote("https://gitlab.com/adadapted/aa_multiplatform_lib")
