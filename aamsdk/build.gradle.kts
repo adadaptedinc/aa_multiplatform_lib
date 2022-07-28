@@ -138,5 +138,5 @@ multiplatformSwiftPackage {
         remote("https://gitlab.com/adadapted/aa_multiplatform_lib")
     }
     zipFileName("aa_multiplatform_lib")
-    outputDirectory(File(projectDir.parent, "swiftpackage"))
+    outputDirectory(File(projectDir.parent))
 }
