@@ -8,6 +8,7 @@ import android.provider.Settings
 import android.telephony.TelephonyManager
 import com.adadapted.library.constants.Config
 import com.adadapted.library.log.AALogger
+import com.adadapted.library.view.DimensionConverter
 import com.google.android.gms.ads.identifier.AdvertisingIdClient
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException
 import com.google.android.gms.common.GooglePlayServicesRepairableException
@@ -70,6 +71,7 @@ actual class DeviceInfoExtractor(context: Context) {
         val mDeviceUdid = captureAndroidId(contextRef)
 
         wipeContextReference()
+        setDeviceScale(mScale)
 
         return DeviceInfo(
             appId = appId,
@@ -93,6 +95,10 @@ actual class DeviceInfoExtractor(context: Context) {
             sdkVersion = Config.LIBRARY_VERSION,
             createdAt = Clock.System.now().epochSeconds
         )
+    }
+
+    private fun setDeviceScale(scale: Float) {
+        DimensionConverter.createInstance(scale)
     }
 
     private fun getAdvertisingIdClientInfo(context: Context): AdvertisingIdClient.Info? {

@@ -5,7 +5,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.AttributeSet
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.adadapted.library.ad.Ad
 import com.adadapted.library.ad.AdContentListener
@@ -88,9 +87,10 @@ class AndroidZoneView : FrameLayout, AdZonePresenterListener, AndroidWebView.Lis
     override fun onZoneAvailable(zone: Zone) {
         var adjustedLayoutParams = LayoutParams(width, height)
         if (width == 0 || height == 0) {
+            val dimension = zone.dimensions[Dimension.Orientation.PORT]
             adjustedLayoutParams = LayoutParams(
-                if (zone.portWidth < 1) { ViewGroup.LayoutParams.MATCH_PARENT } else { zone.portWidth.toInt() },
-                if (zone.portHeight < 1) { ViewGroup.LayoutParams.MATCH_PARENT } else { zone.portHeight.toInt() }
+                dimension?.width ?: LayoutParams.MATCH_PARENT,
+                dimension?.height ?: LayoutParams.MATCH_PARENT
             )
         }
         Handler(Looper.getMainLooper()).post { webView.layoutParams = adjustedLayoutParams }

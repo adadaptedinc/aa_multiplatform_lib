@@ -18,7 +18,24 @@ data class Zone(val id: String = "", val ads: List<Ad> = listOf()) {
     @SerialName("land_width")
     val landWidth: Long = 0
 
+    val dimensions by lazy {
+        val dimensionsToReturn: MutableMap<String, Dimension> = HashMap()
+        dimensionsToReturn[Dimension.Orientation.PORT] = Dimension(
+            calculateDimensionValue(portHeight.toInt()),
+            calculateDimensionValue(portWidth.toInt())
+        )
+        dimensionsToReturn[Dimension.Orientation.LAND] = Dimension(
+            calculateDimensionValue(landHeight.toInt()),
+            calculateDimensionValue(landWidth.toInt())
+        )
+        return@lazy dimensionsToReturn
+    }
+
     fun hasAds(): Boolean {
         return ads.isNotEmpty()
+    }
+
+    private fun calculateDimensionValue(value: Int): Int {
+        return DimensionConverter.convertDpToPx(value)
     }
 }
