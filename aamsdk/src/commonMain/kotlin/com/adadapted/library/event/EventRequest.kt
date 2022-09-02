@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class EventRequest( //TODO SERVER SIDE: this whole object should match up with device info on the backend
+    @SerialName("session_id")
+    val sessionId: String = "",
     @SerialName("app_id")
     val appId: String = "",
     @SerialName("bundle_id")

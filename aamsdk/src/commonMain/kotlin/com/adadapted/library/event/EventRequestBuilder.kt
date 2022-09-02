@@ -18,6 +18,7 @@ object EventRequestBuilder {
     fun buildEventRequest(session: Session, sdkEvents: Set<SdkEvent> = setOf(), sdkErrors: Set<SdkError> = setOf()): EventRequest {
         session.deviceInfo.run {
             return EventRequest(
+                session.id,
                 appId,
                 bundleId,
                 bundleVersion,
