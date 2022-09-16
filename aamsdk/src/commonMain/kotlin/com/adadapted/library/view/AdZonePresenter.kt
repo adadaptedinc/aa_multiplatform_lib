@@ -37,8 +37,6 @@ class AdZonePresenter(private val adViewHandler: AdViewHandler, private val sess
     fun init(zoneId: String) {
         if (this.zoneId.isEmpty()) {
             this.zoneId = zoneId
-            val params: MutableMap<String, String> = HashMap()
-            params["zone_id"] = zoneId
         }
     }
 
