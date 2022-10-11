@@ -123,7 +123,7 @@ object IosAdAdapted : AdAdaptedBase() {
         if (isKeywordInterceptEnabled) {
             InterceptMatcher.match("INIT") //init the matcher
         }
-        AALogger.logInfo("AdAdapted iOS Advertising SDK v%s initialized." + Config.VERSION_NAME)
+        AALogger.logInfo("AdAdapted Multiplatform SDK ${Config.LIBRARY_VERSION} initialized.")
     }
 
     private fun setAdTracking(value: Boolean) {
