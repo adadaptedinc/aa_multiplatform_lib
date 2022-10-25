@@ -9,7 +9,7 @@ plugins {
 }
 
 val libraryName = "aa_multiplatform_lib"
-val libraryVersion = "1.0.0"
+val libraryVersion = "1.0.1"
 group = "com.adadapted"
 version = libraryVersion
 
