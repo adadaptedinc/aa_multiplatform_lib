@@ -4,7 +4,6 @@ import android.content.Context
 import com.adadapted.library.atl.AddItContentPublisher
 import com.adadapted.library.concurrency.Transporter
 import com.adadapted.library.constants.Config
-import com.adadapted.library.constants.EventStrings
 import com.adadapted.library.device.DeviceInfoClient
 import com.adadapted.library.device.DeviceInfoExtractor
 import com.adadapted.library.event.EventClient
@@ -96,18 +95,18 @@ object AdAdapted : AdAdaptedBase() {
 
         val startListener: SessionListener = object : SessionListener {
             override fun onSessionAvailable(session: Session) {
-                sessionListener.onHasAdsToServe(session.hasActiveCampaigns())
-                if (session.hasActiveCampaigns() && !session.hasZoneAds()) {
+                sessionListener.onHasAdsToServe(session.hasActiveCampaigns(), session.getZonesWithAds())
+                if (session.hasActiveCampaigns() && session.getZonesWithAds().isEmpty()) {
                     AALogger.logError("The session has ads to show but none were loaded properly. Is an obfuscation tool obstructing the AdAdapted Library?")
                 }
             }
 
             override fun onAdsAvailable(session: Session) {
-                sessionListener.onHasAdsToServe(session.hasActiveCampaigns())
+                sessionListener.onHasAdsToServe(session.hasActiveCampaigns(), session.getZonesWithAds())
             }
 
             override fun onSessionInitFailed() {
-                sessionListener.onHasAdsToServe(false)
+                sessionListener.onHasAdsToServe(false, listOf())
             }
         }
         SessionClient.start(startListener)
