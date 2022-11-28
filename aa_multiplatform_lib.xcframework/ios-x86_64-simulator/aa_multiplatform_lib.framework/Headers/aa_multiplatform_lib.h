@@ -296,7 +296,7 @@ __attribute__((swift_name("SessionAdapterListener")))
 __attribute__((swift_name("SessionBroadcastListener")))
 @protocol Aa_multiplatform_libSessionBroadcastListener
 @required
-- (void)onHasAdsToServeHasAds:(BOOL)hasAds __attribute__((swift_name("onHasAdsToServe(hasAds:)")));
+- (void)onHasAdsToServeHasAds:(BOOL)hasAds availableZoneIds:(NSArray<NSString *> *)availableZoneIds __attribute__((swift_name("onHasAdsToServe(hasAds:availableZoneIds:)")));
 @end;
 
 __attribute__((swift_name("WebViewListener")))
@@ -358,9 +358,9 @@ __attribute__((swift_name("Session")))
 - (BOOL)isEqual:(id _Nullable)other __attribute__((swift_name("isEqual(_:)")));
 - (NSDictionary<NSString *, Aa_multiplatform_libZone *> *)getAllZones __attribute__((swift_name("getAllZones()")));
 - (Aa_multiplatform_libZone *)getZoneZoneId:(NSString *)zoneId __attribute__((swift_name("getZone(zoneId:)")));
+- (NSArray<NSString *> *)getZonesWithAds __attribute__((swift_name("getZonesWithAds()")));
 - (BOOL)hasActiveCampaigns __attribute__((swift_name("hasActiveCampaigns()")));
 - (BOOL)hasExpired __attribute__((swift_name("hasExpired()")));
-- (BOOL)hasZoneAds __attribute__((swift_name("hasZoneAds()")));
 - (NSUInteger)hash __attribute__((swift_name("hash()")));
 - (NSString *)description __attribute__((swift_name("description()")));
 - (void)updateZonesNewZones:(NSDictionary<NSString *, Aa_multiplatform_libZone *> *)newZones __attribute__((swift_name("updateZones(newZones:)")));
