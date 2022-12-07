@@ -66,7 +66,7 @@ publishing {
         pom {
             name.set("AdAdapted Multiplatform Library")
             description.set("Kotlin Multiplatform library for AdAdapted")
-            url.set("https://gitlab.com/adadapted/aa_multiplatform_sdk.git")
+            url.set("https://github.com/adadaptedinc/aa_multiplatform_lib.git")
 
             licenses {
                 license {
@@ -82,7 +82,7 @@ publishing {
                 }
             }
             scm {
-                url.set("https://gitlab.com/adadapted/aa_multiplatform_sdk.git")
+                url.set("https://github.com/adadaptedinc/aa_multiplatform_lib.git")
             }
 
         }

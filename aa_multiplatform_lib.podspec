@@ -1,8 +1,8 @@
 Pod::Spec.new do |spec|
     spec.name                     = 'aa_multiplatform_lib'
-    spec.version                  = '1.0.2'
-    spec.homepage                 = 'https://gitlab.com/adadapted/aa_multiplatform_lib'
-    spec.source                   = { :git => "https://gitlab.com/adadapted/aa_multiplatform_lib.git", :tag => "#{spec.version}" }
+    spec.version                  = '1.0.3'
+    spec.homepage                 = 'https://github.com/adadaptedinc/aa_multiplatform_lib'
+    spec.source                   = { :git => "https://github.com/adadaptedinc/aa_multiplatform_lib.git", :tag => "#{spec.version}" }
     spec.authors                  = { "Brett Clifton" => "bclifton@adadapted.com", "Matthew Kruk" => "mkruk@adadapted.com" }
     spec.license                  = { :type => "MIT", :file => "LICENSE" }
     spec.summary                  = 'Official AdAdapted iOS Swift SDK'

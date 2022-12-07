@@ -6,7 +6,7 @@ Development is done using Android Studio and the JetBrains KMM Plugin. Updating 
 
 Documentation for integrating the SDK with an App can be found at [https://docs.adadapted.com/#/docs/kmm-getting-started](https://docs.adadapted.com/#/docs/kmm-getting-started)
 
-A valid API key and Ad Zone is required to be able to run the SDK which can be swapped into one of the two test applications [https://gitlab.com/adadapted/android-adapted] and [https://gitlab.com/adadapted/iosadapted]. More information on how to properly run and test these applications can be found on their respective GitHub repositories as well as the AdAdapted Wiki: [https://wiki.adadapted.com/en/engineering/mobile/multiplatform/testing]
+A valid API key and Ad Zone is required to be able to run the SDK which can be swapped into one of the two test applications [https://github.com/adadaptedinc/android-adapted] and [https://github.com/adadaptedinc/iosadapted]. More information on how to properly run and test these applications can be found on their respective GitHub repositories as well as the AdAdapted Wiki: [https://wiki.adadapted.com/en/engineering/mobile/multiplatform/testing]
 
 ### Prerequisites
 

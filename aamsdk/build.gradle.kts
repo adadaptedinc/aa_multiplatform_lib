@@ -9,7 +9,7 @@ plugins {
 }
 
 val libraryName = "aa_multiplatform_lib"
-val libraryVersion = "1.0.2"
+val libraryVersion = "1.0.3"
 group = "com.adadapted"
 version = libraryVersion
 
@@ -135,7 +135,7 @@ multiplatformSwiftPackage {
         iOS { v("14") }
     }
     distributionMode {
-        remote("https://gitlab.com/adadapted/aa_multiplatform_lib")
+        remote("https://github.com/adadaptedinc/aa_multiplatform_lib")
     }
     zipFileName("aa_multiplatform_lib")
     outputDirectory(File(projectDir.parent))
